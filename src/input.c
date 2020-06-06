@@ -2,6 +2,9 @@
 
 static int previousFrameKey = -1;
 
+static void keyPressed(SDL_KeyboardEvent*);
+static void keyReleased(SDL_KeyboardEvent*);
+
 /*
  * Starts the SDL event loop.
  */

@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
 /*
  *
  */
-static void capFrameRate(long *then, float *remainder) {
+static void capFrameRate(long* then, float* remainder) {
   long wait, frameTime;
 
   wait = 16 + *remainder;

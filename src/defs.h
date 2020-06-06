@@ -5,6 +5,7 @@
 #define MAX_KEYBOARD_KEYS       350
 #define FRAMES_PER_SECOND       60
 #define MAX_SND_CHANNELS        8
+#define MAX_LINE_LENGTH         1024
 
 
 enum {

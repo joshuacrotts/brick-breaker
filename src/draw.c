@@ -20,13 +20,18 @@ void presentScene() {
  * Copies the graphics from the texture to a different
  * rectangle. This moves the sprite.
  */
-void blit(SDL_Texture* texture, int x, int y) {
+void blit(SDL_Texture* texture, int x, int y, bool isCenter) {
   SDL_Rect dest;
 
   dest.x = x;
   dest.y = y;
 
   SDL_QueryTexture(texture, NULL, NULL, &dest.w, &dest.h);
+
+  if (isCenter) {
+    dest.x = x + (dest.w >> 1);
+    dest.y = y + (dest.y >> 1);
+  }
 
   SDL_RenderCopy(app.renderer, texture, NULL, &dest);
 }

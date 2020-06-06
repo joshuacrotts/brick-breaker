@@ -32,7 +32,7 @@ void initSounds(void) {
  /*
   *
   */
-void playMusic(int loop) {
+void playMusic(bool loop) {
   Mix_PlayMusic(music, loop ? -1 : 0);
 }
 
@@ -40,7 +40,6 @@ void playMusic(int loop) {
  *
  */
 void playSound(int id, int channel) {
-  //SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Playing sound started.\n");
   Mix_PlayChannel(channel, sounds[id], 0);
 }
 
@@ -48,5 +47,5 @@ void playSound(int id, int channel) {
  *
  */
 static void loadSounds(void) {
-  
+
 }

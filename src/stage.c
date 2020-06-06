@@ -12,3 +12,17 @@ void initStage(void) {
 
   memset(&stage, 0, sizeof(Stage));
 }
+
+/*
+ *
+ */
+static void tick(void) {
+
+}
+
+/*
+ *
+ */
+static void draw(void) {
+
+}

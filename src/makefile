@@ -3,7 +3,7 @@
 #and may not be redistributed without written permission.
 
 #OBJS specifies which files to compile as part of the project
-OBJS = main.c main.h init.c init.h draw.c draw.h commons.h input.h input.c structs.h defs.h stage.c stage.h commons.c sound.c sound.h text.c text.h
+OBJS = main.c main.h init.c init.h draw.c draw.h stds.h input.h input.c structs.h defs.h stage.c stage.h stds.c sound.c sound.h text.c text.h
 
 #CC specifies which compiler we're using
 CC = gcc
