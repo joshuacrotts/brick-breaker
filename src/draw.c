@@ -1,25 +1,14 @@
 #include "draw.h"
 
-
-/*
- * Clears the screen with a black color.
- */
 void prepareScene() {
   SDL_SetRenderDrawColor(app.renderer, 0, 0, 0, 0);
   SDL_RenderClear(app.renderer);
 }
 
-/*
- * Presents the current scene from the application.
- */
 void presentScene() {
   SDL_RenderPresent(app.renderer);
 }
 
-/*
- * Copies the graphics from the texture to a different
- * rectangle. This moves the sprite.
- */
 void blit(SDL_Texture* texture, int x, int y, bool isCenter) {
   SDL_Rect dest;
 
@@ -29,17 +18,13 @@ void blit(SDL_Texture* texture, int x, int y, bool isCenter) {
   SDL_QueryTexture(texture, NULL, NULL, &dest.w, &dest.h);
 
   if (isCenter) {
-    dest.x = x + (dest.w >> 1);
-    dest.y = y + (dest.y >> 1);
+    dest.x -= (dest.w >> 1);
+    dest.y -= (dest.y >> 1);
   }
 
   SDL_RenderCopy(app.renderer, texture, NULL, &dest);
 }
 
-/*
- * Renders a partition of a texture, specified by src, at
- * coordinates (x, y).
- */
 void blitRect(SDL_Texture* texture, SDL_Rect* src, int x, int y) {
   SDL_Rect dest;
   dest.x = x;
@@ -49,11 +34,6 @@ void blitRect(SDL_Texture* texture, SDL_Rect* src, int x, int y) {
   SDL_RenderCopy(app.renderer, texture, src, &dest);
 }
 
-/*
- * Loads an image from the specified path. An error is
- * displayed if the file cannot be found or is not
- * loadable.
- */
 SDL_Texture* loadTexture(char* fileName) {
   SDL_Texture* texture;
 

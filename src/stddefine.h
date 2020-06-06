@@ -1,3 +1,6 @@
+#ifndef DEFS_H
+#define DEFS_H
+
 #define SCREEN_WIDTH            1280
 #define SCREEN_HEIGHT           720
 #define EXIT_ERROR              1
@@ -6,6 +9,7 @@
 #define FRAMES_PER_SECOND       60
 #define MAX_SND_CHANNELS        8
 #define MAX_LINE_LENGTH         1024
+#define MAX_KEYBOARD_KEYS       350
 
 
 enum {
@@ -28,3 +32,5 @@ enum {
   SND_POINTS,
   SND_MAX
 };
+
+#endif

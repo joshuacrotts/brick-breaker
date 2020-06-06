@@ -6,16 +6,10 @@
 static char textBuffer[MAX_LINE_LENGTH];
 static SDL_Texture* fontTexture;
 
-/*
- *
- */
 void initFonts(void) {
   fontTexture = NULL;
 }
 
-/*
- *
- */
 void drawText(int x, int y, int r, int g, int b, const char* text, ...) {
   SDL_Rect rect;
   va_list args;
@@ -45,9 +39,6 @@ void drawText(int x, int y, int r, int g, int b, const char* text, ...) {
   }
 }
 
-/*
- *
- */
 void freeFonts() {
 
 }

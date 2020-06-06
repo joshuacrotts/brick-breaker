@@ -5,9 +5,6 @@ static int previousFrameKey = -1;
 static void keyPressed(SDL_KeyboardEvent*);
 static void keyReleased(SDL_KeyboardEvent*);
 
-/*
- * Starts the SDL event loop.
- */
 void processInput(void) {
   SDL_Event event;
 
@@ -24,6 +21,8 @@ void processInput(void) {
         break;
       default:
         break;
+
+      SDL_GetMouseState(&app.mouse.x, &app.mouse.y);
     }
   }
 }

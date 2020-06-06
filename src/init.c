@@ -1,17 +1,29 @@
 #include "init.h"
 
-/*
- * Initializes the SDL context, renderer, and
- * window.
- */
-void initSDL(void) {
+bool debugMode = false;
+
+void initGame(const char* windowName, int windowWidth, int windowHeight) {
+  initSDL(windowName, windowWidth, windowHeight);
+  initSounds();
+  initFonts();
+
+  // Assigns the callback function to clean up the
+  // SDL context when closing the program.
+  atexit(cleanup);
+}
+
+void initSDL(const char* windowName, int windowWidth, int windowHeight) {
   int rendererFlags;
   int windowFlags;
 
   rendererFlags = SDL_RENDERER_ACCELERATED;
   windowFlags   = 0;
 
-  SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Initialization started.");
+  if (debugMode) {
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Initialization started.");
+  }
+
+  memset(&app, 0, sizeof(App));
 
   // Initialize SDL and exit if we fail.
   if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
@@ -20,7 +32,7 @@ void initSDL(void) {
   }
 
   // Initialize the SDL window.
-  app.window = SDL_CreateWindow("Shooter Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, windowFlags);
+  app.window = SDL_CreateWindow(windowName, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, windowWidth, windowHeight, windowFlags);
 
   if (!app.window) {
     SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Could not open window. %s.\n", SDL_GetError());
@@ -71,4 +83,8 @@ void cleanup(void) {
 
 	SDL_Quit();
   SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Program quit.");
+}
+
+void toggleDebugMode(bool db) {
+  debugMode = db;
 }
