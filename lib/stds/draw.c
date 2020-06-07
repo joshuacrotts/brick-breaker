@@ -9,35 +9,46 @@ void presentScene() {
   SDL_RenderPresent(app.renderer);
 }
 
-void blit(SDL_Texture* texture, int x, int y, bool isCenter) {
+void blit(SDL_Texture* texture, float x, float y, bool isCenter) {
   SDL_Rect dest;
 
-  dest.x = x;
-  dest.y = y;
+  dest.x = (int) x;
+  dest.y = (int) y;
 
   SDL_QueryTexture(texture, NULL, NULL, &dest.w, &dest.h);
 
   if (isCenter) {
     dest.x -= (dest.w >> 1);
-    dest.y -= (dest.y >> 1);
+    dest.y -= (dest.h >> 1);
   }
 
   SDL_RenderCopy(app.renderer, texture, NULL, &dest);
 }
 
-void blitRect(SDL_Texture* texture, SDL_Rect* src, int x, int y) {
+void blitRect(SDL_Texture* texture, SDL_Rect* src, float x, float y) {
   SDL_Rect dest;
-  dest.x = x;
-  dest.y = y;
+  dest.x = (int) x;
+  dest.y = (int) y;
+
   dest.w = src->w;
   dest.h = src->h;
   SDL_RenderCopy(app.renderer, texture, src, &dest);
 }
 
+void blitRotated(SDL_Texture* texture, float x, float y, int angle) {
+  SDL_Rect destRect;
+  destRect.x = (int) x;
+  destRect.y = (int) y;
+  SDL_QueryTexture(texture, NULL, NULL, &destRect.w, &destRect.h);
+
+  destRect.x -= (destRect.w >> 1);
+  destRect.y -= (destRect.h >> 1);
+
+  SDL_RenderCopyEx(app.renderer, texture, NULL, &destRect, angle, NULL, SDL_FLIP_NONE);
+}
+
 SDL_Texture* loadTexture(char* fileName) {
   SDL_Texture* texture;
-
-  SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "Loading %s.\n", fileName);
 
   texture = IMG_LoadTexture(app.renderer, fileName);
 

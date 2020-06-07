@@ -1,6 +1,10 @@
 #include "init.h"
 
-bool debugMode = false;
+static void initSDL(const char*, int, int);
+static void initAudioContext(void);
+static void cleanup(void);
+
+static bool debugMode = false;
 
 void initGame(const char* windowName, int windowWidth, int windowHeight) {
   initSDL(windowName, windowWidth, windowHeight);
@@ -12,7 +16,15 @@ void initGame(const char* windowName, int windowWidth, int windowHeight) {
   atexit(cleanup);
 }
 
-void initSDL(const char* windowName, int windowWidth, int windowHeight) {
+void toggleDebugMode(bool db) {
+  debugMode = db;
+}
+
+/*
+ * Initializes the SDL context, renderer, and
+ * window.
+ */
+static void initSDL(const char* windowName, int windowWidth, int windowHeight) {
   int rendererFlags;
   int windowFlags;
 
@@ -49,7 +61,9 @@ void initSDL(const char* windowName, int windowWidth, int windowHeight) {
     exit(EXIT_ERROR);
   }
 
-  SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Initialization Completed.");
+  if (debugMode) {
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Initialization Completed.");
+  }
 
   //  Initialize SDL to accept both JPG and PNGs.
   IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
@@ -63,7 +77,7 @@ void initSDL(const char* windowName, int windowWidth, int windowHeight) {
 /*
  *
  */
-void initAudioContext(void) {
+static void initAudioContext(void) {
   if (Mix_OpenAudio(44100, AUDIO_S16SYS, 2, 1024) == -1) {
     SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Could not initialize SDL Mixer.\n");
     exit(EXIT_ERROR);
@@ -75,16 +89,17 @@ void initAudioContext(void) {
 /*
  * Cleans up the SDL context and game upon closing the application.
  */
-void cleanup(void) {
-  SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Cleaning up.");
+static void cleanup(void) {
+  if (debugMode) {
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Cleaning up.");
+  }
 	SDL_DestroyRenderer(app.renderer);
 
 	SDL_DestroyWindow(app.window);
 
 	SDL_Quit();
-  SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Program quit.");
-}
 
-void toggleDebugMode(bool db) {
-  debugMode = db;
+  if (debugMode) {
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Program quit.");
+  }
 }

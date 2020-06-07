@@ -36,9 +36,19 @@ int clamp(int, int, int);
 /*
  *
  */
-int collision(int, int, int, int, int, int, int, int);
+bool collision(int, int, int, int, int, int, int, int);
 
 /*
  *
  */
 void calcSlope(int, int, int, int, float*, float*);
+
+/*
+ *
+ */
+float getAngle(int, int, int, int);
+
+/*
+ *
+ */
+int getDistance(int x1, int y1, int x2, int y2);

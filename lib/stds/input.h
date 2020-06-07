@@ -4,7 +4,6 @@
 #include "stds.h"
 
 extern App app;
-extern Stage stage;
 
 /*
  * Starts the SDL event loop.

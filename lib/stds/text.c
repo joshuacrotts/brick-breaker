@@ -7,7 +7,7 @@ static char textBuffer[MAX_LINE_LENGTH];
 static SDL_Texture* fontTexture;
 
 void initFonts(void) {
-  fontTexture = NULL;
+  fontTexture = loadTexture("../res/img/font.png");
 }
 
 void drawText(int x, int y, int r, int g, int b, const char* text, ...) {

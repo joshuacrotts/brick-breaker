@@ -10,6 +10,8 @@
 #define MAX_SND_CHANNELS        8
 #define MAX_LINE_LENGTH         1024
 #define MAX_KEYBOARD_KEYS       350
+#define MAX_MOUSE_BUTTONS       350
+#define PI                      3.14159265358979323846
 
 
 enum {
