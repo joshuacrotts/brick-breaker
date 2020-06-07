@@ -43,6 +43,19 @@ extern void blit(SDL_Texture*, float, float, bool);
  */
 extern void blitRotated(SDL_Texture*, float, float, int);
 
+
+/*
+ * Draws a rectangle with the supplied color to the screen. The
+ * rectangle's properties should be filled (i.e x, y, w, and h).
+ * If the last parameter is true, the shape will be filled.
+ */
+extern void drawRect(SDL_Rect*, int, int, int, int, bool);
+
+/*
+ * Draws a line with the specified color to the screen.
+ */
+extern void drawLine(float, float, float, float, int, int, int, int);
+
 /*
  * Loads an image from the specified path. An error is
  * displayed if the file cannot be found or is not

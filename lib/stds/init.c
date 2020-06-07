@@ -97,6 +97,8 @@ static void cleanup(void) {
 
 	SDL_DestroyWindow(app.window);
 
+  freeFonts();
+
 	SDL_Quit();
 
   if (debugMode) {

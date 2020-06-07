@@ -4,41 +4,54 @@
 #define DEFAULT_FONT_COLOR 0xFF
 
 static char textBuffer[MAX_LINE_LENGTH];
-static SDL_Texture* fontTexture;
+static TTF_Font* arialFont;
+
+static SDL_Surface* messageSurface;
+static SDL_Texture* messageTexture;
+static SDL_Rect messageRect;
 
 void initFonts(void) {
-  fontTexture = loadTexture("../res/img/font.png");
+  if (TTF_Init() == -1) {
+    SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to initialize TTF_Init: %s.\n", SDL_GetError());
+    exit(EXIT_ERROR);
+  }
+
+  arialFont = TTF_OpenFont("../res/fonts/arial.ttf", DEFAULT_FONT_SIZE);
+
+  if (arialFont == NULL) {
+    SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to load TTF font: %s.\n", SDL_GetError());
+    exit(EXIT_ERROR);
+  }
 }
 
-void drawText(int x, int y, int r, int g, int b, const char* text, ...) {
-  SDL_Rect rect;
-  va_list args;
+void drawText(float x, float y, int r, int g, int b, const char* text, ...) {
 
+  messageRect.x = (int) x;
+  messageRect.y = (int) y;
+
+  va_list args;
   memset(&textBuffer, '\0', sizeof(textBuffer));
 
   va_start(args, text);
   vsprintf(textBuffer, text, args);
   va_end(args);
 
-  int len = strlen(textBuffer);
+  SDL_Color textColor = {r, g, b};
+  messageSurface = TTF_RenderText_Solid(arialFont, textBuffer, textColor);
+  TTF_SizeText(arialFont, textBuffer, &messageRect.w, &messageRect.h);
 
-  rect.w = GLYPH_WIDTH;
-  rect.h = GLYPH_HEIGHT;
-  rect.y = 0;
-
-  SDL_SetTextureColorMod(fontTexture, r, g, b);
-
-  for (int i = 0; i < len; i++) {
-    int c = textBuffer[i];
-
-    if (c >= ' ' && c <= 'Z') {
-      rect.x = (c - ' ') * GLYPH_WIDTH;
-      blitRect(fontTexture, &rect, x, y);
-      x += GLYPH_WIDTH;
-    }
+  if (messageSurface == NULL) {
+    SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to write message: %s.\n", SDL_GetError());
+    exit(EXIT_ERROR);
   }
+
+  messageTexture = SDL_CreateTextureFromSurface(app.renderer, messageSurface);
+  SDL_RenderCopy(app.renderer, messageTexture, NULL, &messageRect);
 }
 
 void freeFonts() {
-
+  SDL_DestroyTexture(messageTexture);
+  SDL_FreeSurface(messageSurface);
+  TTF_CloseFont(arialFont);
+  TTF_Quit();
 }

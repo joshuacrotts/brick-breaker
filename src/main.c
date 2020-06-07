@@ -7,7 +7,7 @@ static void tick(void);
 // Barebones game. This is the minimum amount of code
 // necessary to run a window.
 int main(int argc, char* argv[]) {
-  initGame("Standards C Library11", SCREEN_WIDTH, SCREEN_HEIGHT);
+  initGame("Standards C Library", SCREEN_WIDTH, SCREEN_HEIGHT);
   initScene();
   loop();
 
@@ -26,9 +26,7 @@ static void initScene(void) {
 }
 
 static void tick(void) {
-
 }
 
 static void draw(void) {
-
 }

@@ -13,16 +13,21 @@ extern void initGame(const char*, int, int);
 /*
  *
  */
- extern void initSounds(void);
+extern void initSounds(void);
 
  /*
   *
   */
- extern void initFonts(void);
+extern void initFonts(void);
 
 /*
  *
  */
 extern void toggleDebugMode(bool);
+
+/*
+ *
+ */
+extern void freeFonts(void);
 
 #endif

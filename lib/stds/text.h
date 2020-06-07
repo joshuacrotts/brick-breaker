@@ -3,8 +3,12 @@
 
 #include "stds.h"
 
-#define GLYPH_HEIGHT 28
-#define GLYPH_WIDTH  18
+extern App app;
+
+/*
+ *
+ */
+extern void initFonts(void);
 
 /*
  *
@@ -14,6 +18,6 @@ extern void freeFonts(void);
 /*
  *
  */
-extern void drawText(int, int, int, int, int, const char*, ...);
+extern void drawText(float, float, int, int, int, const char*, ...);
 
 #endif

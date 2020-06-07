@@ -47,6 +47,21 @@ void blitRotated(SDL_Texture* texture, float x, float y, int angle) {
   SDL_RenderCopyEx(app.renderer, texture, NULL, &destRect, angle, NULL, SDL_FLIP_NONE);
 }
 
+void drawRect(SDL_Rect* rect, int r, int g, int b, int a, bool isFilled) {
+  SDL_SetRenderDrawColor(app.renderer, r, g, b, a);
+
+  if (isFilled) {
+    SDL_RenderFillRect(app.renderer, rect);
+  } else {
+    SDL_RenderDrawRect(app.renderer, rect);
+  }
+}
+
+void drawLine(float x1, float y1, float x2, float y2, int r, int g, int b, int a) {
+  SDL_SetRenderDrawColor(app.renderer, r, g, b, a);
+  SDL_RenderDrawLine(app.renderer, x1, y1, x2, y2);
+}
+
 SDL_Texture* loadTexture(char* fileName) {
   SDL_Texture* texture;
 
