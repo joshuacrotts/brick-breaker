@@ -15,10 +15,10 @@ struct Delegate {
 };
 
 struct Mouse {
-  int x;
-  int y;
-  int button[MAX_MOUSE_BUTTONS];
-  int wheel;
+  int32_t x;
+  int32_t y;
+  uint8_t button[MAX_MOUSE_BUTTONS];
+  uint8_t wheel;
 };
 
 struct App{
@@ -28,24 +28,28 @@ struct App{
 
   SDL_Point camera;
   Delegate delegate;
-  int keyboard[MAX_KEYBOARD_KEYS];
+  uint16_t keyboard[MAX_KEYBOARD_KEYS];
 };
 
 // Update this as needed.
 struct Entity {
   float x;
   float y;
+
+  // Scales the entity in either the x or y
+  // direction. This should default to 1.
+  float scaleX;
+  float scaleY;
   float dx;
   float dy;
 
-  int w;
-  int h;
-  int health;
-  int angle;
-  int weaponType;
-  int reload;
-  int side;
-  int radius;
+  uint32_t w;
+  uint32_t h;
+  uint16_t health;
+  uint16_t angle;
+  uint16_t radius;
+  uint16_t flags;
+  uint32_t reload;
 
   SDL_Color color;
   SDL_Texture* texture;

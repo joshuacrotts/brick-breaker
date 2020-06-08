@@ -35,7 +35,7 @@ void blitRect(SDL_Texture* texture, SDL_Rect* src, float x, float y) {
   SDL_RenderCopy(app.renderer, texture, src, &dest);
 }
 
-void blitRotated(SDL_Texture* texture, float x, float y, int angle) {
+void blitRotated(SDL_Texture* texture, float x, float y, uint16_t angle) {
   SDL_Rect destRect;
   destRect.x = (int) x;
   destRect.y = (int) y;
@@ -47,7 +47,32 @@ void blitRotated(SDL_Texture* texture, float x, float y, int angle) {
   SDL_RenderCopyEx(app.renderer, texture, NULL, &destRect, angle, NULL, SDL_FLIP_NONE);
 }
 
-void drawRect(SDL_Rect* rect, int r, int g, int b, int a, bool isFilled) {
+void blitColorTextureScaled(SDL_Texture* texture, float x, float y, float scaleX, float scaleY, uint16_t angle, int16_t r, int16_t g, int16_t b, int16_t a) {
+  uint32_t textureWidth = 0;
+  uint32_t textureHeight = 0;
+
+  SDL_QueryTexture(texture, NULL, NULL, &textureWidth, &textureHeight);
+
+  // Apply the scaling procedure to the image.
+  SDL_Rect dest_rect;
+  dest_rect.x = x;
+  dest_rect.y = y;
+  dest_rect.w = (uint32_t) (textureWidth * scaleX);
+  dest_rect.h = (uint32_t) (textureHeight * scaleY);
+
+  // If all four color values are less than 0, don't draw a color.
+  if (r >= 0 && g >= 0 && b >= 0 && a >= 0) {
+    SDL_SetTextureColorMod(texture, r, g, b);
+    SDL_SetTextureAlphaMod(texture, a);
+  }
+  SDL_RenderCopyEx(app.renderer, texture, NULL, &dest_rect, angle, NULL, SDL_FLIP_NONE);
+}
+
+void blitTextureScaled(SDL_Texture* texture, float x, float y, float scaleX, float scaleY, uint16_t angle) {
+  blitColorTextureScaled(texture, x, y, scaleX, scaleY, angle, -1, -1, -1, -1);
+}
+
+void drawRect(SDL_Rect* rect, uint8_t r, uint8_t g, uint8_t b, uint8_t a, bool isFilled) {
   SDL_SetRenderDrawColor(app.renderer, r, g, b, a);
 
   if (isFilled) {
@@ -57,12 +82,12 @@ void drawRect(SDL_Rect* rect, int r, int g, int b, int a, bool isFilled) {
   }
 }
 
-void drawLine(float x1, float y1, float x2, float y2, int r, int g, int b, int a) {
+void drawLine(float x1, float y1, float x2, float y2, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
   SDL_SetRenderDrawColor(app.renderer, r, g, b, a);
   SDL_RenderDrawLine(app.renderer, x1, y1, x2, y2);
 }
 
-SDL_Texture* loadTexture(char* fileName) {
+SDL_Texture* loadTexture(const char* fileName) {
   SDL_Texture* texture;
 
   texture = IMG_LoadTexture(app.renderer, fileName);

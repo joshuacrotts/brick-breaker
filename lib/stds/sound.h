@@ -11,7 +11,7 @@ extern void initSound(void);
 /*
  *
  */
-extern void loadMusic(char*);
+extern void loadMusic(const char*);
 
 /*
  *
@@ -21,6 +21,6 @@ extern void playMusic(bool);
 /*
  *
  */
-extern void playSound(int, int);
+extern void playSound(int16_t, int16_t);
 
 #endif

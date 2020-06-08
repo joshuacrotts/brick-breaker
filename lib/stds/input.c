@@ -1,6 +1,6 @@
 #include "input.h"
 
-static int previousFrameKey = -1;
+static int16_t previousFrameKey = -1;
 
 static void keyPressed(SDL_KeyboardEvent*);
 static void keyReleased(SDL_KeyboardEvent*);

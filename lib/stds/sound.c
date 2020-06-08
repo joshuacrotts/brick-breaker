@@ -13,7 +13,7 @@ void initSounds(void) {
   loadSounds();
 }
 
- void loadMusic(char* fileName) {
+ void loadMusic(const char* fileName) {
    if (music != NULL) {
      Mix_HaltMusic();
      Mix_FreeMusic(music);
@@ -27,7 +27,7 @@ void playMusic(bool loop) {
   Mix_PlayMusic(music, loop ? -1 : 0);
 }
 
-void playSound(int id, int channel) {
+void playSound(int16_t id, int16_t channel) {
   Mix_PlayChannel(channel, sounds[id], 0);
 }
 

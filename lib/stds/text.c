@@ -24,10 +24,11 @@ void initFonts(void) {
   }
 }
 
-void drawText(float x, float y, int r, int g, int b, const char* text, ...) {
-
-  messageRect.x = (int) x;
-  messageRect.y = (int) y;
+void drawText(float x, float y, uint8_t r, uint8_t g, uint8_t b, const char* text, ...) {
+  //SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "aaa %f, %f\n", x, y);
+  messageRect.x = (uint16_t) x;
+  messageRect.y = (uint16_t) y;
+  //SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "%d, %d\n", messageRect.x, messageRect.y);
 
   va_list args;
   memset(&textBuffer, '\0', sizeof(textBuffer));

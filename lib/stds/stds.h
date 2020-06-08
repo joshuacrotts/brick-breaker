@@ -5,6 +5,7 @@
 #include "string.h"
 #include "ctype.h"
 #include "stdbool.h"
+#include "time.h"
 
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
@@ -22,7 +23,7 @@
 /*
  *
  */
-int randomInt(int, int);
+uint32_t randomInt(uint32_t, uint32_t);
 
 /*
  *
@@ -32,7 +33,7 @@ float randomFloat(float, float);
 /*
  *
  */
-int clamp(int, int, int);
+uint32_t clamp(uint32_t, uint32_t, uint32_t);
 
 /*
  *

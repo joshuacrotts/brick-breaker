@@ -18,6 +18,6 @@ extern void freeFonts(void);
 /*
  *
  */
-extern void drawText(float, float, int, int, int, const char*, ...);
+extern void drawText(float, float, uint8_t, uint8_t, uint8_t, const char*, ...);
 
 #endif

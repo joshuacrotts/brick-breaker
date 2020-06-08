@@ -8,7 +8,7 @@ App app;
 /*
  *
  */
-extern void initGame(const char*, int, int);
+extern void initGame(const char*, uint16_t, uint16_t);
 
 /*
  *

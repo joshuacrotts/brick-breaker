@@ -2,9 +2,9 @@
 
 static bool seed = false;
 
-int randomInt(int min, int max) {
+uint32_t randomInt(uint32_t min, uint32_t max) {
   if (!seed) {
-    srand((unsigned int) time(NULL));
+    srand((uint32_t) time(NULL));
     seed = true;
   }
   return (rand() % (max - min + 1)) + min;
@@ -15,7 +15,7 @@ float randomFloat(float min, float max) {
   return min + scale * (max - min);
 }
 
-int clamp(int value, int min, int max) {
+uint32_t clamp(uint32_t value, uint32_t min, uint32_t max) {
   int newValue = value;
   if (value < min) {
     value = min;

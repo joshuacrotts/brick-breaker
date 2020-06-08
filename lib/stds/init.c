@@ -1,12 +1,12 @@
 #include "init.h"
 
-static void initSDL(const char*, int, int);
+static void initSDL(const char*, uint16_t, uint16_t);
 static void initAudioContext(void);
 static void cleanup(void);
 
 static bool debugMode = false;
 
-void initGame(const char* windowName, int windowWidth, int windowHeight) {
+void initGame(const char* windowName, uint16_t windowWidth, uint16_t windowHeight) {
   initSDL(windowName, windowWidth, windowHeight);
   initSounds();
   initFonts();
@@ -24,9 +24,9 @@ void toggleDebugMode(bool db) {
  * Initializes the SDL context, renderer, and
  * window.
  */
-static void initSDL(const char* windowName, int windowWidth, int windowHeight) {
-  int rendererFlags;
-  int windowFlags;
+static void initSDL(const char* windowName, uint16_t windowWidth, uint16_t windowHeight) {
+  int8_t rendererFlags;
+  int8_t windowFlags;
 
   rendererFlags = SDL_RENDERER_ACCELERATED;
   windowFlags   = 0;
@@ -51,7 +51,7 @@ static void initSDL(const char* windowName, int windowWidth, int windowHeight) {
     exit(EXIT_ERROR);
   }
 
-  SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+  SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
 
   // Create renderer with the default graphics context.
   app.renderer = SDL_CreateRenderer(app.window, -1, rendererFlags);
