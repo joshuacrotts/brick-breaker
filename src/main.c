@@ -31,7 +31,6 @@ static void initScene(void) {
   mainEntity = malloc(sizeof(Entity));
   memset(mainEntity, 0, sizeof(Entity));
 
-  angleIncrement = 1;
   mainEntity->x = 0;
   mainEntity->y = 0;
   mainEntity->dx = 0;

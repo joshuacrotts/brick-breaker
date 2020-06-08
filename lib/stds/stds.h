@@ -38,19 +38,19 @@ uint32_t clamp(uint32_t, uint32_t, uint32_t);
 /*
  *
  */
-bool collision(int, int, int, int, int, int, int, int);
+bool collision(int32_t, int32_t, int32_t, int32_t, int32_t, int32_t, int32_t, int32_t);
 
 /*
  *
  */
-void calcSlope(int, int, int, int, float*, float*);
+void calcSlope(int32_t, int32_t, int32_t, int32_t, float*, float*);
 
 /*
  *
  */
-float getAngle(int, int, int, int);
+float getAngle(int32_t, int32_t, int32_t, int32_t);
 
 /*
  *
  */
-int getDistance(int x1, int y1, int x2, int y2);
+int getDistance(int32_t x1, int32_t y1, int32_t x2, int32_t y2);
