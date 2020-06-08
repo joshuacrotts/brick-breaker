@@ -49,7 +49,7 @@ extern void blitRotated(SDL_Texture*, float, float, uint16_t);
  * Blits a rotated SDL texture at an x and y coordinate with a given
  * scale. A color is also provided to alter the color of the texture.
  */
-extern void blitColorTextureScaled(SDL_Texture*, float, float, float, float, uint16_t, int16_t, int16_t, int16_t, int16_t);
+extern void blitColorTextureScaled(SDL_Texture*, float, float, float, float, uint16_t, uint8_t, uint8_t, uint8_t, uint8_t);
 
 /*
  * Blits a rotated SDL texture at an x and y coordinate with a given
@@ -64,6 +64,17 @@ extern void blitTextureScaled(SDL_Texture*, float, float, float, float, uint16_t
  * If the last parameter is true, the shape will be filled.
  */
 extern void drawRect(SDL_Rect*, uint8_t, uint8_t, uint8_t, uint8_t, bool);
+
+/*
+ * Draws a circle. Simple as that. Takes in the circle's center coordinates,
+ * the radius, and RGBA.
+ */
+extern void drawCircle(int32_t, int32_t, uint32_t, uint8_t, uint8_t, uint8_t, uint8_t);
+
+/*
+ * Fills a circle. Simple as that.
+ */
+extern void fillCircle(int32_t, int32_t, uint32_t, uint8_t, uint8_t, uint8_t, uint8_t);
 
 /*
  * Draws a line with the specified color to the screen.

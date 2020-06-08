@@ -4,7 +4,10 @@ static void initScene(void);
 static void draw(void);
 static void tick(void);
 
-static Entity* mainEntity;
+static void updateParticleHandler(void);
+static void drawParticleHandler(void);
+
+static void spawnBloodParticles(int32_t, int32_t, uint32_t);
 
 // Barebones game. This is the minimum amount of code
 // necessary to run a window.
@@ -28,66 +31,87 @@ static void initScene(void) {
   app.delegate.tick = tick;
   app.delegate.draw = draw;
 
-  mainEntity = malloc(sizeof(Entity));
-  memset(mainEntity, 0, sizeof(Entity));
+  memset(&stage, 0, sizeof(Stage));
+  init_player();
 
-  mainEntity->x = 0;
-  mainEntity->y = 0;
-  mainEntity->dx = 0;
-  mainEntity->dy = 0;
-  mainEntity->scaleX = 2;
-  mainEntity->scaleY = 2;
-  mainEntity->texture = loadTexture("../res/img/player.png");
-  mainEntity->angle = 0;
-  SDL_QueryTexture(mainEntity->texture, NULL, NULL, &mainEntity->w, &mainEntity->h);
+  backgroundTexture = loadTexture("../res/img/background1.jpg");
+
+  stage.particleTail = &stage.particleHead;
 }
 
 static void tick(void) {
-  mainEntity->dx *= 0.95;
-  mainEntity->dy *= 0.95;
+  updateCamera(player);
 
-  SDL_QueryTexture(mainEntity->texture, NULL, NULL, &mainEntity->w, &mainEntity->h);
-
-  //  Keyboard input.
-  if (app.keyboard[SDL_SCANCODE_W]) {
-    mainEntity->dy = -5;
+  if (app.mouse.button[SDL_BUTTON_LEFT]) {
+    //spawnBloodParticles(app.mouse.x - app.camera.x, app.mouse.y - app.camera.y, 128);
+    spawnBloodParticles(player->x, player->y, 128);
+    app.mouse.button[SDL_BUTTON_LEFT] = 0;
   }
 
-  if (app.keyboard[SDL_SCANCODE_S]) {
-    mainEntity->dy = 5;
-  }
-
-  if (app.keyboard[SDL_SCANCODE_A]) {
-    mainEntity->dx = -5;
-  }
-
-  if (app.keyboard[SDL_SCANCODE_D]) {
-    mainEntity->dx = 5;
-  }
-
-  // Collision detection.
-  if (mainEntity->x < 0) {
-    mainEntity->x = 0;
-  }
-
-  if (mainEntity->x + (mainEntity->w * mainEntity->scaleX) > SCREEN_WIDTH) {
-    mainEntity->x = SCREEN_WIDTH - (mainEntity->w * mainEntity->scaleX);
-  }
-
-  if (mainEntity->y < 0) {
-    mainEntity->y = 0;
-  }
-
-  if (mainEntity->y + (mainEntity->h * mainEntity->scaleY) > SCREEN_HEIGHT) {
-    mainEntity->y = SCREEN_HEIGHT - (mainEntity->h * mainEntity->scaleY);
-  }
-
-  mainEntity->x += mainEntity->dx;
-  mainEntity->y += mainEntity->dy;
-
-  mainEntity->angle = getAngle(mainEntity->x, mainEntity->y, app.mouse.x, app.mouse.y);
+  updateParticleHandler();
+  player_update();
 }
 
 static void draw(void) {
-  blitTextureScaled(mainEntity->texture, mainEntity->x, mainEntity->y, mainEntity->scaleX, mainEntity->scaleY, mainEntity->angle);
+  drawParticleHandler();
+  player_draw();
+}
+
+static void spawnBloodParticles(int32_t x, int32_t y, uint32_t n) {
+  for (int i = 0; i < n; i++) {
+    bool scatterParticle = randomInt(0, 1);
+    float dx = randomFloat(-20, 20);
+    float dy = randomFloat(-20, 20);
+    float decX;
+    float decY;
+    float deltaAlpha;
+    if (!scatterParticle) {
+      decX = randomFloat(0.50, 0.70);
+      decY = randomFloat(0.50, 0.70);
+    } else {
+      decX = randomFloat(0.70, 0.95);
+      decY = randomFloat(0.70, 0.95);
+      deltaAlpha = randomFloat(1, 3);
+    }
+    uint16_t w = randomInt(1, 10);
+    uint16_t h = w;
+    uint8_t r = randomInt(20, 0xff);
+    uint8_t g = 0;
+    uint8_t b = 0;
+    uint8_t a = 0xff;
+    uint16_t angle = 0;
+    Entity* e;
+    e = add_particle(x, y, dx, dy, decX, decY, w, h, angle, r, g, b, a, deltaAlpha);
+    stage.particleTail->next = e;
+    stage.particleTail = e;
+  }
+}
+
+static void updateParticleHandler() {
+  Entity* e;
+  Entity* prev;
+
+  prev = &stage.particleHead;
+  for (e = stage.particleHead.next; e != NULL; e = e->next) {
+    e->tick(e);
+
+    if (e->flags & DEATH_MASK) {
+      if (e == stage.particleTail) {
+        stage.particleTail = prev;
+      }
+
+      prev->next = e->next;
+      free(e);
+      e = prev;
+    }
+    prev = e;
+  }
+}
+
+static void drawParticleHandler() {
+  Entity* e;
+
+  for (e = stage.particleHead.next; e != NULL; e = e->next) {
+    e->draw(e);
+  }
 }

@@ -47,7 +47,7 @@ void blitRotated(SDL_Texture* texture, float x, float y, uint16_t angle) {
   SDL_RenderCopyEx(app.renderer, texture, NULL, &destRect, angle, NULL, SDL_FLIP_NONE);
 }
 
-void blitColorTextureScaled(SDL_Texture* texture, float x, float y, float scaleX, float scaleY, uint16_t angle, int16_t r, int16_t g, int16_t b, int16_t a) {
+void blitColorTextureScaled(SDL_Texture* texture, float x, float y, float scaleX, float scaleY, uint16_t angle, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
   uint32_t textureWidth = 0;
   uint32_t textureHeight = 0;
 
@@ -73,6 +73,7 @@ void blitTextureScaled(SDL_Texture* texture, float x, float y, float scaleX, flo
 }
 
 void drawRect(SDL_Rect* rect, uint8_t r, uint8_t g, uint8_t b, uint8_t a, bool isFilled) {
+  SDL_SetRenderDrawBlendMode(app.renderer, SDL_BLENDMODE_BLEND);
   SDL_SetRenderDrawColor(app.renderer, r, g, b, a);
 
   if (isFilled) {
@@ -80,12 +81,52 @@ void drawRect(SDL_Rect* rect, uint8_t r, uint8_t g, uint8_t b, uint8_t a, bool i
   } else {
     SDL_RenderDrawRect(app.renderer, rect);
   }
+  SDL_SetRenderDrawBlendMode(app.renderer, SDL_BLENDMODE_NONE);
 }
 
 void drawLine(float x1, float y1, float x2, float y2, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
   SDL_SetRenderDrawColor(app.renderer, r, g, b, a);
   SDL_RenderDrawLine(app.renderer, x1, y1, x2, y2);
 }
+
+void drawCircle(int32_t centreX, int32_t centreY, uint32_t radius, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+   const int32_t diameter = (radius * 2);
+
+   int32_t x = (radius - 1);
+   int32_t y = 0;
+   int32_t tx = 1;
+   int32_t ty = 1;
+   int32_t error = (tx - diameter);
+
+   SDL_SetRenderDrawColor(app.renderer, r, g, b, a);
+   while (x >= y)
+   {
+      //  Each of the following renders an octant of the circle
+      SDL_RenderDrawPoint(app.renderer, centreX + x, centreY - y);
+      SDL_RenderDrawPoint(app.renderer, centreX + x, centreY + y);
+      SDL_RenderDrawPoint(app.renderer, centreX - x, centreY - y);
+      SDL_RenderDrawPoint(app.renderer, centreX - x, centreY + y);
+      SDL_RenderDrawPoint(app.renderer, centreX + y, centreY - x);
+      SDL_RenderDrawPoint(app.renderer, centreX + y, centreY + x);
+      SDL_RenderDrawPoint(app.renderer, centreX - y, centreY - x);
+      SDL_RenderDrawPoint(app.renderer, centreX - y, centreY + x);
+
+      if (error <= 0)
+      {
+         ++y;
+         error += ty;
+         ty += 2;
+      }
+
+      if (error > 0)
+      {
+         --x;
+         tx += 2;
+         error += (tx - diameter);
+      }
+   }
+}
+
 
 SDL_Texture* loadTexture(const char* fileName) {
   SDL_Texture* texture;

@@ -6,7 +6,7 @@
 #define EXIT_ERROR              1
 #define EXIT_SUCCESS            0
 #define MAX_KEYBOARD_KEYS       350
-#define FRAMES_PER_SECOND       60
+#define FPS                     60
 #define MAX_SND_CHANNELS        8
 #define MAX_LINE_LENGTH         1024
 #define MAX_KEYBOARD_KEYS       350

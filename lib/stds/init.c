@@ -69,7 +69,7 @@ static void initSDL(const char* windowName, uint16_t windowWidth, uint16_t windo
   IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
 
   //  Remove cursor.
-  SDL_ShowCursor(false);
+  SDL_ShowCursor(true);
 
   initAudioContext();
 }
@@ -96,6 +96,8 @@ static void cleanup(void) {
 	SDL_DestroyRenderer(app.renderer);
 
 	SDL_DestroyWindow(app.window);
+
+  free(&app);
 
   freeFonts();
 
