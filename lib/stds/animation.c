@@ -17,7 +17,7 @@ Animation* add_spritesheet(char* directory, uint8_t numberOfFrames, float frameD
   a->spriteSheetH = h;
   a->currentFrameID = 0;
   a->currentTexture = NULL;
-  a->idFlags |= SPRITE_SHEET_ANIMATION;
+  a->idFlags |= SPRITE_SHEET_MASK;
 }
 
 Animation* add_animation(char* directory, uint8_t numberOfFrames, float frameDelay) {
@@ -32,7 +32,7 @@ Animation* add_animation(char* directory, uint8_t numberOfFrames, float frameDel
   a->frameTimer = frameDelay * FPS;
   a->currentFrameID = 0;
   a->currentTexture = a->frames[a->currentFrameID];
-  a->idFlags |= STD_ANIMATION;
+  a->idFlags |= STD_ANIMATION_MASK;
 
   char numberBuffer[3];
   char* fileExtsn = ".png";
