@@ -3,7 +3,7 @@
 #and may not be redistributed without written permission.
 
 #OBJS specifies which files to compile as part of the project
-OBJS = ../lib/stds/init.c ../lib/stds/init.h ../lib/stds/draw.c ../lib/stds/draw.h ../lib/stds/stds.h ../lib/stds/input.h ../lib/stds/input.c ../lib/stds/structs.h ../lib/stds/stddefine.h  ../lib/stds/stds.c ../lib/stds/sound.c ../lib/stds/sound.h ../lib/stds/text.c ../lib/stds/text.h ../lib/stds/game.c ../lib/stds/game.h ../lib/stds/camera.c ../lib/stds/camera.h commons.h main.c main.h game_defs.h game_structs.h particle.c particle.h player.c player.h
+OBJS = ../lib/stds/init.c ../lib/stds/init.h ../lib/stds/draw.c ../lib/stds/draw.h ../lib/stds/stds.h ../lib/stds/input.h ../lib/stds/input.c ../lib/stds/structs.h ../lib/stds/stddefine.h  ../lib/stds/stds.c ../lib/stds/sound.c ../lib/stds/sound.h ../lib/stds/text.c ../lib/stds/text.h ../lib/stds/game.c ../lib/stds/game.h ../lib/stds/camera.c ../lib/stds/camera.h ../lib/stds/animation.c ../lib/stds/animation.h commons.h main.c main.h game_defs.h game_structs.h particle.c particle.h player.c player.h background.c background.h
 
 #CC specifies which compiler we're using
 CC = gcc

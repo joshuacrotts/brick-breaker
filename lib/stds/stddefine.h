@@ -1,6 +1,8 @@
 #ifndef DEFS_H
 #define DEFS_H
 
+#define LEVEL_WIDTH             3840
+#define LEVEL_HEIGHT            2160
 #define SCREEN_WIDTH            1280
 #define SCREEN_HEIGHT           720
 #define EXIT_ERROR              1
@@ -11,7 +13,12 @@
 #define MAX_LINE_LENGTH         1024
 #define MAX_KEYBOARD_KEYS       350
 #define MAX_MOUSE_BUTTONS       350
+#define MAX_BUFFER_SIZE         128
+#define MAX_FILE_NAME_LEN       48
 #define PI                      3.14159265358979323846
+
+#define SPRITE_SHEET_MASK       2
+#define STD_ANIMATION_MASK      1
 
 
 enum {

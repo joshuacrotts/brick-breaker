@@ -8,6 +8,37 @@ typedef struct Entity Entity;
 typedef struct Mouse Mouse;
 typedef struct Entity Entity;
 typedef struct App App;
+typedef struct Animation Animation;
+typedef struct Texture Texture;
+
+struct Animation {
+  Animation* next;
+  SDL_Texture* currentTexture;
+  SDL_Texture** frames;
+
+  SDL_Texture* spritesheet;
+  uint16_t startX;
+  uint16_t startY;
+  uint16_t spriteSheetW;
+  uint16_t spriteSheetH;
+
+  uint8_t idFlags;
+  uint8_t flags;
+  uint8_t currentFrameID;
+  uint8_t numberOfFrames;
+  float frameDelay;
+  float frameTimer;
+
+  void (*tick)(Animation*);
+  void (*draw)(Entity*, Animation*);
+  void (*die)(Animation*);
+};
+
+struct Texture {
+  char name[MAX_FILE_NAME_LEN];
+  SDL_Texture* texture;
+  Texture* next;
+};
 
 struct Delegate {
   void (*tick)(void);
@@ -27,8 +58,9 @@ struct App{
   Mouse mouse;
 
   SDL_Rect screenBounds;
-  SDL_Point camera;
+  SDL_Rect camera;
   Delegate delegate;
+  Texture textureHead, *textureTail;
   uint16_t keyboard[MAX_KEYBOARD_KEYS];
 };
 
@@ -69,6 +101,7 @@ struct Entity {
 
   int32_t life;
 
+  Animation* animation;
   SDL_Color color;
   SDL_Texture* texture;
   Entity* next;

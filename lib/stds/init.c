@@ -11,6 +11,8 @@ void initGame(const char* windowName, uint16_t windowWidth, uint16_t windowHeigh
   initSounds();
   initFonts();
 
+  app.textureTail = &app.textureHead;
+
   // Assigns the callback function to clean up the
   // SDL context when closing the program.
   atexit(cleanup);

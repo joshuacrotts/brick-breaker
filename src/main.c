@@ -9,6 +9,10 @@ static void drawParticleHandler(void);
 
 static void spawnBloodParticles(int32_t, int32_t, uint32_t);
 
+static Animation* redParticleAnimation;
+static Animation* blueParticleAnimation;
+static Animation* greenParticleAnimation;
+
 // Barebones game. This is the minimum amount of code
 // necessary to run a window.
 int main(int argc, char* argv[]) {
@@ -33,18 +37,21 @@ static void initScene(void) {
 
   memset(&stage, 0, sizeof(Stage));
   init_player();
-
-  backgroundTexture = loadTexture("../res/img/background1.jpg");
+  init_background();
 
   stage.particleTail = &stage.particleHead;
 }
 
+/*
+ *
+ */
 static void tick(void) {
   updateCamera(player);
+  background_update();
 
   if (app.mouse.button[SDL_BUTTON_LEFT]) {
     //spawnBloodParticles(app.mouse.x - app.camera.x, app.mouse.y - app.camera.y, 128);
-    spawnBloodParticles(player->x, player->y, 128);
+    spawnBloodParticles(player->x + (player->w >> 1), player->y + (player->h >> 1), 128);
     app.mouse.button[SDL_BUTTON_LEFT] = 0;
   }
 
@@ -52,11 +59,18 @@ static void tick(void) {
   player_update();
 }
 
+/*
+ *
+ */
 static void draw(void) {
+  background_draw();
   drawParticleHandler();
   player_draw();
 }
 
+/*
+ *
+ */
 static void spawnBloodParticles(int32_t x, int32_t y, uint32_t n) {
   for (int i = 0; i < n; i++) {
     bool scatterParticle = randomInt(0, 1);
@@ -87,6 +101,9 @@ static void spawnBloodParticles(int32_t x, int32_t y, uint32_t n) {
   }
 }
 
+/*
+ *
+ */
 static void updateParticleHandler() {
   Entity* e;
   Entity* prev;
@@ -108,7 +125,10 @@ static void updateParticleHandler() {
   }
 }
 
-static void drawParticleHandler() {
+/*
+ *
+ */
+static void drawParticleHandler(void) {
   Entity* e;
 
   for (e = stage.particleHead.next; e != NULL; e = e->next) {

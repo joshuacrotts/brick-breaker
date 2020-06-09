@@ -1,5 +1,8 @@
 #include "draw.h"
 
+static SDL_Texture* getTexture(char*);
+static void addTextureToCache(char*, SDL_Texture*);
+
 void prepareScene() {
   SDL_SetRenderDrawColor(app.renderer, 0, 0, 0, 0);
   SDL_RenderClear(app.renderer);
@@ -128,15 +131,37 @@ void drawCircle(int32_t centreX, int32_t centreY, uint32_t radius, uint8_t r, ui
 }
 
 
-SDL_Texture* loadTexture(const char* fileName) {
+SDL_Texture* loadTexture(char* fileName) {
   SDL_Texture* texture;
 
-  texture = IMG_LoadTexture(app.renderer, fileName);
+  texture = getTexture(fileName);
 
   if (texture == NULL) {
-    SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "Failed to load image. %s.\n", fileName);
-    exit(EXIT_FAILURE);
+    texture = IMG_LoadTexture(app.renderer, fileName);
+    addTextureToCache(fileName, texture);
   }
 
   return texture;
+}
+
+static SDL_Texture* getTexture(char* fileName) {
+  Texture* t;
+
+  for (t = app.textureHead.next; t != NULL; t = t->next) {
+    if (strcmp(t->name, fileName) == 0) {
+      return t->texture;
+    }
+  }
+}
+
+static void addTextureToCache(char* fileName, SDL_Texture* sdlTexture) {
+  Texture* texture;
+
+  texture = malloc(sizeof(Texture));
+  memset(texture, 0, sizeof(Texture));
+  app.textureTail->next = texture;
+  app.textureTail = texture;
+
+  strncpy(texture->name, fileName, MAX_FILE_NAME_LEN);
+  texture->texture = sdlTexture;
 }

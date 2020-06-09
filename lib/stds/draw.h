@@ -86,6 +86,6 @@ extern void drawLine(float, float, float, float, uint8_t, uint8_t, uint8_t, uint
  * displayed if the file cannot be found or is not
  * loadable.
  */
-extern SDL_Texture* loadTexture(const char*);
+extern SDL_Texture* loadTexture(char*);
 
 #endif

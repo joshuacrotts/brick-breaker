@@ -5,7 +5,9 @@
 
 extern App app;
 
+
 extern Entity* add_particle(float, float, float, float, float, float, uint16_t, uint16_t, uint16_t, uint8_t, uint8_t, uint8_t, uint8_t, float);
+extern Animation* add_animation(char*, uint8_t, float);
 extern void particle_tick(Entity*);
 extern void particle_draw(Entity*);
 extern void particle_die(Entity*);

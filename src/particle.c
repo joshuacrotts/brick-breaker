@@ -14,15 +14,16 @@ Entity* add_particle(float x, float y, float dx, float dy, float decX, float dec
   e->h = h;
   e->dx = dx;
   e->dy = dy;
+  e->life = FPS * 5;
   e->deltaAccelX = decX;
   e->deltaAccelY = decY;
-  e->life = FPS * 5;
 
   SDL_Color color;
-  color.r = r;
-  color.g = g;
-  color.b = b;
-  color.a = a;
+  color.r = randomInt(0x20, 0xff);
+  color.g = 0;
+  color.b = 0;
+  color.a = 0xff;
+
   e->color = color;
   e->deltaAlpha = deltaAlpha;
   e->angle = angle;
@@ -37,16 +38,17 @@ Entity* add_particle(float x, float y, float dx, float dy, float decX, float dec
 
 void particle_tick(Entity* e) {
   e->life--;
-  int16_t currAlpha = e->color.a;
-  currAlpha -= (int16_t) e->deltaAlpha;
+  //int16_t currAlpha = e->color.a;
+  //int16_t currAlpha -= (int16_t) e->deltaAlpha;
 
-  if (e->life <= 0 || currAlpha <= 0) {
-    e->color.a = 0;
+  if (e->life <= 0) {
     e->die(e);
     return;
   }
 
-  e->color.a = currAlpha;
+  if (e->animation != NULL) {
+      e->animation->tick(e->animation);
+  }
 
   e->dx *= e->deltaAccelX;
   e->dy *= e->deltaAccelY;
@@ -56,14 +58,17 @@ void particle_tick(Entity* e) {
 }
 
 void particle_draw(Entity* e) {
-  SDL_Rect rect;
+  if (e->animation == NULL) {
+    SDL_Rect rect;
 
-  rect.x = e->x - app.camera.x;
-  rect.y = e->y - app.camera.y;
-  rect.w = e->w;
-  rect.h = e->h;
-
-  drawRect(&rect, e->color.r, e->color.g, e->color.b, e->color.a, true);
+    rect.x = e->x - app.camera.x;
+    rect.y = e->y - app.camera.y;
+    rect.w = e->w;
+    rect.h = e->h;
+    drawRect(&rect, e->color.r, e->color.g, e->color.b, e->color.a, true);
+  } else {
+    e->animation->draw(e, e->animation);
+  }
 }
 
 void particle_die(Entity* e) {
