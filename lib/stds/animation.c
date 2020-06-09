@@ -57,18 +57,30 @@ void animation_update(Animation* a) {
     // Resets the frame countdown.
     a->frameTimer = a->frameDelay * FPS;
 
+    if (a->idFlags & SPRITE_SHEET_MASK) {
+      a->x += a->spriteSheetW;
+    } else {
+      a->currentFrameID += 1;
+      a->currentTexture = a->frames[a->currentFrameID];
+    }
+
     // If we reach the end of the animation sequence,
     // return to the start.
-    if (++a->currentFrameID >= a->numberOfFrames) {
+    if (a->currentFrameID >= a->numberOfFrames) {
       a->currentFrameID = 0;
+      if (a->idFlags & SPRITE_SHEET_MASK) {
+        a->x = 0;
+      } else {
+        a->currentFrameID = 0;
+      }
     }
-    a->currentTexture = a->frames[a->currentFrameID];
   }
 }
 
-void animation_draw(Entity* e, Animation* a) {
-  if (e != NULL && a != NULL) {
-    blit(a->frames[a->currentFrameID], e->x - app.camera.x, e->y - app.camera.y, false);
+void animation_draw(Entity* e) {
+  if (e != NULL && e->animation != NULL) {
+    blit(e->animation->frames[e->animation->currentFrameID],
+         e->x - app.camera.x, e->y - app.camera.y, false);
   }
 }
 

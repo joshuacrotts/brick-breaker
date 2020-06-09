@@ -4,14 +4,11 @@ static void initScene(void);
 static void draw(void);
 static void tick(void);
 
-static void updateParticleHandler(void);
-static void drawParticleHandler(void);
-
-static void spawnBloodParticles(int32_t, int32_t, uint32_t);
-
-static Animation* redParticleAnimation;
-static Animation* blueParticleAnimation;
-static Animation* greenParticleAnimation;
+static void createEmitter(int32_t, int32_t, uint32_t, uint32_t);
+static void updateEmitters();
+static void updateEntities();
+static void drawEmitters();
+static void drawEntities();
 
 // Barebones game. This is the minimum amount of code
 // necessary to run a window.
@@ -36,10 +33,14 @@ static void initScene(void) {
   app.delegate.draw = draw;
 
   memset(&stage, 0, sizeof(Stage));
+  app.textureTail = &app.textureHead;
+  stage.emitterTail = &stage.emitterHead;
+  stage.entityTail = &stage.entityHead;
+
   init_player();
   init_background();
 
-  stage.particleTail = &stage.particleHead;
+//  createEmitter(400, 400, 1000, ID_P_BLOOD_CIRCLE_MASK);
 }
 
 /*
@@ -48,14 +49,14 @@ static void initScene(void) {
 static void tick(void) {
   updateCamera(player);
   background_update();
+  updateEmitters();
+  updateEntities();
 
-  if (app.mouse.button[SDL_BUTTON_LEFT]) {
-    //spawnBloodParticles(app.mouse.x - app.camera.x, app.mouse.y - app.camera.y, 128);
-    spawnBloodParticles(player->x + (player->w >> 1), player->y + (player->h >> 1), 128);
-    app.mouse.button[SDL_BUTTON_LEFT] = 0;
-  }
+   if (app.mouse.button[SDL_BUTTON_LEFT]) {
+     spawnColorfulParticles(NULL, app.camera.x + app.mouse.x, app.camera.y + app.mouse.y, 128, ID_P_ANIMATED_PARTICLE_MASK);
+     app.mouse.button[SDL_BUTTON_LEFT] = 0;
+   }
 
-  updateParticleHandler();
   player_update();
 }
 
@@ -64,57 +65,67 @@ static void tick(void) {
  */
 static void draw(void) {
   background_draw();
-  drawParticleHandler();
+  drawEmitters();
+  drawEntities();
   player_draw();
 }
 
 /*
  *
  */
-static void spawnBloodParticles(int32_t x, int32_t y, uint32_t n) {
-  for (int i = 0; i < n; i++) {
-    bool scatterParticle = randomInt(0, 1);
-    float dx = randomFloat(-20, 20);
-    float dy = randomFloat(-20, 20);
-    float decX;
-    float decY;
-    float deltaAlpha;
-    if (!scatterParticle) {
-      decX = randomFloat(0.50, 0.70);
-      decY = randomFloat(0.50, 0.70);
-    } else {
-      decX = randomFloat(0.70, 0.95);
-      decY = randomFloat(0.70, 0.95);
-      deltaAlpha = randomFloat(1, 3);
+static void createEmitter(int32_t x, int32_t y, uint32_t maxParticles, uint32_t flags) {
+  Emitter* em;
+
+  em = create_emitter(x, y, maxParticles, flags);
+
+  stage.emitterTail->next = em;
+  stage.emitterTail = em;
+}
+
+/*
+ *
+ */
+static void updateEmitters(void) {
+  Emitter* em;
+  Emitter* prev;
+
+  prev = &stage.emitterHead;
+
+  for (em = stage.emitterHead.next; em != NULL; em = em->next) {
+    emitter_update(em);
+
+    if (em->flags & DEATH_MASK) {
+      if (em == stage.emitterTail) {
+        stage.emitterTail = prev;
+      }
+
+      prev->next = em->next;
+      free(em);
+      em = prev;
     }
-    uint16_t w = randomInt(1, 10);
-    uint16_t h = w;
-    uint8_t r = randomInt(20, 0xff);
-    uint8_t g = 0;
-    uint8_t b = 0;
-    uint8_t a = 0xff;
-    uint16_t angle = 0;
-    Entity* e;
-    e = add_particle(x, y, dx, dy, decX, decY, w, h, angle, r, g, b, a, deltaAlpha);
-    stage.particleTail->next = e;
-    stage.particleTail = e;
+    prev = em;
   }
 }
 
 /*
  *
  */
-static void updateParticleHandler() {
+static void updateEntities(void) {
   Entity* e;
   Entity* prev;
 
-  prev = &stage.particleHead;
-  for (e = stage.particleHead.next; e != NULL; e = e->next) {
-    e->tick(e);
+  prev = &stage.entityHead;
+
+  for (e = stage.entityHead.next; e != NULL; e = e->next) {
+    if (e->idFlags & ID_PARTICLE_MASK) {
+      particle_tick(e);
+    } else if (e->tick) {
+      e->tick(e);
+    }
 
     if (e->flags & DEATH_MASK) {
-      if (e == stage.particleTail) {
-        stage.particleTail = prev;
+      if (e == stage.entityTail) {
+          stage.entityTail = prev;
       }
 
       prev->next = e->next;
@@ -128,10 +139,25 @@ static void updateParticleHandler() {
 /*
  *
  */
-static void drawParticleHandler(void) {
+static void drawEmitters(void) {
+  Emitter* em;
+
+  for (em = stage.emitterHead.next; em != NULL; em = em->next) {
+    emitter_draw(em);
+  }
+}
+
+/*
+ *
+ */
+static void drawEntities(void) {
   Entity* e;
 
-  for (e = stage.particleHead.next; e != NULL; e = e->next) {
-    e->draw(e);
+  for (e = stage.entityHead.next; e != NULL; e = e->next) {
+    if (e->flags & ID_PARTICLE_MASK) {
+      particle_draw(e);
+    } else if (e->draw) {
+      e->draw(e);
+    }
   }
 }

@@ -92,7 +92,7 @@ void drawLine(float x1, float y1, float x2, float y2, uint8_t r, uint8_t g, uint
   SDL_RenderDrawLine(app.renderer, x1, y1, x2, y2);
 }
 
-void drawCircle(int32_t centreX, int32_t centreY, uint32_t radius, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+void drawCircle(int32_t centerX, int32_t centerY, uint32_t radius, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
    const int32_t diameter = (radius * 2);
 
    int32_t x = (radius - 1);
@@ -105,14 +105,14 @@ void drawCircle(int32_t centreX, int32_t centreY, uint32_t radius, uint8_t r, ui
    while (x >= y)
    {
       //  Each of the following renders an octant of the circle
-      SDL_RenderDrawPoint(app.renderer, centreX + x, centreY - y);
-      SDL_RenderDrawPoint(app.renderer, centreX + x, centreY + y);
-      SDL_RenderDrawPoint(app.renderer, centreX - x, centreY - y);
-      SDL_RenderDrawPoint(app.renderer, centreX - x, centreY + y);
-      SDL_RenderDrawPoint(app.renderer, centreX + y, centreY - x);
-      SDL_RenderDrawPoint(app.renderer, centreX + y, centreY + x);
-      SDL_RenderDrawPoint(app.renderer, centreX - y, centreY - x);
-      SDL_RenderDrawPoint(app.renderer, centreX - y, centreY + x);
+      SDL_RenderDrawPoint(app.renderer, centerX + x, centerY - y);
+      SDL_RenderDrawPoint(app.renderer, centerX + x, centerY + y);
+      SDL_RenderDrawPoint(app.renderer, centerX - x, centerY - y);
+      SDL_RenderDrawPoint(app.renderer, centerX - x, centerY + y);
+      SDL_RenderDrawPoint(app.renderer, centerX + y, centerY - x);
+      SDL_RenderDrawPoint(app.renderer, centerX + y, centerY + x);
+      SDL_RenderDrawPoint(app.renderer, centerX - y, centerY - x);
+      SDL_RenderDrawPoint(app.renderer, centerX - y, centerY + x);
 
       if (error <= 0)
       {
@@ -128,6 +128,43 @@ void drawCircle(int32_t centreX, int32_t centreY, uint32_t radius, uint8_t r, ui
          error += (tx - diameter);
       }
    }
+}
+
+void fillCircle(int32_t x, int32_t y, uint32_t radius, uint8_t r, uint8_t g, uint8_t b, uint8_t a)
+{
+  int offsetx, offsety, d;
+  int status;
+
+  offsetx = 0;
+  offsety = radius;
+  d = radius - 1;
+  status = 0;
+  SDL_SetRenderDrawColor(app.renderer, r, g, b, a);
+  while (offsety >= offsetx) {
+      status += SDL_RenderDrawLine(app.renderer, x - offsety, y + offsetx, x + offsety, y + offsetx);
+      status += SDL_RenderDrawLine(app.renderer, x - offsetx, y + offsety, x + offsetx, y + offsety);
+      status += SDL_RenderDrawLine(app.renderer, x - offsetx, y - offsety, x + offsetx, y - offsety);
+      status += SDL_RenderDrawLine(app.renderer, x - offsety, y - offsetx, x + offsety, y - offsetx);
+
+      if (status < 0) {
+          status = -1;
+          break;
+      }
+
+      if (d >= 2 * offsetx) {
+          d -= 2 * offsetx + 1;
+          offsetx +=1;
+      }
+      else if (d < 2 * (radius - offsety)) {
+          d += 2 * offsety - 1;
+          offsety -= 1;
+      }
+      else {
+          d += 2 * (offsety - offsetx - 1);
+          offsety -= 1;
+          offsetx += 1;
+      }
+  }
 }
 
 

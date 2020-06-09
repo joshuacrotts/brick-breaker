@@ -26,7 +26,7 @@ extern Animation* add_spritesheet(char*, uint8_t, float, uint16_t, uint16_t, uin
  */
 extern Animation* add_animation(char*, uint8_t, float);
 extern void animation_update(Animation*);
-extern void animation_draw(Entity*, Animation*);
+extern void animation_draw(Entity*);
 extern void animation_die(Animation*);
 
 extern SDL_Texture* loadTexture(const char*);

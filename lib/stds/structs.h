@@ -17,6 +17,8 @@ struct Animation {
   SDL_Texture** frames;
 
   SDL_Texture* spritesheet;
+  uint16_t x;
+  uint16_t y;
   uint16_t startX;
   uint16_t startY;
   uint16_t spriteSheetW;
@@ -30,7 +32,7 @@ struct Animation {
   float frameTimer;
 
   void (*tick)(Animation*);
-  void (*draw)(Entity*, Animation*);
+  void (*draw)(Entity*);
   void (*die)(Animation*);
 };
 
@@ -106,10 +108,10 @@ struct Entity {
   SDL_Texture* texture;
   Entity* next;
 
-  void (*tick)(Entity* other);
-  void (*draw)(Entity* other);
-  void (*touch)(Entity* other);
-  void (*die)(Entity* other);
+  void (*tick)(Entity*);
+  void (*draw)(Entity*);
+  void (*touch)(Entity*);
+  void (*die)(Entity*);
 };
 
 #endif

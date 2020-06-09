@@ -9,12 +9,10 @@ void init_player(void) {
 
   player = malloc(sizeof(Entity));
   memset(player, 0, sizeof(Entity));
-
   player->x = SCREEN_WIDTH >> 1;
   player->y = SCREEN_HEIGHT >> 1;
   player->texture = loadTexture("../res/img/player.png");
   SDL_QueryTexture(player->texture, NULL, NULL, &player->w, &player->h);
-
   player->idFlags |= ID_PLAYER_MASK;
   player->life = 1;
   //
