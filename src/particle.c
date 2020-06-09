@@ -29,7 +29,7 @@ Entity* add_particle(float x, float y, float dx, float dy, float decX, float dec
   en->deltaAlpha = deltaAlpha;
   en->angle = angle;
   en->idFlags |= idFlags | ID_PARTICLE_MASK;
-  en->flags |= ID_P_ANIMATED_PARTICLE_MASK;
+  en->flags |= ID_PARTICLE_MASK;
 
   return en;
 }
@@ -61,7 +61,6 @@ Entity* add_animated_particle(float x, float y, float dx, float dy, float decX, 
 
   en->angle = angle;
   en->idFlags |= idFlags | ID_PARTICLE_MASK;
-  en->flags |= ID_PARTICLE_MASK;
 
   return en;
 }
@@ -86,6 +85,7 @@ void particle_tick(Entity* e) {
 }
 
 void particle_draw(Entity* e) {
+
   if (e->animation == NULL) {
     SDL_Rect rect;
     rect.x = e->x - app.camera.x;

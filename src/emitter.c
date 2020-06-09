@@ -93,7 +93,7 @@ void spawnColorfulParticles(Emitter* em, int32_t x, int32_t y, uint32_t n, uint3
     float decY;
     float deltaAlpha;
     uint16_t angle = 0;
-    
+
     if (!scatterParticle) {
       decX = randomFloat(0.50, 0.70);
       decY = randomFloat(0.50, 0.70);

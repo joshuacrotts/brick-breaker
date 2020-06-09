@@ -53,8 +53,11 @@ static void tick(void) {
   updateEntities();
 
    if (app.mouse.button[SDL_BUTTON_LEFT]) {
-     spawnColorfulParticles(NULL, app.camera.x + app.mouse.x, app.camera.y + app.mouse.y, 128, ID_P_ANIMATED_PARTICLE_MASK);
+     spawnBloodParticles(NULL, app.camera.x + app.mouse.x, app.camera.y + app.mouse.y, 128, ID_P_BLOOD_SQUARE_MASK);
      app.mouse.button[SDL_BUTTON_LEFT] = 0;
+   } else if (app.mouse.button[SDL_BUTTON_RIGHT]) {
+     spawnColorfulParticles(NULL, app.camera.x + app.mouse.x, app.camera.y + app.mouse.y, 128, ID_P_ANIMATED_PARTICLE_MASK);
+     app.mouse.button[SDL_BUTTON_RIGHT] = 0;
    }
 
   player_update();
@@ -154,7 +157,7 @@ static void drawEntities(void) {
   Entity* e;
 
   for (e = stage.entityHead.next; e != NULL; e = e->next) {
-    if (e->flags & ID_PARTICLE_MASK) {
+    if (e->idFlags & ID_PARTICLE_MASK) {
       particle_draw(e);
     } else if (e->draw) {
       e->draw(e);
