@@ -14,6 +14,7 @@ typedef struct Texture Texture;
 struct Animation {
   Animation* next;
   SDL_Texture* currentTexture;
+  SDL_Texture* defaultTexture;
   SDL_Texture** frames;
 
   SDL_Texture* spritesheet;
@@ -21,8 +22,8 @@ struct Animation {
   uint16_t y;
   uint16_t startX;
   uint16_t startY;
-  uint16_t spriteSheetW;
-  uint16_t spriteSheetH;
+  uint32_t spriteSheetW;
+  uint32_t spriteSheetH;
 
   uint8_t idFlags;
   uint8_t flags;
@@ -70,6 +71,9 @@ struct App{
 struct Entity {
   float x;
   float y;
+
+  //  Miscellaneous positioning variable.
+  float variability;
 
   // Scales the entity in either the x or y
   // direction. This should default to 1.

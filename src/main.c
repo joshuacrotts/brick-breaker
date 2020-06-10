@@ -53,7 +53,7 @@ static void tick(void) {
   updateEntities();
 
    if (app.mouse.button[SDL_BUTTON_LEFT]) {
-     spawnBloodParticles(NULL, app.camera.x + app.mouse.x, app.camera.y + app.mouse.y, 128, ID_P_BLOOD_SQUARE_MASK);
+     spawnBloodParticles(NULL, app.camera.x + app.mouse.x, app.camera.y + app.mouse.y, 256, ID_P_BLOOD_SQUARE_MASK);
      app.mouse.button[SDL_BUTTON_LEFT] = 0;
    } else if (app.mouse.button[SDL_BUTTON_RIGHT]) {
      spawnColorfulParticles(NULL, app.camera.x + app.mouse.x, app.camera.y + app.mouse.y, 128, ID_P_ANIMATED_PARTICLE_MASK);

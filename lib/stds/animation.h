@@ -11,10 +11,8 @@ extern App app;
  * x, y, w, h).
  * @param x = starting top-left x pos of the sprite sheet.
  * @param y = starting top-left y pos of the sprite sheet.
- * @param w = width of an individual frame.
- * @param h = height of an individual frame.
  */
-extern Animation* add_spritesheet(char*, uint8_t, float, uint16_t, uint16_t, uint16_t, uint16_t);
+extern Animation* add_spritesheet(char*, uint8_t, float, uint16_t, uint16_t);
 
 /*
  * The other way to use animations is to specify the
@@ -31,5 +29,7 @@ extern void animation_die(Animation*);
 
 extern SDL_Texture* loadTexture(const char*);
 extern void blit(SDL_Texture*, float, float, bool);
+extern void blitRect(SDL_Texture*, SDL_Rect*, float, float);
+extern void blitRotated(SDL_Texture*, float, float, uint16_t);
 
 #endif

@@ -53,4 +53,4 @@ float getAngle(int32_t, int32_t, int32_t, int32_t);
 /*
  *
  */
-int getDistance(int32_t x1, int32_t y1, int32_t x2, int32_t y2);
+int getDistance(int32_t, int32_t, int32_t, int32_t);

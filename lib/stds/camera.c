@@ -14,7 +14,7 @@ void updateCamera(Entity* focusPoint) {
     if (app.camera.y < 0) {
       app.camera.y = 0;
     }
-
+    
     if (app.camera.x > LEVEL_WIDTH - app.camera.w) {
       app.camera.x = LEVEL_WIDTH - app.camera.w;
     }

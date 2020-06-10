@@ -49,7 +49,7 @@ void spawnBloodParticles(Emitter* em, int32_t x, int32_t y, uint32_t n, uint32_t
   for (int i = 0; i < n; i++) {
     bool scatterParticle = randomInt(0, 1);
     float dx = randomFloat(-20, 20);
-    float dy = randomFloat(-20, 20);
+    float dy = randomFloat(-15, 10);
     float decX;
     float decY;
     float deltaAlpha;
@@ -74,6 +74,10 @@ void spawnBloodParticles(Emitter* em, int32_t x, int32_t y, uint32_t n, uint32_t
     Entity* en;
     en = add_particle(x, y, dx, dy, decX, decY, w, h, angle, r, g, b, a, deltaAlpha, idFlags);
 
+    // if (scatterParticle) {
+    //   en->idFlags |= ID_SCATTER_PARTICLE_MASK;
+    // }
+
     if (em != NULL) {
       em->particleTail->next = en;
       em->particleTail = en;
@@ -87,8 +91,8 @@ void spawnBloodParticles(Emitter* em, int32_t x, int32_t y, uint32_t n, uint32_t
 void spawnColorfulParticles(Emitter* em, int32_t x, int32_t y, uint32_t n, uint32_t flags) {
   for (int i = 0; i < n; i++) {
     bool scatterParticle = randomInt(0, 1);
-    float dx = randomFloat(-20, 20);
-    float dy = randomFloat(-20, 20);
+    float dx = randomFloat(-10, 10);
+    float dy = randomFloat(-15, 10);
     float decX;
     float decY;
     float deltaAlpha;
@@ -121,6 +125,10 @@ void spawnColorfulParticles(Emitter* em, int32_t x, int32_t y, uint32_t n, uint3
 
     Entity* en;
     en = add_animated_particle(x, y, dx, dy, decX, decY, angle, ID_P_ANIMATED_PARTICLE_MASK, particleAnimation);
+
+    // if (scatterParticle) {
+    //   en->idFlags |= ID_SCATTER_PARTICLE_MASK;
+    // }
 
     if (em != NULL) {
       em->particleTail->next = en;
