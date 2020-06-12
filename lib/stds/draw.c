@@ -167,6 +167,31 @@ void fillCircle(int32_t x, int32_t y, uint32_t radius, uint8_t r, uint8_t g, uin
   }
 }
 
+SDL_Color combineFadeColor(FadeColor* f) {
+  if (f->time <= 1.0f && f->firstColor) {
+    f->time = (float) (f->time + f->alpha);
+  } else {
+    f->firstColor = false;
+  }
+
+  if (f->time >= 0.0f && !f->firstColor) {
+    f->time = (float) (f->time - f->alpha);
+  } else {
+    f->firstColor = true;
+  }
+
+  uint8_t r = (uint8_t) (f->time * f->c1.r + (1.0f - f->time) * f->c1.r);
+  uint8_t g = (uint8_t) (f->time * f->c1.g + (1.0f - f->time) * f->c1.g);
+  uint8_t b = (uint8_t) (f->time * f->c1.b + (1.0f - f->time) * f->c1.b);
+
+  SDL_Color c;
+  c.r = clamp(r, 0, 0xff);
+  c.g = clamp(g, 0, 0xff);
+  c.b = clamp(b, 0, 0xff);
+
+  return c;
+}
+
 
 SDL_Texture* loadTexture(char* fileName) {
   SDL_Texture* texture;

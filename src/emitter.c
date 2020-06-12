@@ -86,6 +86,7 @@ void spawnBloodParticles(Emitter* em, int32_t x, int32_t y, uint32_t n, uint32_t
 }
 
 void spawnColorfulParticles(Emitter* em, int32_t x, int32_t y, uint32_t n, uint32_t flags) {
+  
   for (int i = 0; i < n; i++) {
     bool scatterParticle = randomInt(0, 1);
     float dx = randomFloat(-10.0f, 10.0f);
@@ -118,7 +119,7 @@ void spawnColorfulParticles(Emitter* em, int32_t x, int32_t y, uint32_t n, uint3
         particleAnimation = add_animation("../res/img/particles/green/p", 2, randomFloat(0.166f, 0.70f));
         break;
     }
-
+    
     particleAnimation->flags |= STD_ANIMATION_MASK;
 
     Entity* en;

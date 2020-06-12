@@ -10,6 +10,7 @@ typedef struct Entity Entity;
 typedef struct App App;
 typedef struct Animation Animation;
 typedef struct Texture Texture;
+typedef struct FadeColor FadeColor;
 
 struct Animation {
   Animation* next;
@@ -31,10 +32,6 @@ struct Animation {
   uint8_t numberOfFrames;
   float frameDelay;
   float frameTimer;
-
-  void (*tick)(Animation*);
-  void (*draw)(Entity*);
-  void (*die)(Animation*);
 };
 
 struct Texture {
@@ -65,6 +62,15 @@ struct App{
   Delegate delegate;
   Texture textureHead, *textureTail;
   uint16_t keyboard[MAX_KEYBOARD_KEYS];
+};
+
+struct FadeColor {
+  SDL_Color c1;
+  SDL_Color c2;
+
+  bool firstColor;
+  float alpha;
+  float time;
 };
 
 // Update this as needed.

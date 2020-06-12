@@ -54,3 +54,8 @@ float getAngle(int32_t, int32_t, int32_t, int32_t);
  *
  */
 int getDistance(int32_t, int32_t, int32_t, int32_t);
+
+/*
+ *
+ */
+void print(const char*, ...);

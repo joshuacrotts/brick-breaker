@@ -1,5 +1,6 @@
 #include "stds.h"
 
+static char textBuffer[MAX_LINE_LENGTH];
 static bool seed = false;
 
 uint32_t randomInt(uint32_t min, uint32_t max) {
@@ -55,4 +56,15 @@ int32_t getDistance(int32_t x1, int32_t y1, int32_t x2, int32_t y2) {
   int y = y2 - y1;
 
   return (int32_t) sqrt(x * x + y * y);
+}
+
+void print(const char* str, ...) {
+  va_list args;
+  memset(&textBuffer, '\0', sizeof(textBuffer));
+
+  va_start(args, str);
+  vsprintf(textBuffer, str, args);
+  va_end(args);
+
+  SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, textBuffer);
 }

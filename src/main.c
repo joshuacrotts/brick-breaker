@@ -50,6 +50,11 @@ static void tick(void) {
   background_update();
   updateEmitters();
   updateEntities();
+
+  if (app.mouse.button[SDL_BUTTON_LEFT]) {
+    spawnColorfulParticles(NULL, app.mouse.x, app.mouse.y, 128, ID_P_ANIMATED_PARTICLE_MASK);
+    app.mouse.button[SDL_BUTTON_LEFT] = 0;
+  }
 }
 
 /*
@@ -108,9 +113,12 @@ static void updateEntities(void) {
   prev = &stage.entityHead;
 
   for (e = stage.entityHead.next; e != NULL; e = e->next) {
-    if (e->idFlags & ID_PARTICLE_MASK) {
+    if (e->idFlags & ID_PARTICLE_MASK) 
+    {
       particle_tick(e);
-    } else if (e->tick) {
+    } 
+    else if (e->tick) 
+    {
       e->tick(e);
     }
 
@@ -145,9 +153,12 @@ static void drawEntities(void) {
   Entity* e;
 
   for (e = stage.entityHead.next; e != NULL; e = e->next) {
-    if (e->idFlags & ID_PARTICLE_MASK) {
+    if (e->idFlags & ID_PARTICLE_MASK) 
+    {
       particle_draw(e);
-    } else if (e->draw) {
+    } 
+    else if (e->draw) 
+    {
       e->draw(e);
     }
   }

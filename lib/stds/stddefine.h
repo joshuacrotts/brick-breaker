@@ -3,18 +3,20 @@
 
 #define LEVEL_WIDTH             9999
 #define LEVEL_HEIGHT            9999
-#define SCREEN_WIDTH            1280
-#define SCREEN_HEIGHT           720
+#define SCREEN_WIDTH            740
+#define SCREEN_HEIGHT           960
 #define EXIT_ERROR              1
 #define EXIT_SUCCESS            0
 #define MAX_KEYBOARD_KEYS       350
 #define FPS                     60
 #define MAX_SND_CHANNELS        8
 #define MAX_LINE_LENGTH         1024
+#define SMALL_TEXT_BUFFER       32
 #define MAX_KEYBOARD_KEYS       350
 #define MAX_MOUSE_BUTTONS       350
 #define MAX_BUFFER_SIZE         128
 #define MAX_FILE_NAME_LEN       48
+#define WINDOW_UPDATE_TIMER     1000
 #define PI                      3.14159265358979323846
 
 #define SPRITE_SHEET_MASK       2

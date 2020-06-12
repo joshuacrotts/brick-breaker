@@ -85,7 +85,6 @@ void animation_draw(Entity* e) {
   if (e != NULL) {
     Animation* a = e->animation;
     if (a->flags & STD_ANIMATION_MASK) {
-      SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Player pos: %f, %f", e->x - app.camera.x, e->y - app.camera.y);
       blitRotated(a->frames[a->currentFrameID], e->x - app.camera.x, e->y - app.camera.y, e->angle);
     } else if (a->flags & SPRITE_SHEET_MASK) {
       SDL_Rect currRect;

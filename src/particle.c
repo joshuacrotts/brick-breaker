@@ -67,14 +67,13 @@ Entity* add_animated_particle(float x, float y, float dx, float dy, float decX, 
 
 void particle_tick(Entity* e) {
   e->life--;
-
   if (e->life <= 0) {
     particle_die(e);
     return;
   }
 
   if (e->animation != NULL) {
-      e->animation->tick(e->animation);
+      animation_update(e);
   }
 
   e->dx *= e->deltaAccelX;
@@ -103,7 +102,7 @@ void particle_draw(Entity* e) {
       fillCircle(rect.x, rect.y, r, e->color.r, e->color.g, e->color.b, e->color.a);
     }
   } else {
-    e->animation->draw(e);
+    animation_draw(e);
   }
 }
 
