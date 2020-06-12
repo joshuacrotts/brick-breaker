@@ -22,7 +22,6 @@ void init_background(void) {
 }
 
 void background_draw(void) {
-  //blit(background->backgroundTexture, background->x, background->y, false);
   blitTextureScaled(background->backgroundTexture, background->x, background->y, background->scaleX, background->scaleY, 0);
 }
 

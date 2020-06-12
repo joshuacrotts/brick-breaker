@@ -26,7 +26,7 @@ void loop() {
 static void capFrameRate(long* then, float* remainder) {
   long wait, frameTime;
 
-  wait = 16 + *remainder;
+  wait = (int32_t) (16 + *remainder);
   *remainder -= (int)*remainder;
   frameTime = SDL_GetTicks() - *then;
   wait -= frameTime;
@@ -37,7 +37,7 @@ static void capFrameRate(long* then, float* remainder) {
 
   SDL_Delay(wait);
 
-  *remainder += (0.667);
+  *remainder += (0.667f);
 
   *then = SDL_GetTicks();
 }

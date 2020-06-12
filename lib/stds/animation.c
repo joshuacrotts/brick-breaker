@@ -17,8 +17,6 @@ Animation* add_spritesheet(char* directory, uint8_t numberOfFrames, float frameD
   SDL_QueryTexture(a->currentTexture, NULL, NULL, &a->spriteSheetW, &a->spriteSheetH);
   a->currentFrameID = 0;
   a->idFlags |= SPRITE_SHEET_MASK;
-
-  //SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "%d\n", a->spriteSheetW);
 }
 
 Animation* add_animation(char* directory, uint8_t numberOfFrames, float frameDelay) {
@@ -49,11 +47,11 @@ Animation* add_animation(char* directory, uint8_t numberOfFrames, float frameDel
   }
 
   a->defaultTexture = a->frames[0];
-  a->tick = animation_update;
-  a->draw = animation_draw;
 }
 
-void animation_update(Animation* a) {
+void animation_update(Entity* e) {
+  Animation* a = e->animation;
+
   a->frameTimer -= 1;
 
   if (a->frameTimer < 0) {
@@ -84,21 +82,24 @@ void animation_update(Animation* a) {
 }
 
 void animation_draw(Entity* e) {
-  if (e != NULL && e->animation != NULL) {
-    if (e->animation->flags & STD_ANIMATION_MASK) {
-      blitRotated(e->animation->frames[e->animation->currentFrameID], e->x - app.camera.x, e->y - app.camera.y, e->angle);
-    } else if (e->animation->flags & SPRITE_SHEET_MASK) {
+  if (e != NULL) {
+    Animation* a = e->animation;
+    if (a->flags & STD_ANIMATION_MASK) {
+      SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Player pos: %f, %f", e->x - app.camera.x, e->y - app.camera.y);
+      blitRotated(a->frames[a->currentFrameID], e->x - app.camera.x, e->y - app.camera.y, e->angle);
+    } else if (a->flags & SPRITE_SHEET_MASK) {
       SDL_Rect currRect;
-      currRect.x = e->animation->x;
-      currRect.y = e->animation->y;
-      currRect.w = e->w;
-      currRect.h = e->h;
-      blitRect(e->animation->currentTexture, &currRect, e->x - app.camera.x, e->y - app.camera.y);
+      currRect.x = a->x;
+      currRect.y = a->y;
+      SDL_QueryTexture(a->currentTexture, NULL, NULL, &currRect.w, &currRect.h);
+      blitRect(a->currentTexture, &currRect, a->x - app.camera.x, a->y - app.camera.y);
     }
   }
 }
 
-void animation_die(Animation* a) {
+void animation_die(Entity* e) {
+  Animation* a = e->animation;
+
   for (int i = 0; i < a->numberOfFrames; i++) {
     SDL_DestroyTexture(a->frames[i]);
   }

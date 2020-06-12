@@ -8,10 +8,7 @@ Stage stage;
 Entity* player;
 extern Background* background;
 
-extern void init_player(void);
 extern void init_background(void);
-extern void player_update(void);
-extern void player_draw(void);
 extern void background_update(void);
 extern void background_draw(void);
 extern void background_die(void);

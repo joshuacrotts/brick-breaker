@@ -16,8 +16,8 @@ struct Animation {
   SDL_Texture* currentTexture;
   SDL_Texture* defaultTexture;
   SDL_Texture** frames;
-
   SDL_Texture* spritesheet;
+
   uint16_t x;
   uint16_t y;
   uint16_t startX;

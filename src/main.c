@@ -3,6 +3,7 @@
 static void initScene(void);
 static void draw(void);
 static void tick(void);
+static void cleanupStage(void);
 
 static void createEmitter(int32_t, int32_t, uint32_t, uint32_t);
 static void updateEmitters();
@@ -17,6 +18,7 @@ int main(int argc, char* argv[]) {
   initScene();
   loop();
 
+  atexit(cleanupStage);
   return 0;
 }
 
@@ -37,10 +39,7 @@ static void initScene(void) {
   stage.emitterTail = &stage.emitterHead;
   stage.entityTail = &stage.entityHead;
 
-  init_player();
   init_background();
-
-//  createEmitter(400, 400, 1000, ID_P_BLOOD_CIRCLE_MASK);
 }
 
 /*
@@ -51,16 +50,6 @@ static void tick(void) {
   background_update();
   updateEmitters();
   updateEntities();
-
-   if (app.mouse.button[SDL_BUTTON_LEFT]) {
-     spawnBloodParticles(NULL, app.camera.x + app.mouse.x, app.camera.y + app.mouse.y, 256, ID_P_BLOOD_SQUARE_MASK);
-     app.mouse.button[SDL_BUTTON_LEFT] = 0;
-   } else if (app.mouse.button[SDL_BUTTON_RIGHT]) {
-     spawnColorfulParticles(NULL, app.camera.x + app.mouse.x, app.camera.y + app.mouse.y, 128, ID_P_ANIMATED_PARTICLE_MASK);
-     app.mouse.button[SDL_BUTTON_RIGHT] = 0;
-   }
-
-  player_update();
 }
 
 /*
@@ -70,7 +59,6 @@ static void draw(void) {
   background_draw();
   drawEmitters();
   drawEntities();
-  player_draw();
 }
 
 /*
@@ -163,4 +151,34 @@ static void drawEntities(void) {
       e->draw(e);
     }
   }
+}
+
+/*
+ *
+ */
+static void cleanupStage(void) {
+  Animation* a;
+  Emitter* em;
+  Entity* en;
+
+  while (stage.animationHead.next) {
+    a = stage.animationHead.next;
+    stage.animationHead.next = a->next;
+    free(a);
+  }
+
+   while (stage.emitterHead.next) {
+    em = stage.emitterHead.next;
+    stage.emitterHead.next = em->next;
+    free(em);
+  }
+
+  while (stage.entityHead.next) {
+    en = stage.entityHead.next;
+    stage.entityHead.next = en->next;
+    free(en);
+  }
+
+  free(&stage);
+  background_die();
 }

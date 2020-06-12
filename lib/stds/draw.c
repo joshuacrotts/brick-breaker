@@ -58,8 +58,8 @@ void blitColorTextureScaled(SDL_Texture* texture, float x, float y, float scaleX
 
   // Apply the scaling procedure to the image.
   SDL_Rect dest_rect;
-  dest_rect.x = x;
-  dest_rect.y = y;
+  dest_rect.x = (int32_t) x;
+  dest_rect.y = (int32_t) y;
   dest_rect.w = (uint32_t) (textureWidth * scaleX);
   dest_rect.h = (uint32_t) (textureHeight * scaleY);
 
@@ -89,7 +89,7 @@ void drawRect(SDL_Rect* rect, uint8_t r, uint8_t g, uint8_t b, uint8_t a, bool i
 
 void drawLine(float x1, float y1, float x2, float y2, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
   SDL_SetRenderDrawColor(app.renderer, r, g, b, a);
-  SDL_RenderDrawLine(app.renderer, x1, y1, x2, y2);
+  SDL_RenderDrawLine(app.renderer, (int32_t) x1, (int32_t) y1, (int32_t) x2, (int32_t) y2);
 }
 
 void drawCircle(int32_t centerX, int32_t centerY, uint32_t radius, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {

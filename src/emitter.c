@@ -28,6 +28,7 @@ void emitter_update(Emitter* em) {
       if (p == em->particleTail) {
         em->particleTail = prev;
       }
+
       prev->next = p->next;
       free(p);
       p = prev;
@@ -48,19 +49,19 @@ void emitter_draw(Emitter* em) {
 void spawnBloodParticles(Emitter* em, int32_t x, int32_t y, uint32_t n, uint32_t idFlags) {
   for (int i = 0; i < n; i++) {
     bool scatterParticle = randomInt(0, 1);
-    float dx = randomFloat(-20, 20);
-    float dy = randomFloat(-15, 10);
+    float dx = randomFloat(-20.0f, 20.0f);
+    float dy = randomFloat(-15.0f, 10.0f);
     float decX;
     float decY;
     float deltaAlpha;
 
     if (!scatterParticle) {
-      decX = randomFloat(0.50, 0.70);
-      decY = randomFloat(0.50, 0.70);
+      decX = randomFloat(0.50f, 0.70f);
+      decY = randomFloat(0.50f, 0.70f);
     } else {
-      decX = randomFloat(0.70, 0.95);
-      decY = randomFloat(0.70, 0.95);
-      deltaAlpha = randomFloat(1, 3);
+      decX = randomFloat(0.70f, 0.95f);
+      decY = randomFloat(0.70f, 0.95f);
+      deltaAlpha = randomFloat(1.0f, 3.0f);
     }
 
     uint16_t w = randomInt(1, 10);
@@ -73,10 +74,6 @@ void spawnBloodParticles(Emitter* em, int32_t x, int32_t y, uint32_t n, uint32_t
 
     Entity* en;
     en = add_particle(x, y, dx, dy, decX, decY, w, h, angle, r, g, b, a, deltaAlpha, idFlags);
-
-    // if (scatterParticle) {
-    //   en->idFlags |= ID_SCATTER_PARTICLE_MASK;
-    // }
 
     if (em != NULL) {
       em->particleTail->next = en;
@@ -91,33 +88,34 @@ void spawnBloodParticles(Emitter* em, int32_t x, int32_t y, uint32_t n, uint32_t
 void spawnColorfulParticles(Emitter* em, int32_t x, int32_t y, uint32_t n, uint32_t flags) {
   for (int i = 0; i < n; i++) {
     bool scatterParticle = randomInt(0, 1);
-    float dx = randomFloat(-10, 10);
-    float dy = randomFloat(-15, 10);
+    float dx = randomFloat(-10.0f, 10.0f);
+    float dy = randomFloat(-15.0f, 10.0f);
     float decX;
     float decY;
     float deltaAlpha;
+
     uint16_t angle = 0;
 
     if (!scatterParticle) {
-      decX = randomFloat(0.50, 0.70);
-      decY = randomFloat(0.50, 0.70);
+      decX = randomFloat(0.50f, 0.70f);
+      decY = randomFloat(0.50f, 0.70f);
     } else {
-      decX = randomFloat(0.70, 0.95);
-      decY = randomFloat(0.70, 0.95);
-      deltaAlpha = randomFloat(1, 3);
+      decX = randomFloat(0.70f, 0.95f);
+      decY = randomFloat(0.70f, 0.95f);
+      deltaAlpha = randomFloat(1.0f, 3.0f);
     }
 
     Animation* particleAnimation;
     uint8_t animationColor = randomInt(0, 2);
     switch(animationColor) {
       case 0:
-        particleAnimation = add_animation("../res/img/particles/red/p", 2, randomFloat(0.166, 0.70));
+        particleAnimation = add_animation("../res/img/particles/red/p", 2, randomFloat(0.166f, 0.70f));
         break;
       case 1:
-        particleAnimation = add_animation("../res/img/particles/blue/p", 2, randomFloat(0.166, 0.70));
+        particleAnimation = add_animation("../res/img/particles/blue/p", 2, randomFloat(0.166f, 0.70f));
         break;
       case 2:
-        particleAnimation = add_animation("../res/img/particles/green/p", 2, randomFloat(0.166, 0.70));
+        particleAnimation = add_animation("../res/img/particles/green/p", 2, randomFloat(0.166f, 0.70f));
         break;
     }
 
@@ -125,10 +123,6 @@ void spawnColorfulParticles(Emitter* em, int32_t x, int32_t y, uint32_t n, uint3
 
     Entity* en;
     en = add_animated_particle(x, y, dx, dy, decX, decY, angle, ID_P_ANIMATED_PARTICLE_MASK, particleAnimation);
-
-    // if (scatterParticle) {
-    //   en->idFlags |= ID_SCATTER_PARTICLE_MASK;
-    // }
 
     if (em != NULL) {
       em->particleTail->next = en;

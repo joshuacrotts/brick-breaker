@@ -3,7 +3,7 @@
 #and may not be redistributed without written permission.
 
 #OBJS specifies which files to compile as part of the project
-OBJS = ../lib/stds/init.c ../lib/stds/init.h ../lib/stds/draw.c ../lib/stds/draw.h ../lib/stds/stds.h ../lib/stds/input.h ../lib/stds/input.c ../lib/stds/structs.h ../lib/stds/stddefine.h  ../lib/stds/stds.c ../lib/stds/sound.c ../lib/stds/sound.h ../lib/stds/text.c ../lib/stds/text.h ../lib/stds/game.c ../lib/stds/game.h ../lib/stds/camera.c ../lib/stds/camera.h ../lib/stds/animation.c ../lib/stds/animation.h commons.h main.c main.h game_defs.h game_structs.h particle.c particle.h player.c player.h background.c background.h emitter.c emitter.h
+OBJS = ../lib/stds/init.c ../lib/stds/init.h ../lib/stds/draw.c ../lib/stds/draw.h ../lib/stds/stds.h ../lib/stds/input.h ../lib/stds/input.c ../lib/stds/structs.h ../lib/stds/stddefine.h  ../lib/stds/stds.c ../lib/stds/sound.c ../lib/stds/sound.h ../lib/stds/text.c ../lib/stds/text.h ../lib/stds/game.c ../lib/stds/game.h ../lib/stds/camera.c ../lib/stds/camera.h ../lib/stds/animation.c ../lib/stds/animation.h commons.h main.c main.h game_defs.h game_structs.h particle.c particle.h background.c background.h emitter.c emitter.h
 
 #CC specifies which compiler we're using
 CC = gcc
@@ -17,7 +17,7 @@ LIBRARY_PATHS = -LC:\MinGW\lib
 #COMPILER_FLAGS specifies the additional compilation options we're using
 # -w suppresszzes all warnings
 # -Wl,-subsystem,windows gets rid of the console window
-COMPILER_FLAGS = -Werror
+COMPILER_FLAGS = -Werror -Wfloat-conversion
 
 #LINKER_FLAGS specifies the libraries we're linking against
 LINKER_FLAGS = -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf

@@ -81,7 +81,7 @@ void particle_tick(Entity* e) {
   e->dy *= e->deltaAccelY;
 
   if (e->idFlags & ID_SCATTER_PARTICLE_MASK) {
-    e->dy += 0.5;
+    e->dy += 0.5f;
   }
 
   e->x += e->dx;
@@ -91,8 +91,8 @@ void particle_tick(Entity* e) {
 void particle_draw(Entity* e) {
   if (e->animation == NULL) {
     SDL_Rect rect;
-    rect.x = e->x - app.camera.x;
-    rect.y = e->y - app.camera.y;
+    rect.x = (int32_t) (e->x - app.camera.x);
+    rect.y = (int32_t) (e->y - app.camera.y);
     rect.w = e->w;
     rect.h = e->h;
 
