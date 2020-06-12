@@ -5,20 +5,28 @@
 
 App app;
 Stage stage;
-Entity* player;
+Entity* paddle;
 extern Background* background;
 
+extern void init_paddle(void);
 extern void init_background(void);
 extern void background_update(void);
 extern void background_draw(void);
 extern void background_die(void);
+extern void paddle_update(void);
+extern void paddle_draw(void);
+extern void paddle_die(void);
 extern void emitter_update(Emitter*);
 extern void emitter_draw(Emitter*);
 extern void emitter_die(Emitter*);
 extern void particle_tick(Entity*);
 extern void particle_draw(Entity*);
 extern void particle_die(Entity*);
+extern void ball_update(Entity*);
+extern void ball_draw(Entity*);
+extern void ball_die(Entity*);
 
+extern Entity* add_ball(int32_t, int32_t);
 extern Entity* add_particle(float, float, float, float, float, float, uint16_t, uint16_t, uint16_t, int16_t, int16_t, int16_t, int16_t, float);
 extern Animation* add_animation(char*, uint8_t, float);
 extern Emitter* create_emitter(int32_t, int32_t, uint32_t, uint32_t);

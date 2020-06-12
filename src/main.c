@@ -10,6 +10,7 @@ static void updateEmitters();
 static void updateEntities();
 static void drawEmitters();
 static void drawEntities();
+static void ballHitPaddle(Entity*);
 
 // Barebones game. This is the minimum amount of code
 // necessary to run a window.
@@ -39,6 +40,7 @@ static void initScene(void) {
   stage.emitterTail = &stage.emitterHead;
   stage.entityTail = &stage.entityHead;
 
+  init_paddle();
   init_background();
 }
 
@@ -46,13 +48,17 @@ static void initScene(void) {
  *
  */
 static void tick(void) {
-  updateCamera(player);
+  //updateCamera(player);
   background_update();
   updateEmitters();
   updateEntities();
+  paddle_update();
 
   if (app.mouse.button[SDL_BUTTON_LEFT]) {
-    spawnColorfulParticles(NULL, app.mouse.x, app.mouse.y, 128, ID_P_ANIMATED_PARTICLE_MASK);
+    Entity* b = add_ball(app.mouse.x, app.mouse.y);
+    stage.entityTail->next = b;
+    stage.entityTail = b;
+    //spawnColorfulParticles(NULL, app.mouse.x, app.mouse.y, 16, ID_P_ANIMATED_PARTICLE_MASK);
     app.mouse.button[SDL_BUTTON_LEFT] = 0;
   }
 }
@@ -64,6 +70,7 @@ static void draw(void) {
   background_draw();
   drawEmitters();
   drawEntities();
+  paddle_draw();
 }
 
 /*
@@ -117,6 +124,11 @@ static void updateEntities(void) {
     {
       particle_tick(e);
     } 
+    else if (e->idFlags & ID_BALL_MASK) 
+    {
+      ballHitPaddle(e);
+      ball_update(e);
+    }
     else if (e->tick) 
     {
       e->tick(e);
@@ -157,10 +169,26 @@ static void drawEntities(void) {
     {
       particle_draw(e);
     } 
+    else if (e->idFlags & ID_BALL_MASK) 
+    {
+      ball_draw(e);
+    }
     else if (e->draw) 
     {
       e->draw(e);
     }
+  }
+}
+
+/*
+ *
+ */
+static void ballHitPaddle(Entity* b) {
+
+  if (collision((int32_t) paddle->x, (int32_t) paddle->y, (int32_t) paddle->w, (int32_t) paddle->h, 
+                (int32_t) b->x, (int32_t) b->y, (int32_t) b->w, (int32_t) b->h)) {
+    b->dy = -b->dy;
+    return;
   }
 }
 
@@ -190,6 +218,6 @@ static void cleanupStage(void) {
     free(en);
   }
 
-  free(&stage);
+  paddle_die();
   background_die();
 }

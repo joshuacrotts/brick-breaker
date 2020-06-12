@@ -1,0 +1,31 @@
+#ifndef BALL_H
+#define BALL_H
+
+#include "commons.h"
+
+extern App app;
+extern Stage stage;
+
+/*
+ *
+ */
+Entity* add_ball(int32_t, int32_t);
+
+/*
+ *
+ */
+void ball_update(Entity*);
+
+/*
+ *
+ */
+void ball_draw(Entity*);
+
+/*
+ *
+ */
+void ball_die(Entity*);
+
+extern void drawRect(SDL_Rect*, uint8_t, uint8_t, uint8_t, uint8_t, bool);
+
+#endif

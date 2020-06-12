@@ -3,7 +3,7 @@
 #and may not be redistributed without written permission.
 
 #OBJS specifies which files to compile as part of the project
-OBJS = ../lib/stds/init.c ../lib/stds/init.h ../lib/stds/draw.c ../lib/stds/draw.h ../lib/stds/stds.h ../lib/stds/input.h ../lib/stds/input.c ../lib/stds/structs.h ../lib/stds/stddefine.h  ../lib/stds/stds.c ../lib/stds/sound.c ../lib/stds/sound.h ../lib/stds/text.c ../lib/stds/text.h ../lib/stds/game.c ../lib/stds/game.h ../lib/stds/camera.c ../lib/stds/camera.h ../lib/stds/animation.c ../lib/stds/animation.h commons.h main.c main.h game_defs.h game_structs.h particle.c particle.h background.c background.h emitter.c emitter.h
+OBJS = ../lib/stds/init.c ../lib/stds/init.h ../lib/stds/draw.c ../lib/stds/draw.h ../lib/stds/stds.h ../lib/stds/input.h ../lib/stds/input.c ../lib/stds/structs.h ../lib/stds/stddefine.h  ../lib/stds/stds.c ../lib/stds/sound.c ../lib/stds/sound.h ../lib/stds/text.c ../lib/stds/text.h ../lib/stds/game.c ../lib/stds/game.h ../lib/stds/camera.c ../lib/stds/camera.h ../lib/stds/animation.c ../lib/stds/animation.h commons.h main.c main.h game_defs.h game_structs.h particle.c particle.h background.c background.h emitter.c emitter.h paddle.c paddle.h ball.c ball.h
 
 #CC specifies which compiler we're using
 CC = gcc

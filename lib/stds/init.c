@@ -93,14 +93,12 @@ static void cleanup(void) {
   if (debugMode) {
     SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Cleaning up.");
   }
-	SDL_DestroyRenderer(app.renderer);
 
+	SDL_DestroyRenderer(app.renderer);
 	SDL_DestroyWindow(app.window);
 
   free(&app);
-
   freeFonts();
-
 	SDL_Quit();
 
   if (debugMode) {

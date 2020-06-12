@@ -7,6 +7,7 @@
 #define MOVE_MASK                        0x00000002
 
 
+#define ID_BALL_MASK                     0x00000030
 #define ID_PLAYER_MASK                   0x00000001
 #define ID_PARTICLE_MASK                 0x00000100
 #define ID_SCATTER_PARTICLE_MASK         0x00000200
