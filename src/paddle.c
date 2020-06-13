@@ -3,14 +3,15 @@
 static void keyInputUpdate(void);
 static void checkBounds(void);
 
-void init_paddle() {
+void init_paddle(void) {
     paddle = malloc(sizeof(Entity));
     memset(paddle, 0, sizeof(Entity));
 
     paddle->x = 20;
-    paddle->y = SCREEN_HEIGHT - 20;
-    paddle->w = 620;
-    paddle->h = 10;
+    paddle->y = SCREEN_HEIGHT - 40;
+    paddle->texture = loadTexture("../res/img/paddle.png");
+    SDL_QueryTexture(paddle->texture, NULL, NULL, &paddle->w, &paddle->h);
+
     paddle->idFlags |= ID_PLAYER_MASK;
 }
 
@@ -23,13 +24,7 @@ void paddle_update(void) {
 }
 
 void paddle_draw(void) {
-    SDL_Rect rect;
-    rect.x = (int32_t) paddle->x;
-    rect.y = (int32_t) paddle->y;
-    rect.w = paddle->w;
-    rect.h = paddle->h;
-
-    drawRect(&rect, 0xff, 0, 0, 0xff, true);
+    blit(paddle->texture, paddle->x, paddle->y, false);
 }
 
 void paddle_die(void) {

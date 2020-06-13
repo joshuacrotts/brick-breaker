@@ -6,8 +6,9 @@
 #define DEATH_MASK                       0x00000001
 #define MOVE_MASK                        0x00000002
 
-
+#define BALL_SPEED                               10
 #define ID_BALL_MASK                     0x00000030
+#define ID_DEFAULT_BRICK_MASK            0x00000040
 #define ID_PLAYER_MASK                   0x00000001
 #define ID_PARTICLE_MASK                 0x00000100
 #define ID_SCATTER_PARTICLE_MASK         0x00000200

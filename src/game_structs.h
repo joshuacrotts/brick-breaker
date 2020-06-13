@@ -6,6 +6,7 @@
 typedef struct Stage Stage;
 typedef struct Background Background;
 typedef struct Emitter Emitter;
+typedef struct Level Level;
 
 struct Background {
   int32_t x;
@@ -30,10 +31,21 @@ struct Emitter {
   Emitter* next;
 };
 
+struct Level {
+  Entity ballHead, *ballTail;
+  Entity brickHead, *brickTail;
+  Entity powerupHead, *powerupTail;
+  Entity entityHead, *entityTail;
+  Emitter emitterHead, *emitterTail;
+
+  Background* background;
+  
+  Level* next;
+};
+
 struct Stage {
   Animation animationHead, *animationTail;
-  Emitter emitterHead, *emitterTail;
-  Entity entityHead, *entityTail;
+  Level levelHead, *levelTail;
 };
 
 #endif

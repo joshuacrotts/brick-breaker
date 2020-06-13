@@ -87,6 +87,46 @@ void drawRect(SDL_Rect* rect, uint8_t r, uint8_t g, uint8_t b, uint8_t a, bool i
   SDL_SetRenderDrawBlendMode(app.renderer, SDL_BLENDMODE_NONE);
 }
 
+void drawRectStroke(int32_t x, int32_t y, uint32_t w, uint32_t h, uint32_t stroke, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+  if (stroke <= 0) {
+    SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Error: stroke %d cannot be a negative or zero value!", stroke);
+    exit(EXIT_FAILURE);
+  } else {
+    SDL_Rect r1;
+    SDL_Rect r2;
+    SDL_Rect r3;
+    SDL_Rect r4;
+
+    // Top-left to TR
+    r1.x = x;
+    r1.y = y;
+    r1.w = w;
+    r1.h = stroke;
+
+    //TL to BL
+    r2.x = x;
+    r2.y = y;
+    r2.w = stroke;
+    r2.h = h;
+
+    //BL to BR
+    r3.x = x;
+    r3.y = h - stroke;
+    r3.w = w;
+    r3.h = stroke;
+
+    r4.x = w - stroke;
+    r4.y = y;
+    r4.w = stroke;
+    r4.h = h;
+
+    drawRect(&r1, r, g, b, a, true);
+    drawRect(&r2, r, g, b, a, true);
+    drawRect(&r3, r, g, b, a, true);
+    drawRect(&r4, r, g, b, a, true);
+  }
+}
+
 void drawLine(float x1, float y1, float x2, float y2, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
   SDL_SetRenderDrawColor(app.renderer, r, g, b, a);
   SDL_RenderDrawLine(app.renderer, (int32_t) x1, (int32_t) y1, (int32_t) x2, (int32_t) y2);
@@ -180,10 +220,10 @@ SDL_Color combineFadeColor(FadeColor* f) {
     f->firstColor = true;
   }
 
-  uint8_t r = (uint8_t) (f->time * f->c1.r + (1.0f - f->time) * f->c1.r);
-  uint8_t g = (uint8_t) (f->time * f->c1.g + (1.0f - f->time) * f->c1.g);
-  uint8_t b = (uint8_t) (f->time * f->c1.b + (1.0f - f->time) * f->c1.b);
-
+  int r = (int) (f->time * f->c2.r + (1.0f - f->time) * f->c1.r);
+  int g = (int) (f->time * f->c2.g + (1.0f - f->time) * f->c1.g);
+  int b = (int) (f->time * f->c2.b + (1.0f - f->time) * f->c1.b);
+  
   SDL_Color c;
   c.r = clamp(r, 0, 0xff);
   c.g = clamp(g, 0, 0xff);

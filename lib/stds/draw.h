@@ -66,6 +66,14 @@ extern void blitTextureScaled(SDL_Texture*, float, float, float, float, uint16_t
 extern void drawRect(SDL_Rect*, uint8_t, uint8_t, uint8_t, uint8_t, bool);
 
 /*
+ * Draws a rectangle with the specified stroke (pixel width) and color.
+ * First four parameters are the x, y, width, and height of rectangle.
+ * The next specifies how "thick" it should be. The last four values 
+ * specify the RGBA values.
+ */
+extern void drawRectStroke(int32_t, int32_t, uint32_t, uint32_t, uint32_t, uint8_t, uint8_t, uint8_t, uint8_t);
+
+/*
  * Draws a circle. Simple as that. Takes in the circle's center coordinates,
  * the radius, and RGBA.
  */
@@ -87,5 +95,10 @@ extern void drawLine(float, float, float, float, uint8_t, uint8_t, uint8_t, uint
  * loadable.
  */
 extern SDL_Texture* loadTexture(char*);
+
+/*
+ *
+ */
+extern SDL_Color combineFadeColor(FadeColor*);
 
 #endif

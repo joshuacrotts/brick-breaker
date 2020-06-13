@@ -2,20 +2,22 @@
 
 static void checkBounds(Entity*);
 
-Entity* add_ball(int32_t x, int32_t y) {
+Entity* add_ball(float x, float y, uint32_t flags) {
     Entity* b;
 
     b = malloc(sizeof(Entity));
     memset(b, 0, sizeof(Entity));
 
-    b->x = 480;
-    b->y = 240;
-    b->w = 3;
-    b->h = b->w;
+    b->x = x;
+    b->y = y;
+    b->texture = loadTexture("../res/img/ball_sprite_0.png");
+    SDL_QueryTexture(b->texture, NULL, NULL, &b->w, &b->h);
+
     b->dx = randomFloat(-5.0f, 5.0f);
     b->dy = randomFloat(-5.0f, 5.0f);
 
     b->idFlags |= ID_BALL_MASK;
+    b->flags |= flags;
 
     return b;
 }
@@ -28,13 +30,7 @@ void ball_update(Entity* b) {
 }
 
 void ball_draw(Entity* b) {
-    SDL_Rect rect;
-    rect.x = (int32_t) b->x;
-    rect.y = (int32_t) b->y;
-    rect.w = b->w;
-    rect.h = b->h;
-
-    drawRect(&rect, 0xff, 0xff, 0, 0xff, true);
+    blit(b->texture, b->x, b->y, false);
 }
 
 void ball_die(Entity* b) {

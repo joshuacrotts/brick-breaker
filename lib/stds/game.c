@@ -3,7 +3,7 @@
 static uint16_t currentFPS;
 
 static void capFrameRate(long*, float*);
-uint32_t updateWindowTitle(uint32_t, void*);
+static uint32_t updateWindowTitle(uint32_t, void*);
 
 void loop() {
   long timer;
@@ -50,7 +50,7 @@ static void capFrameRate(long* then, float* remainder) {
 /*
  *
  */
-uint32_t updateWindowTitle(uint32_t interval, void* args) {
+static uint32_t updateWindowTitle(uint32_t interval, void* args) {
   uint16_t fps = *(uint16_t*) args;
   // Create text window buffer.
   char windowBuffer[SMALL_TEXT_BUFFER];

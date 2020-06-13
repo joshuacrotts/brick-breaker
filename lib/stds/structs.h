@@ -106,11 +106,12 @@ struct Entity {
   uint32_t flags;
   uint32_t idFlags;
   uint32_t reload;
-
-  uint16_t health;
+  
   uint16_t angle;
   uint16_t radius;
 
+  // Can be used interchangably for different purposes.
+  int32_t health;
   int32_t life;
 
   Animation* animation;

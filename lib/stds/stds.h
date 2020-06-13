@@ -23,7 +23,7 @@
 /*
  *
  */
-uint32_t randomInt(uint32_t, uint32_t);
+int32_t randomInt(int32_t, int32_t);
 
 /*
  *
@@ -33,7 +33,7 @@ float randomFloat(float, float);
 /*
  *
  */
-uint32_t clamp(uint32_t, uint32_t, uint32_t);
+int32_t clamp(int32_t, int32_t, int32_t);
 
 /*
  *

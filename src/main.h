@@ -6,6 +6,7 @@
 App app;
 Stage stage;
 Entity* paddle;
+extern Level* currentLevel;
 extern Background* background;
 
 extern void init_paddle(void);
@@ -26,7 +27,8 @@ extern void ball_update(Entity*);
 extern void ball_draw(Entity*);
 extern void ball_die(Entity*);
 
-extern Entity* add_ball(int32_t, int32_t);
+extern Entity* add_ball(float, float, uint32_t);
+extern Level* add_level();
 extern Entity* add_particle(float, float, float, float, float, float, uint16_t, uint16_t, uint16_t, int16_t, int16_t, int16_t, int16_t, float);
 extern Animation* add_animation(char*, uint8_t, float);
 extern Emitter* create_emitter(int32_t, int32_t, uint32_t, uint32_t);
@@ -40,6 +42,9 @@ extern void drawText(float, float, int, int, int, const char*, ...);
 extern void blitColorTextureScaled(SDL_Texture*, float, float, float, float, uint16_t, int16_t, int16_t, int16_t, int16_t);
 extern void blitTextureScaled(SDL_Texture*, float, float, float, float, uint16_t);
 extern void blit(SDL_Texture*, float, float, bool);
+extern void drawRect(SDL_Rect*, uint8_t, uint8_t, uint8_t, uint8_t, bool);
+extern void drawRectStroke(int32_t, int32_t, int32_t, int32_t, uint32_t, uint8_t, uint8_t, uint8_t, uint8_t);
 extern SDL_Texture* loadTexture(const char*);
+extern SDL_Color combineFadeColor(FadeColor*);
 
 #endif

@@ -79,8 +79,8 @@ void spawnBloodParticles(Emitter* em, int32_t x, int32_t y, uint32_t n, uint32_t
       em->particleTail->next = en;
       em->particleTail = en;
     } else {
-      stage.entityTail->next = en;
-      stage.entityTail = en;
+      currentLevel->entityTail->next = en;
+      currentLevel->entityTail = en;
     }
   }
 }
@@ -129,8 +129,8 @@ void spawnColorfulParticles(Emitter* em, int32_t x, int32_t y, uint32_t n, uint3
       em->particleTail->next = en;
       em->particleTail = en;
     } else {
-      stage.entityTail->next = en;
-      stage.entityTail = en;
+      currentLevel->entityTail->next = en;
+      currentLevel->entityTail = en;
     }
   }
 }

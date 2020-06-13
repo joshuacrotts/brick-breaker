@@ -21,6 +21,7 @@
 
 #define SPRITE_SHEET_MASK       2
 #define STD_ANIMATION_MASK      1
+#define ANIMATION_ACTIVE_MASK   0x010000000;
 
 
 enum {

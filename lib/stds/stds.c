@@ -3,7 +3,7 @@
 static char textBuffer[MAX_LINE_LENGTH];
 static bool seed = false;
 
-uint32_t randomInt(uint32_t min, uint32_t max) {
+int32_t randomInt(int32_t min, int32_t max) {
   if (!seed) {
     srand((uint32_t) time(NULL));
     seed = true;
@@ -12,16 +12,21 @@ uint32_t randomInt(uint32_t min, uint32_t max) {
 }
 
 float randomFloat(float min, float max) {
+  if (!seed) {
+    srand((uint32_t) time(NULL));
+    seed = true;
+  }
+
   float scale = rand() / (float) RAND_MAX;
   return min + scale * (max - min);
 }
 
-uint32_t clamp(uint32_t value, uint32_t min, uint32_t max) {
+int32_t clamp(int32_t value, int32_t min, int32_t max) {
   int newValue = value;
   if (value < min) {
-    value = min;
+    newValue = min;
   } else if (value > max) {
-    value = max;
+    newValue = max;
   }
 
   return newValue;

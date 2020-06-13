@@ -3,6 +3,7 @@
 
 #include "commons.h"
 
+extern Level* currentLevel;
 extern Entity* e;
 extern App app;
 extern Stage stage;
