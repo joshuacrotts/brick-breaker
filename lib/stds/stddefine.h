@@ -16,6 +16,7 @@
 #define MAX_MOUSE_BUTTONS       350
 #define MAX_BUFFER_SIZE         128
 #define MAX_FILE_NAME_LEN       48
+#define TEXTURE_BUFFER_SIZE     4
 #define WINDOW_UPDATE_TIMER     1000
 #define PI                      3.14159265358979323846
 

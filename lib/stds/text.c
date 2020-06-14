@@ -16,7 +16,7 @@ void initFonts(void) {
     exit(EXIT_ERROR);
   }
 
-  arialFont = TTF_OpenFont("../res/fonts/arial.ttf", DEFAULT_FONT_SIZE);
+  arialFont = TTF_OpenFont("../res/fonts/nes.ttf", DEFAULT_FONT_SIZE);
 
   if (arialFont == NULL) {
     SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to load TTF font: %s.\n", SDL_GetError());

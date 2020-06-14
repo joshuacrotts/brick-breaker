@@ -9,8 +9,8 @@ void init_paddle(void) {
 
     paddle->x = 20;
     paddle->y = SCREEN_HEIGHT - 40;
-    paddle->texture = loadTexture("../res/img/paddle.png");
-    SDL_QueryTexture(paddle->texture, NULL, NULL, &paddle->w, &paddle->h);
+    paddle->texture[0] = loadTexture("../res/img/paddle.png");
+    SDL_QueryTexture(paddle->texture[0], NULL, NULL, &paddle->w, &paddle->h);
 
     paddle->idFlags |= ID_PLAYER_MASK;
 }
@@ -24,7 +24,7 @@ void paddle_update(void) {
 }
 
 void paddle_draw(void) {
-    blit(paddle->texture, paddle->x, paddle->y, false);
+    blit(paddle->texture[0], paddle->x, paddle->y, false);
 }
 
 void paddle_die(void) {

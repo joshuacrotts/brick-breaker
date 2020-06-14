@@ -64,7 +64,7 @@ static void tick(void) {
 
   if (app.mouse.button[SDL_BUTTON_LEFT]) {
     Entity* b = add_ball(app.mouse.x, app.mouse.y, 0);
-    Entity* p = add_powerup(app.mouse.x, app.mouse.y, 0, MULTI_BALL);
+    Entity* p = add_powerup(app.mouse.x, app.mouse.y, 0, LARGE_PADDLE);
 
     currentLevel->ballTail->next = b;
     currentLevel->ballTail = b;

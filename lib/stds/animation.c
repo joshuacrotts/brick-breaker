@@ -27,7 +27,6 @@ Animation* add_spritesheet(char* directory, uint8_t numberOfFrames, float frameD
 
 Animation* add_animation(char* directory, uint8_t numberOfFrames, float frameDelay) {
   Animation* a;
-
   a = malloc(sizeof(Animation));
   memset(a, 0, sizeof(Animation));
 
@@ -36,16 +35,13 @@ Animation* add_animation(char* directory, uint8_t numberOfFrames, float frameDel
   a->frameDelay = frameDelay;
   a->frameTimer = frameDelay * FPS;
   a->currentFrameID = 0;
-  a->currentTexture = a->frames[a->currentFrameID];
   
   SDL_QueryTexture(a->currentTexture, NULL, NULL, &a->w, &a->h);
-
   a->idFlags |= STD_ANIMATION_MASK;
   a->flags |= ANIMATION_ACTIVE_MASK;
 
   char numberBuffer[3];
   char* fileExtsn = ".png";
-
   for (int i = 0; i < a->numberOfFrames; i++) {
     itoa(i, numberBuffer, 10);
     strcpy(inputBuffer, directory);
@@ -54,13 +50,12 @@ Animation* add_animation(char* directory, uint8_t numberOfFrames, float frameDel
     a->frames[i] = loadTexture(fileNameExt);
     memset(inputBuffer, '\0', sizeof(inputBuffer));
   }
-
+  a->currentTexture = a->frames[0];
   a->defaultTexture = a->frames[0];
 }
 
 void animation_update(Entity* e) {
   Animation* a = e->animation;
-
   if (a->flags & ANIMATION_ACTIVE_MASK) {
     a->frameTimer -= 1;
 
@@ -106,8 +101,10 @@ void animation_draw(Entity* e) {
     Animation* a = e->animation;
     if (a->flags & ANIMATION_ACTIVE_MASK) {
       if (a->idFlags & STD_ANIMATION_MASK) {
-        blitRotated(a->frames[a->currentFrameID], e->x - app.camera.x, e->y - app.camera.y, e->angle);
+        blitRotated(a->frames[a->currentFrameID], (e->x + e->w / 2) - app.camera.x, (e->y + e->h / 2) - app.camera.y, e->angle);
       } else if (a->idFlags & SPRITE_SHEET_MASK) {
+        // Yes, the math IS correct; don't second-guess yourself!
+        // The offset is due to the RECTANGLE!
         SDL_Rect currRect;
         currRect.x = (int32_t) a->x;
         currRect.y = (int32_t) a->y;
@@ -116,8 +113,6 @@ void animation_draw(Entity* e) {
 
         blitRect(a->currentTexture, &currRect, e->x - app.camera.x, e->y - app.camera.y);
       }
-    } else {
-      blit(a->defaultTexture, e->x - app.camera.x, e->y - app.camera.y, false);
     }
   }
 }

@@ -18,9 +18,9 @@ void add_debris(Entity* parentBrick, uint32_t flags) {
 
       d->x = parentBrick->x + parentBrick->w / 2;
       d->y = parentBrick->y + parentBrick->h / 2;
-      d->dx = randomFloat(0, 5) - randomFloat(0, 5);
-      d->dy = randomFloat(-1, 1);
-      d->texture = parentBrick->texture;
+      d->dx = randomFloat(-5.0f, 5.0f);
+      d->dy = randomFloat(1.0f, 2.0f);
+      d->texture = parentBrick->texture[0];
 
       d->rect.x = x;
       d->rect.y = y;

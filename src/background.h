@@ -10,6 +10,7 @@ extern void init_background(void);
 extern void background_update(void);
 extern void background_draw(void);
 extern void background_die(void);
+extern void drawHUD(SDL_Color*);
 
 extern void blit(SDL_Texture*, float, float, bool);
 extern void blitTextureScaled(SDL_Texture*, float, float, float, float, uint16_t);

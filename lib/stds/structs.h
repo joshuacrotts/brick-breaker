@@ -120,10 +120,7 @@ struct Entity {
 
   Animation* animation;
   SDL_Color color;
-  SDL_Texture* texture;
-  SDL_Texture* texture2;
-  SDL_Texture* texture3;
-  SDL_Texture* texture4;
+  SDL_Texture* texture[TEXTURE_BUFFER_SIZE];
   Entity* next;
 
   void (*tick)(Entity*);

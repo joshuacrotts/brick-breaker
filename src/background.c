@@ -40,7 +40,8 @@ void background_draw(void) {
   blitTextureScaled(background->backgroundTexture, background->x, background->y, background->scaleX, background->scaleY, 0);
   
   SDL_Color c = combineFadeColor(&fadeColor);
-  drawRectStroke(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 8, c.r, c.g, c.b, 0xff);
+  drawRectStroke(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, INSETS, c.r, c.g, c.b, 0xff);
+  drawHUD(&c);
 }
 
 void background_update(void) {

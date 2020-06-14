@@ -16,6 +16,9 @@ Entity* add_powerup(float x, float y, uint32_t flags, int8_t identifier) {
         case MULTI_BALL:
             a = add_spritesheet("../res/img/powerup/multi.png", 10, 0.05f, 0, 0);
             break;
+        case LARGE_PADDLE:
+            a = add_spritesheet("../res/img/powerup/large.png", 10, 0.05f, 0, 0);
+            break;
         default:
             exit(EXIT_ERROR);            
     }

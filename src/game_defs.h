@@ -6,7 +6,9 @@
 #define DEATH_MASK                       0x10000000
 #define MOVE_MASK                        0x20000000
 
-#define BALL_SPEED                               10
+#define MAX_DEBRIS_IMGS                  3
+#define INSETS                           8
+#define BALL_SPEED                       10
 #define ID_BALL_MASK                     0x00000030
 #define POWERUP_ACTIVE                   0x00000102
 #define POWERUP_INACTIVE                 0x00000101
@@ -20,11 +22,21 @@
 #define ID_P_BLOOD_SQUARE_MASK           0x00000042
 
 enum Powerup {
-    MULTI_BALL
+    MULTI_BALL,
+    LARGE_PADDLE
 };
 
 enum Brick {
-    RED
+    RED,
+    BLUE,
+    BROWN,
+    YELLOW,
+    ORANGE,
+    PURPLE,
+    DARK_GREEN,
+    LIGHT_GREEN,
+    LIGHT_BLUE,
+    GRAY,
 };
 
 #endif

@@ -25,8 +25,15 @@ Level* add_level() {
     level->powerupTail = &level->powerupHead;
 
     for (int x = 20; x <= SCREEN_WIDTH - 80; x += 92) {
-        for (int y = 20; y <= 200; y += 32) {
-            Entity* b = add_brick(x, y, 0, RED);
+        for (int y = 120; y <= 300; y += 32) {
+            Entity* b;
+
+            switch (randomInt(0, 1)) {
+              case 0: b = add_brick(x, y, 0, RED);
+                      break;
+              case 1: b = add_brick(x, y, 0, BLUE);
+                      break;
+            }
             
             level->brickTail->next = b;
             level->brickTail = b;
