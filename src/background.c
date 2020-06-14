@@ -41,7 +41,7 @@ void background_draw(void) {
   
   SDL_Color c = combineFadeColor(&fadeColor);
   drawRectStroke(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, INSETS, c.r, c.g, c.b, 0xff);
-  drawHUD(&c);
+  draw_HUD(&c);
 }
 
 void background_update(void) {

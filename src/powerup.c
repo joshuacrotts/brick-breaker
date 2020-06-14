@@ -19,9 +19,16 @@ Entity* add_powerup(float x, float y, uint32_t flags, int8_t identifier) {
         case LARGE_PADDLE:
             a = add_spritesheet("../res/img/powerup/large.png", 10, 0.05f, 0, 0);
             break;
+        case EXTRA_LIFE:
+            a = add_spritesheet("../res/img/powerup/extra_life.png", 8, 0.09f, 0, 0);
+            break;
+        case GOLD_COIN:
+            a = add_spritesheet("../res/img/powerup/gold_coin.png", 16, 0.05f, 0, 0);
+            break;
         default:
             exit(EXIT_ERROR);            
     }
+
     a->flags |= ANIMATION_ACTIVE_MASK;
 
     p->w = a->w;

@@ -23,20 +23,22 @@
 
 enum Powerup {
     MULTI_BALL,
-    LARGE_PADDLE
+    LARGE_PADDLE,
+    EXTRA_LIFE,
+    GOLD_COIN
 };
 
 enum Brick {
-    RED,
-    BLUE,
-    BROWN,
-    YELLOW,
-    ORANGE,
-    PURPLE,
-    DARK_GREEN,
-    LIGHT_GREEN,
-    LIGHT_BLUE,
-    GRAY,
+    NULL_COLOR, //0
+    RED,//1
+    BLUE,//2
+    BROWN,//3
+    YELLOW,//4
+    ORANGE,//5
+    PURPLE,//6
+    DARK_GREEN,//7
+    LIGHT_GREEN,//8
+    LIGHT_BLUE,//9
 };
 
 #endif

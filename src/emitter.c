@@ -1,6 +1,6 @@
 #include "emitter.h"
 
-Emitter* create_emitter(int32_t x, int32_t y, uint32_t maxParticles, uint32_t idFlags) {
+Emitter* add_emitter(int32_t x, int32_t y, uint32_t maxParticles, uint32_t idFlags) {
   Emitter* em;
   em = malloc(sizeof(Emitter));
   memset(em, 0, sizeof(Emitter));
@@ -19,7 +19,7 @@ void emitter_update(Emitter* em) {
   Entity* prev;
   prev = &em->particleHead;
 
-  spawnBloodParticles(em, em->x, em->y, 5, ID_P_BLOOD_CIRCLE_MASK);
+  spawn_blood_particles(em, em->x, em->y, 5, ID_P_BLOOD_CIRCLE_MASK);
 
   for (p = em->particleHead.next; p != NULL; p = p->next) {
     particle_update(p);
@@ -46,7 +46,7 @@ void emitter_draw(Emitter* em) {
   }
 }
 
-void spawnBloodParticles(Emitter* em, int32_t x, int32_t y, uint32_t n, uint32_t idFlags) {
+void spawn_blood_particles(Emitter* em, int32_t x, int32_t y, uint32_t n, uint32_t idFlags) {
   for (int i = 0; i < n; i++) {
     bool scatterParticle = randomInt(0, 1);
     float dx = randomFloat(-20.0f, 20.0f);
@@ -85,7 +85,7 @@ void spawnBloodParticles(Emitter* em, int32_t x, int32_t y, uint32_t n, uint32_t
   }
 }
 
-void spawnColorfulParticles(Emitter* em, int32_t x, int32_t y, uint32_t n, uint32_t flags) {
+void spawn_colorful_particles(Emitter* em, int32_t x, int32_t y, uint32_t n, uint32_t flags) {
   
   for (int i = 0; i < n; i++) {
     bool scatterParticle = randomInt(0, 1);

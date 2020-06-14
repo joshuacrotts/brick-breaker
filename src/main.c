@@ -1,27 +1,27 @@
 #include "main.h"
 
-static void initScene(void);
+static void init_scene(void);
 static void draw(void);
 static void tick(void);
-static void cleanupStage(void);
+static void cleanup_stage(void);
 
-static void createEmitter(int32_t, int32_t, uint32_t, uint32_t);
-static void updateEmitters(void);
-static void updateEntities(void);
-static void updateDebris(void);
+static void create_emitter(int32_t, int32_t, uint32_t, uint32_t);
+static void update_emitters(void);
+static void update_entities(void);
+static void update_debris(void);
 
-static void drawEmitters(void);
-static void drawEntities(void);
-static void drawDebris(void);
+static void draw_emitters(void);
+static void draw_entities(void);
+static void draw_debris(void);
 
 // Barebones game. This is the minimum amount of code
 // necessary to run a window.
 int main(int argc, char* argv[]) {
   initGame("Standards C Library", SCREEN_WIDTH, SCREEN_HEIGHT);
-  initScene();
+  init_scene();
   loop();
 
-  atexit(cleanupStage);
+  atexit(cleanup_stage);
   return 0;
 }
 
@@ -33,7 +33,7 @@ int main(int argc, char* argv[]) {
  *
  * Sprites and structs are also initalized here.
  */
-static void initScene(void) {
+static void init_scene(void) {
   app.delegate.tick = tick;
   app.delegate.draw = draw;
 
@@ -56,15 +56,15 @@ static void initScene(void) {
  */
 static void tick(void) {
   background_update();
-  updateEmitters();
-  updateEntities();
-  updateDebris();
+  update_emitters();
+  update_entities();
+  update_debris();
   level_update();
   paddle_update();
 
   if (app.mouse.button[SDL_BUTTON_LEFT]) {
     Entity* b = add_ball(app.mouse.x, app.mouse.y, 0);
-    Entity* p = add_powerup(app.mouse.x, app.mouse.y, 0, LARGE_PADDLE);
+    Entity* p = add_powerup(app.mouse.x, app.mouse.y, 0, GOLD_COIN);
 
     currentLevel->ballTail->next = b;
     currentLevel->ballTail = b;
@@ -80,9 +80,9 @@ static void tick(void) {
  */
 static void draw(void) {
   background_draw();
-  drawEmitters();
-  drawEntities();
-  drawDebris();
+  draw_emitters();
+  draw_entities();
+  draw_debris();
   level_draw();
   paddle_draw();
 }
@@ -90,7 +90,7 @@ static void draw(void) {
 /*
  *
  */
-static void updateEmitters(void) {
+static void update_emitters(void) {
   Emitter* em;
   Emitter* prev;
 
@@ -115,7 +115,7 @@ static void updateEmitters(void) {
 /*
  *
  */
-static void updateEntities(void) {
+static void update_entities(void) {
   Entity* e;
   Entity* prev;
 
@@ -145,7 +145,7 @@ static void updateEntities(void) {
 /*
  *
  */
-static void updateDebris(void) {
+static void update_debris(void) {
   Debris* d;
   Debris* prev;
 
@@ -170,7 +170,7 @@ static void updateDebris(void) {
 /*
  *
  */
-static void drawEmitters(void) {
+static void draw_emitters(void) {
   Emitter* em;
 
   for (em = currentLevel->emitterHead.next; em != NULL; em = em->next) {
@@ -181,7 +181,7 @@ static void drawEmitters(void) {
 /*
  *
  */
-static void drawEntities(void) {
+static void draw_entities(void) {
   Entity* e;
 
   for (e = currentLevel->entityHead.next; e != NULL; e = e->next) {
@@ -197,7 +197,7 @@ static void drawEntities(void) {
 /*
  *
  */
-static void drawDebris(void) {
+static void draw_debris(void) {
   Debris* d;
 
   for (d = stage.debrisHead.next; d != NULL; d = d->next) {
@@ -208,10 +208,10 @@ static void drawDebris(void) {
 /*
  *
  */
-static void createEmitter(int32_t x, int32_t y, uint32_t maxParticles, uint32_t flags) {
+static void create_emitter(int32_t x, int32_t y, uint32_t maxParticles, uint32_t flags) {
   Emitter* em;
 
-  em = create_emitter(x, y, maxParticles, flags);
+  em = add_emitter(x, y, maxParticles, flags);
 
   currentLevel->emitterTail->next = em;
   currentLevel->emitterTail = em;
@@ -220,7 +220,7 @@ static void createEmitter(int32_t x, int32_t y, uint32_t maxParticles, uint32_t 
 /*
  *
  */
-static void cleanupStage(void) {
+static void cleanup_stage(void) {
   Level* l;
   Animation* a;
   Emitter* em;

@@ -35,9 +35,9 @@ extern Level* add_level();
 extern Entity* add_particle(float, float, float, float, float, float, uint16_t, uint16_t, uint16_t, int16_t, int16_t, int16_t, int16_t, float);
 extern Animation* add_animation(char*, uint8_t, float);
 extern Entity* add_powerup(float, float, uint32_t, int8_t);
-extern Emitter* create_emitter(int32_t, int32_t, uint32_t, uint32_t);
-extern void spawnBloodParticles(Emitter*, int32_t, int32_t, uint32_t, uint32_t);
-extern void spawnColorfulParticles(Emitter*, int32_t, int32_t, uint32_t, uint32_t);
+extern Emitter* add_emitter(int32_t, int32_t, uint32_t, uint32_t);
+extern void spawn_blood_particles(Emitter*, int32_t, int32_t, uint32_t, uint32_t);
+extern void spawn_colorful_particles(Emitter*, int32_t, int32_t, uint32_t, uint32_t);
 
 extern void initGame(const char*, int, int);
 extern void updateCamera(Entity*);

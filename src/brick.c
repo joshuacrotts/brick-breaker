@@ -1,7 +1,7 @@
 #include "brick.h"
 
 static void update_brick_status(Entity*);
-static char* getStringEnum(enum Brick);
+static char* get_string_enum(enum Brick);
 
 Entity* add_brick(float x, float y, uint32_t flags, int8_t identifier) {
     Entity* b;
@@ -15,7 +15,7 @@ Entity* add_brick(float x, float y, uint32_t flags, int8_t identifier) {
     b->life = 4;
     b->identifier = identifier;
 
-    char* str_identifier = getStringEnum(identifier);
+    char* str_identifier = get_string_enum(identifier);
     char buffer[MAX_BUFFER_SIZE];
 
     // Firstly, load in the animation file.
@@ -104,17 +104,17 @@ static void update_brick_status(Entity* b) {
     }
 }
 
-static char* getStringEnum(enum Brick b) {
+static char* get_string_enum(enum Brick b) {
     switch(b) {
         case RED: return "red";
         case BLUE: return "blue";
         case YELLOW: return "yellow";
         case PURPLE: return "purple";
         case ORANGE: return "orange";
-        case GRAY: return "gray";
         case LIGHT_BLUE: return "light_blue";
         case LIGHT_GREEN: return "light_green";
         case DARK_GREEN: return "dark_green";
         case BROWN: return "brown";
+        case NULL_COLOR: return "NULL";
     }
 }

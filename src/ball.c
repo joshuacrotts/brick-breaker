@@ -1,6 +1,6 @@
 #include "ball.h"
 
-static void checkBounds(Entity*);
+static void check_bounds(Entity*);
 
 Entity* add_ball(float x, float y, uint32_t flags) {
     Entity* b;
@@ -26,7 +26,7 @@ void ball_update(Entity* b) {
     b->x += b->dx;
     b->y += b->dy;
 
-    checkBounds(b);
+    check_bounds(b);
 }
 
 void ball_draw(Entity* b) {
@@ -37,7 +37,7 @@ void ball_die(Entity* b) {
     free(b);
 }
 
-static void checkBounds(Entity* b) {
+static void check_bounds(Entity* b) {
     if (b->x < 0) {
         b->x = 0;
         b->dx = -b->dx;

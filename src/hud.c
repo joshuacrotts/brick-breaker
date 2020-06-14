@@ -1,6 +1,6 @@
 #include "hud.h"
 
-void drawHUD(SDL_Color* c) {
+void draw_HUD(SDL_Color* c) {
     SDL_Rect bg;
     bg.x = INSETS;
     bg.y = INSETS;

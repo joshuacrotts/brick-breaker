@@ -1,15 +1,15 @@
 #include "level.h"
 
-static void drawBalls(void);
-static void drawPowerups(void);
-static void drawBricks(void);
-static void updateBalls(void);
-static void updatePowerups(void);
-static void updateBricks(void);
+static void draw_balls(void);
+static void draw_powerups(void);
+static void draw_bricks(void);
+static void update_balls(void);
+static void update_powerups(void);
+static void update_bricks(void);
 
-static void ballHitPaddle(Entity*);
-static void ballHitBrick(Entity*);
-static void powerupHitPaddle(Entity*);
+static void ball_hit_paddle(Entity*);
+static void ball_hit_brick(Entity*);
+static void powerup_hit_paddle(Entity*);
 
 Level* add_level() {
     Level* level;
@@ -44,15 +44,15 @@ Level* add_level() {
 }
 
 void level_update() {
-    updateBalls();
-    updatePowerups();
-    updateBricks();
+    update_balls();
+    update_powerups();
+    update_bricks();
 }
 
 void level_draw() {
-    drawBalls();
-    drawPowerups();
-    drawBricks();
+    draw_balls();
+    draw_powerups();
+    draw_bricks();
 }
 
 void level_die() {
@@ -71,7 +71,7 @@ void level_die() {
 /*
  *
  */
-static void updateBalls(void) {
+static void update_balls(void) {
   Entity* b;
   Entity* prevBall;
 
@@ -79,8 +79,8 @@ static void updateBalls(void) {
 
   for (b = currentLevel->ballHead.next; b != NULL; b = b->next) {
     if (b->idFlags & ID_BALL_MASK) {
-      ballHitPaddle(b);
-      ballHitBrick(b);
+      ball_hit_paddle(b);
+      ball_hit_brick(b);
       ball_update(b);
     }
 
@@ -101,7 +101,7 @@ static void updateBalls(void) {
 /*
  *
  */
-static void updatePowerups(void) {
+static void update_powerups(void) {
   Entity* p;
   Entity* prev;
 
@@ -109,7 +109,7 @@ static void updatePowerups(void) {
 
   for (p = currentLevel->powerupHead.next; p != NULL; p = p->next) {
     if (p->idFlags & ID_DEFAULT_POWERUP_MASK) {
-      powerupHitPaddle(p);
+      powerup_hit_paddle(p);
       powerup_update(p);
     }
 
@@ -129,7 +129,7 @@ static void updatePowerups(void) {
 /*
  *
  */
-static void updateBricks(void) {
+static void update_bricks(void) {
     Entity* brick;
     Entity* prevBrick;
 
@@ -153,7 +153,7 @@ static void updateBricks(void) {
 /*
  *
  */
-static void drawPowerups(void) {
+static void draw_powerups(void) {
   Entity* p;
 
   for (p = currentLevel->powerupHead.next; p != NULL; p = p->next) {
@@ -166,7 +166,7 @@ static void drawPowerups(void) {
 /*
  *
  */
-static void drawBalls(void) {
+static void draw_balls(void) {
   Entity* b;
 
   for (b = currentLevel->ballHead.next; b != NULL; b = b->next) {
@@ -179,7 +179,7 @@ static void drawBalls(void) {
 /*
  *
  */
-static void drawBricks(void) {
+static void draw_bricks(void) {
     Entity* b;
 
     for (b = currentLevel->brickHead.next; b != NULL; b = b->next) {
@@ -190,7 +190,7 @@ static void drawBricks(void) {
 /*
  *
  */
-static void ballHitBrick(Entity* ball) {
+static void ball_hit_brick(Entity* ball) {
     Entity* brick;
 
     for (brick = currentLevel->brickHead.next; brick != NULL; brick = brick->next) {
@@ -208,7 +208,7 @@ static void ballHitBrick(Entity* ball) {
 /*
  *
  */
-static void ballHitPaddle(Entity* b) {
+static void ball_hit_paddle(Entity* b) {
 
   if (collision((int32_t) paddle->x, (int32_t) paddle->y, (int32_t) paddle->w, (int32_t) paddle->h, 
                 (int32_t) b->x, (int32_t) b->y, (int32_t) b->w, (int32_t) b->h)) {
@@ -226,7 +226,7 @@ static void ballHitPaddle(Entity* b) {
 /*
  *
  */
-static void powerupHitPaddle(Entity* p) {
+static void powerup_hit_paddle(Entity* p) {
   if (collision((int32_t) paddle->x, (int32_t) paddle->y, (int32_t) paddle->w, (int32_t) paddle->h, 
                 (int32_t) p->x, (int32_t) p->y, (int32_t) p->w, (int32_t) p->h)) {
     

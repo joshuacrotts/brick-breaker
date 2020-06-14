@@ -1,7 +1,7 @@
 #include "paddle.h"
 
-static void keyInputUpdate(void);
-static void checkBounds(void);
+static void key_input_update(void);
+static void check_bounds(void);
 
 void init_paddle(void) {
     paddle = malloc(sizeof(Entity));
@@ -19,8 +19,8 @@ void paddle_update(void) {
     paddle->x += paddle->dx;
     paddle->y += paddle->dy;
 
-    checkBounds();
-    keyInputUpdate();
+    check_bounds();
+    key_input_update();
 }
 
 void paddle_draw(void) {
@@ -31,7 +31,7 @@ void paddle_die(void) {
     free(paddle);
 }
 
-static void checkBounds(void) {
+static void check_bounds(void) {
     if (paddle->x < 0) {
         paddle->x = 0;
     } else if (paddle->x + paddle->w > SCREEN_WIDTH) {
@@ -43,7 +43,7 @@ static void checkBounds(void) {
     }
 }
 
-static void keyInputUpdate(void) {
+static void key_input_update(void) {
     paddle->dx *= 0.95f;
     paddle->dy *= 0.95f;
 
