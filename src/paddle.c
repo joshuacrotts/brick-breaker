@@ -28,10 +28,7 @@ void paddle_draw(void) {
 }
 
 void paddle_die(void) {
-    if (paddle->flags & DEATH_MASK) {
-        free(paddle);
-        return;
-    }
+    free(paddle);
 }
 
 static void checkBounds(void) {
@@ -51,10 +48,10 @@ static void keyInputUpdate(void) {
     paddle->dy *= 0.95f;
 
     if (app.keyboard[SDL_SCANCODE_A]) {
-        paddle->dx = -5.0f;
+        paddle->dx = -10.0f;
     }
 
     if (app.keyboard[SDL_SCANCODE_D]) {
-        paddle->dx = 5.0f;
+        paddle->dx = 10.0f;
     }
 }

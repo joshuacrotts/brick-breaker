@@ -34,10 +34,7 @@ void ball_draw(Entity* b) {
 }
 
 void ball_die(Entity* b) {
-    if (b->flags & DEATH_MASK) {
-        free(b);
-        return;
-    }
+    free(b);
 }
 
 static void checkBounds(Entity* b) {

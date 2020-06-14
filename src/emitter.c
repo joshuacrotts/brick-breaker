@@ -22,7 +22,7 @@ void emitter_update(Emitter* em) {
   spawnBloodParticles(em, em->x, em->y, 5, ID_P_BLOOD_CIRCLE_MASK);
 
   for (p = em->particleHead.next; p != NULL; p = p->next) {
-    particle_tick(p);
+    particle_update(p);
 
     if (p->flags & DEATH_MASK) {
       if (p == em->particleTail) {
@@ -30,7 +30,7 @@ void emitter_update(Emitter* em) {
       }
 
       prev->next = p->next;
-      free(p);
+      particle_die(p);
       p = prev;
     }
 

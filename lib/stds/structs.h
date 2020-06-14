@@ -21,13 +21,16 @@ struct Animation {
 
   uint16_t x;
   uint16_t y;
+  uint32_t w;
+  uint32_t h;
   uint16_t startX;
   uint16_t startY;
   uint32_t spriteSheetW;
   uint32_t spriteSheetH;
+  bool cycleOnce;
 
-  uint8_t idFlags;
-  uint8_t flags;
+  uint32_t idFlags;
+  uint32_t flags;
   uint8_t currentFrameID;
   uint8_t numberOfFrames;
   float frameDelay;
@@ -106,6 +109,7 @@ struct Entity {
   uint32_t flags;
   uint32_t idFlags;
   uint32_t reload;
+  uint32_t identifier;
   
   uint16_t angle;
   uint16_t radius;
@@ -117,6 +121,9 @@ struct Entity {
   Animation* animation;
   SDL_Color color;
   SDL_Texture* texture;
+  SDL_Texture* texture2;
+  SDL_Texture* texture3;
+  SDL_Texture* texture4;
   Entity* next;
 
   void (*tick)(Entity*);

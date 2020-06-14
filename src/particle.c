@@ -65,10 +65,10 @@ Entity* add_animated_particle(float x, float y, float dx, float dy, float decX, 
   return en;
 }
 
-void particle_tick(Entity* e) {
+void particle_update(Entity* e) {
   e->life--;
   if (e->life <= 0) {
-    particle_die(e);
+    e->flags |= DEATH_MASK;
     return;
   }
 
@@ -107,7 +107,5 @@ void particle_draw(Entity* e) {
 }
 
 void particle_die(Entity* e) {
-    if (!(e->flags & DEATH_MASK)) {
-      e->flags |= DEATH_MASK;
-    }
+  free(e);
 }

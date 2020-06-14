@@ -3,7 +3,7 @@
 
 #define LEVEL_WIDTH             9999
 #define LEVEL_HEIGHT            9999
-#define SCREEN_WIDTH            740
+#define SCREEN_WIDTH            960
 #define SCREEN_HEIGHT           960
 #define EXIT_ERROR              1
 #define EXIT_SUCCESS            0
@@ -21,7 +21,7 @@
 
 #define SPRITE_SHEET_MASK       2
 #define STD_ANIMATION_MASK      1
-#define ANIMATION_ACTIVE_MASK   0x010000000;
+#define ANIMATION_ACTIVE_MASK   0x01000000
 
 
 enum {

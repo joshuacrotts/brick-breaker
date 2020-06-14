@@ -8,13 +8,11 @@ static void cleanupStage(void);
 static void createEmitter(int32_t, int32_t, uint32_t, uint32_t);
 static void updateEmitters(void);
 static void updateEntities(void);
-static void updateBalls(void);
-static void updateBricks(void);
+static void updateDebris(void);
+
 static void drawEmitters(void);
 static void drawEntities(void);
-static void drawBalls(void);
-static void drawBricks(void);
-static void ballHitPaddle(Entity*);
+static void drawDebris(void);
 
 // Barebones game. This is the minimum amount of code
 // necessary to run a window.
@@ -42,17 +40,12 @@ static void initScene(void) {
   memset(&stage, 0, sizeof(Stage));
   app.textureTail = &app.textureHead;
   stage.levelTail = &stage.levelHead;
+  stage.debrisTail = &stage.debrisHead;
 
   Level* level = add_level();
   stage.levelTail->next = level;
   stage.levelTail = level;
   currentLevel = stage.levelTail;
-  level->ballTail = &level->ballHead;
-  level->emitterTail = &level->emitterHead;
-  level->entityTail = &level->entityHead;
-  level->ballTail = &level->ballHead;
-  level->brickTail = &level->ballHead;
-  level->powerupTail = &level->powerupHead;
 
   init_paddle();
   init_background();
@@ -65,14 +58,19 @@ static void tick(void) {
   background_update();
   updateEmitters();
   updateEntities();
-  updateBalls();
-  updateBricks();
+  updateDebris();
+  level_update();
   paddle_update();
 
   if (app.mouse.button[SDL_BUTTON_LEFT]) {
     Entity* b = add_ball(app.mouse.x, app.mouse.y, 0);
+    Entity* p = add_powerup(app.mouse.x, app.mouse.y, 0, MULTI_BALL);
+
     currentLevel->ballTail->next = b;
     currentLevel->ballTail = b;
+
+    currentLevel->powerupTail->next = p;
+    currentLevel->powerupTail = p;
     app.mouse.button[SDL_BUTTON_LEFT] = 0;
   }
 }
@@ -84,33 +82,9 @@ static void draw(void) {
   background_draw();
   drawEmitters();
   drawEntities();
-  drawBalls();
-  drawBricks();
+  drawDebris();
+  level_draw();
   paddle_draw();
-}
-
-/*
- *
- */
-static void updateBalls(void) {
-  Entity* b;
-
-  for (b = currentLevel->ballHead.next; b != NULL; b = b->next) {
-    if (b->idFlags & ID_BALL_MASK) {
-      ballHitPaddle(b);
-      ball_update(b);
-    }
-  }
-}
-
-/*
- *
- */
-static void updateBricks(void) {
-  Entity* b;
-  for (b = currentLevel->brickHead.next; b != NULL; b = b->next) {
-
-  }
 }
 
 /*
@@ -148,12 +122,10 @@ static void updateEntities(void) {
   prev = &currentLevel->entityHead;
 
   for (e = currentLevel->entityHead.next; e != NULL; e = e->next) {
-    if (e->idFlags & ID_PARTICLE_MASK) 
-    {
-      particle_tick(e);
+    if (e->idFlags & ID_PARTICLE_MASK) {
+      particle_update(e);
     } 
-    else if (e->tick) 
-    {
+    else if (e->tick) {
       e->tick(e);
     }
 
@@ -173,24 +145,25 @@ static void updateEntities(void) {
 /*
  *
  */
-static void drawBalls(void) {
-  Entity* b;
+static void updateDebris(void) {
+  Debris* d;
+  Debris* prev;
 
-  for (b = currentLevel->ballHead.next; b != NULL; b = b->next) {
-    if (b->idFlags & ID_BALL_MASK) {
-      ball_draw(b);
+  prev = &stage.debrisHead;
+
+  for (d = stage.debrisHead.next; d != NULL; d = d->next) {
+    debris_update(d);
+    
+    if (d->flags & DEATH_MASK) {
+      if (d == stage.debrisTail) {
+        stage.debrisTail = prev;
+      }
+
+      prev->next = d->next;
+      debris_die(d);
+      d = prev;
     }
-  }
-}
-
-/*
- *
- */
-static void drawBricks(void) {
-  Entity* b;
-
-  for (b = currentLevel->brickHead.next; b != NULL; b = b->next) {
-
+    prev = d;
   }
 }
 
@@ -224,18 +197,11 @@ static void drawEntities(void) {
 /*
  *
  */
-static void ballHitPaddle(Entity* b) {
+static void drawDebris(void) {
+  Debris* d;
 
-  if (collision((int32_t) paddle->x, (int32_t) paddle->y, (int32_t) paddle->w, (int32_t) paddle->h, 
-                (int32_t) b->x, (int32_t) b->y, (int32_t) b->w, (int32_t) b->h)) {
-    uint32_t SIZE = 16;                  
-    double rel = (paddle->x + (paddle->w / 2)) - (b->x + (SIZE / 2));
-    double norm = rel / (paddle->w / 2);
-    double bounce = norm * (5 * PI / 12);
-    
-    b->dx = (float) (BALL_SPEED * -sin(bounce));
-    b->dy = (float) (-BALL_SPEED * cos(bounce));
-    return;
+  for (d = stage.debrisHead.next; d != NULL; d = d->next) {
+    debris_draw(d);
   }
 }
 

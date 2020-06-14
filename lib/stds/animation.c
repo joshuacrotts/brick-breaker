@@ -14,9 +14,15 @@ Animation* add_spritesheet(char* directory, uint8_t numberOfFrames, float frameD
   a->frameTimer = frameDelay * FPS;
   a->startX = x;
   a->startY = y;
+  
   SDL_QueryTexture(a->currentTexture, NULL, NULL, &a->spriteSheetW, &a->spriteSheetH);
+  
+  a->w = a->spriteSheetW / numberOfFrames;
+  a->h = a->spriteSheetH;
+
   a->currentFrameID = 0;
   a->idFlags |= SPRITE_SHEET_MASK;
+  a->flags |= ANIMATION_ACTIVE_MASK;
 }
 
 Animation* add_animation(char* directory, uint8_t numberOfFrames, float frameDelay) {
@@ -31,8 +37,11 @@ Animation* add_animation(char* directory, uint8_t numberOfFrames, float frameDel
   a->frameTimer = frameDelay * FPS;
   a->currentFrameID = 0;
   a->currentTexture = a->frames[a->currentFrameID];
+  
+  SDL_QueryTexture(a->currentTexture, NULL, NULL, &a->w, &a->h);
 
   a->idFlags |= STD_ANIMATION_MASK;
+  a->flags |= ANIMATION_ACTIVE_MASK;
 
   char numberBuffer[3];
   char* fileExtsn = ".png";
@@ -52,30 +61,41 @@ Animation* add_animation(char* directory, uint8_t numberOfFrames, float frameDel
 void animation_update(Entity* e) {
   Animation* a = e->animation;
 
-  a->frameTimer -= 1;
+  if (a->flags & ANIMATION_ACTIVE_MASK) {
+    a->frameTimer -= 1;
 
-  if (a->frameTimer < 0) {
-    // Resets the frame countdown.
-    a->frameTimer = a->frameDelay * FPS;
-    a->currentFrameID += 1;
+    if (a->frameTimer < 0) {
+      // Resets the frame countdown.
+      a->frameTimer = a->frameDelay * FPS;
+      a->currentFrameID += 1;
 
-    // If we have a spritesheet, we advance x coordinate
-    // of the sprite. Otherwise, we advance the pointer
-    // referencing which sprite to render in the
-    if (a->idFlags & SPRITE_SHEET_MASK) {
-      a->x += a->spriteSheetW / a->numberOfFrames;
-    } else {
-      a->currentTexture = a->frames[a->currentFrameID];
-    }
-
-    // If we reach the end of the animation sequence,
-    // return to the start.
-    if (a->currentFrameID >= a->numberOfFrames) {
-      a->currentFrameID = 0;
+      // If we have a spritesheet, we advance x coordinate
+      // of the sprite. Otherwise, we advance the pointer
+      // referencing which sprite to render in the
       if (a->idFlags & SPRITE_SHEET_MASK) {
-        a->x = 0;
+        a->x += a->spriteSheetW / a->numberOfFrames;
       } else {
+        a->currentTexture = a->frames[a->currentFrameID];
+      }
+
+      // If we reach the end of the animation sequence,
+      // return to the start.
+      if (a->currentFrameID >= a->numberOfFrames) {
         a->currentFrameID = 0;
+        if (a->idFlags & SPRITE_SHEET_MASK) {
+          a->x = 0;
+        } else {
+          a->currentFrameID = 0;
+        }
+
+        // If we have the flag enabled to cycle through the animation
+        // only once (and we just finished), deactivate the flag to
+        // continue and quit.
+        if (a->cycleOnce) {
+          a->flags ^= ANIMATION_ACTIVE_MASK;
+          a->cycleOnce = false;
+          return;
+        }
       }
     }
   }
@@ -84,14 +104,20 @@ void animation_update(Entity* e) {
 void animation_draw(Entity* e) {
   if (e != NULL) {
     Animation* a = e->animation;
-    if (a->flags & STD_ANIMATION_MASK) {
-      blitRotated(a->frames[a->currentFrameID], e->x - app.camera.x, e->y - app.camera.y, e->angle);
-    } else if (a->flags & SPRITE_SHEET_MASK) {
-      SDL_Rect currRect;
-      currRect.x = a->x;
-      currRect.y = a->y;
-      SDL_QueryTexture(a->currentTexture, NULL, NULL, &currRect.w, &currRect.h);
-      blitRect(a->currentTexture, &currRect, a->x - app.camera.x, a->y - app.camera.y);
+    if (a->flags & ANIMATION_ACTIVE_MASK) {
+      if (a->idFlags & STD_ANIMATION_MASK) {
+        blitRotated(a->frames[a->currentFrameID], e->x - app.camera.x, e->y - app.camera.y, e->angle);
+      } else if (a->idFlags & SPRITE_SHEET_MASK) {
+        SDL_Rect currRect;
+        currRect.x = (int32_t) a->x;
+        currRect.y = (int32_t) a->y;
+        currRect.w = a->w;
+        currRect.h = a->h;
+
+        blitRect(a->currentTexture, &currRect, e->x - app.camera.x, e->y - app.camera.y);
+      }
+    } else {
+      blit(a->defaultTexture, e->x - app.camera.x, e->y - app.camera.y, false);
     }
   }
 }
