@@ -31,7 +31,7 @@ extern void debris_draw(Debris*);
 extern void debris_die(Debris*);
 
 extern Entity* add_ball(float, float, uint32_t);
-extern Level* add_level();
+extern Level* add_level(const char*);
 extern Entity* add_particle(float, float, float, float, float, float, uint16_t, uint16_t, uint16_t, int16_t, int16_t, int16_t, int16_t, float);
 extern Animation* add_animation(char*, uint8_t, float);
 extern Entity* add_powerup(float, float, uint32_t, int8_t);

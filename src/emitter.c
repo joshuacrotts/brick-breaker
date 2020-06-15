@@ -19,9 +19,7 @@ void emitter_update(Emitter* em) {
   Entity* prev;
   prev = &em->particleHead;
 
-  spawn_blood_particles(em, em->x, em->y, 5, ID_P_BLOOD_CIRCLE_MASK);
-
-  for (p = em->particleHead.next; p != NULL; p = p->next) {
+  for (p = em->particleHead.next; p != NULL; p = p->next) {    
     particle_update(p);
 
     if (p->flags & DEATH_MASK) {
@@ -82,6 +80,30 @@ void spawn_blood_particles(Emitter* em, int32_t x, int32_t y, uint32_t n, uint32
       currentLevel->entityTail->next = en;
       currentLevel->entityTail = en;
     }
+  }
+}
+
+void spawn_star_particles(Emitter* em, int32_t x, int32_t y, uint32_t n, uint32_t flags) {
+  for (int i = 0; i < n; i++) {
+    float dx = -10;
+    float dy = -10;
+
+    uint16_t w = randomInt(1, 4);
+    uint16_t h = w;
+    uint8_t r = 0xff;
+    uint8_t g = 0xff;
+    uint8_t b = 0xff;
+    uint8_t a = randomInt(10, 40);    
+
+    Entity* en;
+    en = add_particle(x, y, dx, dy, 0, 0, w, h, 0, r, g, b, a, 0, flags | ID_P_SQUARE_MASK);
+    if (em != NULL) {
+      em->particleTail->next = en;
+      em->particleTail = en;
+    } else {
+      currentLevel->entityTail->next = en;
+      currentLevel->entityTail = en;
+    }    
   }
 }
 

@@ -1,5 +1,12 @@
 #include "level.h"
 
+#define MAXC            16
+#define CHAR_OFFSET     48
+#define BRICK_ROW_COUNT 10
+#define BRICK_COL_COUNT 8
+#define BRICK_WIDTH     92
+#define BRICK_HEIGHT    32
+
 static void draw_balls(void);
 static void draw_powerups(void);
 static void draw_bricks(void);
@@ -11,8 +18,21 @@ static void ball_hit_paddle(Entity*);
 static void ball_hit_brick(Entity*);
 static void powerup_hit_paddle(Entity*);
 
-Level* add_level() {
+Level* add_level(const char* levelData) {
     Level* level;
+    FILE* fptr;
+
+    fptr = fopen(levelData, "r");
+
+    if (fptr == NULL) {
+      SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Could not read from file! %s\n", SDL_GetError());
+      exit(EXIT_FAILURE);
+    }
+    
+    // Create the buffer for the level data 
+    // where each line corresponds to one row
+    // of bricks.
+    char buffer[MAXC];
 
     level = malloc(sizeof(Level));
     memset(level, 0, sizeof(Level));
@@ -24,22 +44,51 @@ Level* add_level() {
     level->brickTail = &level->brickHead;
     level->powerupTail = &level->powerupHead;
 
-    for (int x = 20; x <= SCREEN_WIDTH - 80; x += 92) {
-        for (int y = 120; y <= 300; y += 32) {
-            Entity* b;
+    uint8_t brick_data = 1;
 
-            switch (randomInt(0, 1)) {
-              case 0: b = add_brick(x, y, 0, RED);
-                      break;
-              case 1: b = add_brick(x, y, 0, BLUE);
-                      break;
-            }
-            
-            level->brickTail->next = b;
-            level->brickTail = b;
+    for (int y = 120; y < 120 + (BRICK_HEIGHT * BRICK_COL_COUNT); y += 32) {
+      fgets(buffer, MAXC, fptr);
+      for (int x = 20, bi = 0; x <= SCREEN_WIDTH - 80; x += 92, bi++) {
+        Entity* b;
+        int c = (buffer[bi] - '\0') - CHAR_OFFSET;
+
+        // If the char is invalid, then quit iteration.
+        if (c < 0) {
+          break;
         }
+
+        // Depending on the char value, add its corresponding
+        // brick ID.
+        switch (c) {
+          case 0: break;
+          case 1: b = add_brick(x, y, 0, RED);
+                  break;
+          case 2: b = add_brick(x, y, 0, BLUE);
+                  break;
+          case 3: b = add_brick(x, y, 0, LIGHT_GREEN);
+                  break;
+          case 4: b = add_brick(x, y, 0, YELLOW);
+                  break;
+          case 5: b = add_brick(x, y, 0, ORANGE);
+                  break;
+          case 6: b = add_brick(x, y, 0, PURPLE);
+                  break;                  
+          case 7: b = add_brick(x, y, 0, LIGHT_BLUE);
+                break;
+          case 8: b = add_brick(x, y, 0, DARK_GREEN);
+                  break;
+          case 9: b = add_brick(x, y, 0, BROWN);
+                  break;                  
+          default:
+                  break;
+        }
+            
+        level->brickTail->next = b;
+        level->brickTail = b;
+      }
     }
 
+    fclose(fptr);
     return level;
 }
 
@@ -194,6 +243,29 @@ static void ball_hit_brick(Entity* ball) {
     Entity* brick;
 
     for (brick = currentLevel->brickHead.next; brick != NULL; brick = brick->next) {
+      // // If we collide with the top or bottom halfs.
+
+      // bool verticalCollision = collision((int32_t) ball->x, (int32_t) ball->y, ball->w, ball->h, 
+      //                                    (int32_t) brick->x, (int32_t) brick->y, brick->w, 2) 
+      //                       || collision((int32_t) ball->x, (int32_t) ball->y, ball->w, ball->h, 
+      //                                    (int32_t) brick->x, (int32_t) brick->y + brick->h - 2, brick->w, 2);
+
+      // bool horizontalCollision = collision((int32_t) ball->x, (int32_t) ball->y, ball->w, ball->h, 
+      //                                    (int32_t) brick->x, (int32_t) brick->y, 2, brick->h) 
+      //                       || collision((int32_t) ball->x, (int32_t) ball->y, ball->w, ball->h, 
+      //                                    (int32_t) brick->x + brick->w - 2, (int32_t) brick->y, 2, brick->h);                                         
+
+      // if (verticalCollision || horizontalCollision) {
+      //     if (verticalCollision) {
+      //       ball->dy = -ball->dy;
+      //     } else if (horizontalCollision) {
+      //       ball->dx = -ball->dx;
+      //     }
+          
+      //     brick->life--;
+      //     add_debris(brick, 0);
+      //     break;
+      // }      
       if (collision((int32_t) ball->x, (int32_t) ball->y, ball->w, ball->h,
                     (int32_t) brick->x, (int32_t) brick->y, brick->w, brick->h)) {
           brick->life--;

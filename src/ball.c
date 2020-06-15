@@ -13,8 +13,14 @@ Entity* add_ball(float x, float y, uint32_t flags) {
     b->texture[0] = loadTexture("../res/img/ball_sprite_0.png");
     SDL_QueryTexture(b->texture[0], NULL, NULL, &b->w, &b->h);
 
-    b->dx = randomFloat(-5.0f, 5.0f);
-    b->dy = randomFloat(-5.0f, 5.0f);
+    // Continuously generate a speed that is reasonable.
+    do {
+        b->dx = randomFloat(-10.0f, 10.0f);
+    } while(b->dx < 7.0f && b->dx > -7.0f);
+
+    do {
+        b->dy = randomFloat(-10.0f, 10.0f);
+    } while(b->dy < 7.0f && b->dy > -7.0f);
 
     b->idFlags |= ID_BALL_MASK;
     b->flags |= flags;

@@ -34,6 +34,14 @@ void init_background(void) {
   fadeColor.c2 = c2;
   fadeColor.time = 0.0f;
   fadeColor.alpha = 0.01f;
+
+  init_HUD();
+}
+
+void background_update(void) {
+  background->x = 0 - app.camera.x;
+  background->y = 0 - app.camera.y;
+  spawn_star_particles(NULL, randomInt(400, 2000), randomInt(900, 1100), 3, ID_P_STAR_MASK);
 }
 
 void background_draw(void) {
@@ -42,11 +50,6 @@ void background_draw(void) {
   SDL_Color c = combineFadeColor(&fadeColor);
   drawRectStroke(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, INSETS, c.r, c.g, c.b, 0xff);
   draw_HUD(&c);
-}
-
-void background_update(void) {
-  background->x = 0 - app.camera.x;
-  background->y = 0 - app.camera.y;
 }
 
 void background_die(void) {

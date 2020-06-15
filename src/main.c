@@ -42,7 +42,7 @@ static void init_scene(void) {
   stage.levelTail = &stage.levelHead;
   stage.debrisTail = &stage.debrisHead;
 
-  Level* level = add_level();
+  Level* level = add_level("../res/level_data/level_1.txt");
   stage.levelTail->next = level;
   stage.levelTail = level;
   currentLevel = stage.levelTail;
@@ -118,7 +118,6 @@ static void update_emitters(void) {
 static void update_entities(void) {
   Entity* e;
   Entity* prev;
-
   prev = &currentLevel->entityHead;
 
   for (e = currentLevel->entityHead.next; e != NULL; e = e->next) {

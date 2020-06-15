@@ -20,17 +20,17 @@ Entity* add_particle(float x, float y, float dx, float dy, float decX, float dec
   en->animation = NULL;
 
   SDL_Color color;
-  color.r = randomInt(0x20, 0xff);
-  color.g = 0;
-  color.b = 0;
-  color.a = 0xff;
+  color.r = r;
+  color.g = g;
+  color.b = b;
+  color.a = a;
 
   en->color = color;
   en->deltaAlpha = deltaAlpha;
   en->angle = angle;
   en->idFlags |= idFlags | ID_PARTICLE_MASK;
   en->flags |= ID_PARTICLE_MASK;
-
+  
   return en;
 }
 
@@ -76,11 +76,20 @@ void particle_update(Entity* e) {
       animation_update(e);
   }
 
-  e->dx *= e->deltaAccelX;
-  e->dy *= e->deltaAccelY;
+  if (floor(e->deltaAccelX) != 0) {
+    e->dx *= e->deltaAccelX;
+  }
+
+  if (floor(e->deltaAccelY) != 0) {
+    e->dy *= e->deltaAccelY;
+  }
 
   if (e->idFlags & ID_SCATTER_PARTICLE_MASK) {
     e->dy += 0.5f;
+  } else if (e->idFlags & ID_P_STAR_MASK) {
+    if (e->y < -100) {
+      e->flags |= DEATH_MASK;
+    }
   }
 
   e->x += e->dx;
@@ -94,10 +103,9 @@ void particle_draw(Entity* e) {
     rect.y = (int32_t) (e->y - app.camera.y);
     rect.w = e->w;
     rect.h = e->h;
-
-    if (e->idFlags & ID_P_BLOOD_SQUARE_MASK) {
+    if (e->idFlags & ID_P_SQUARE_MASK) {
       drawRect(&rect, e->color.r, e->color.g, e->color.b, e->color.a, true);
-    } else {
+    } else if (e->idFlags & ID_P_CIRCLE_MASK) {
       uint32_t r = rect.w >> 1;
       fillCircle(rect.x, rect.y, r, e->color.r, e->color.g, e->color.b, e->color.a);
     }

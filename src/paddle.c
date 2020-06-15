@@ -7,6 +7,7 @@ void init_paddle(void) {
     paddle = malloc(sizeof(Entity));
     memset(paddle, 0, sizeof(Entity));
 
+    paddle->life = 3;
     paddle->x = 20;
     paddle->y = SCREEN_HEIGHT - 40;
     paddle->texture[0] = loadTexture("../res/img/paddle.png");

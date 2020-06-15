@@ -21,5 +21,6 @@ extern Animation* add_animation(char*, uint8_t, float);
 extern void spawn_blood_particles(Emitter*, int32_t, int32_t, uint32_t, uint32_t);
 extern void spawn_colorful_particles(Emitter*, int32_t, int32_t, uint32_t, uint32_t);
 extern void spawn_sinusoidal_particles(Emitter*, int32_t, int32_t, uint32_t, uint32_t);
+extern void spawn_star_particles(Emitter*, int32_t, int32_t, uint32_t, uint32_t);
 
 #endif

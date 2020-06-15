@@ -7,7 +7,7 @@ Level* currentLevel;
 extern Entity* paddle;
 extern Stage stage;
 
-extern Level* add_level();
+extern Level* add_level(const char*);
 extern Entity* add_brick(float, float, uint32_t, int8_t);
 extern void add_debris(Entity*, uint32_t);
 extern void level_update(void);
