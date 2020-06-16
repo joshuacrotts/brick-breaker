@@ -29,6 +29,7 @@ extern void level_die(void);
 extern void debris_update(Debris*);
 extern void debris_draw(Debris*);
 extern void debris_die(Debris*);
+extern void draw_paused(void);
 
 extern Entity* add_ball(float, float, uint32_t);
 extern Level* add_level(const char*);

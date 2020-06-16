@@ -45,14 +45,16 @@ static void check_bounds(void) {
 }
 
 static void key_input_update(void) {
-    paddle->dx *= 0.95f;
-    paddle->dy *= 0.95f;
+    if (app.gameState != PAUSED) {
+        paddle->dx *= 0.95f;
+        paddle->dy *= 0.95f;
 
-    if (app.keyboard[SDL_SCANCODE_A]) {
-        paddle->dx = -10.0f;
-    }
+        if (app.keyboard[SDL_SCANCODE_A]) {
+            paddle->dx = -10.0f;
+        }
 
-    if (app.keyboard[SDL_SCANCODE_D]) {
-        paddle->dx = 10.0f;
+        if (app.keyboard[SDL_SCANCODE_D]) {
+            paddle->dx = 10.0f;
+        }
     }
 }

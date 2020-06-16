@@ -36,6 +36,7 @@ int main(int argc, char* argv[]) {
 static void init_scene(void) {
   app.delegate.tick = tick;
   app.delegate.draw = draw;
+  app.gameState = RUNNING;
 
   memset(&stage, 0, sizeof(Stage));
   app.textureTail = &app.textureHead;
@@ -55,13 +56,22 @@ static void init_scene(void) {
  *
  */
 static void tick(void) {
+  if (app.keyboard[SDL_SCANCODE_P]) {
+      app.gameState = app.gameState == PAUSED ? RUNNING : PAUSED;
+      app.keyboard[SDL_SCANCODE_P] = 0;
+  }
+
+  if (app.gameState == PAUSED) {
+    return;
+  }
+
   background_update();
   update_emitters();
   update_entities();
   update_debris();
   level_update();
   paddle_update();
-
+  
   if (app.mouse.button[SDL_BUTTON_LEFT]) {
     Entity* b = add_ball(app.mouse.x, app.mouse.y, 0);
     Entity* p = add_powerup(app.mouse.x, app.mouse.y, 0, GOLD_COIN);
@@ -79,12 +89,18 @@ static void tick(void) {
  *
  */
 static void draw(void) {
+
+
   background_draw();
   draw_emitters();
   draw_entities();
   draw_debris();
   level_draw();
   paddle_draw();
+  
+  if (app.gameState == PAUSED) {
+    draw_paused();
+  }
 }
 
 /*

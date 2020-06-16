@@ -64,6 +64,8 @@ struct App{
   SDL_Rect camera;
   Delegate delegate;
   Texture textureHead, *textureTail;
+
+  enum GameState gameState;
   uint16_t keyboard[MAX_KEYBOARD_KEYS];
 };
 

@@ -19,6 +19,16 @@ void draw_HUD(SDL_Color* c) {
     drawLives(c);
 }
 
+void draw_paused(void) {
+    SDL_Rect r;
+    r.x = 0;
+    r.y = 0;
+    r.w = SCREEN_WIDTH;
+    r.h= SCREEN_HEIGHT;
+    drawRect(&r, 0, 0, 0, 128, true);
+    drawText(SCREEN_WIDTH / 2 - 50, SCREEN_HEIGHT / 2, 0xff, 0xff, 0xff, "PAUSED");
+}
+
 /*
  * Draws the hearts representing the user's 
  * lives. This may need to be non-static for accessibility

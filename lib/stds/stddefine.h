@@ -25,19 +25,19 @@
 #define ANIMATION_ACTIVE_MASK   0x01000000
 
 
-enum {
+enum GameState{
   RUNNING,
   PAUSED
 };
 
-enum {
+enum SoundChannel{
   CH_ANY = -1,
   CH_PLAYER,
   CH_ALIEN_FIRE,
   CH_POINTS
 };
 
-enum {
+enum SFX{
   SND_PLAYER_FIRE,
   SND_ALIEN_FIRE,
   SND_PLAYER_DIE,

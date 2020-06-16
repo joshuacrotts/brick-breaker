@@ -9,6 +9,7 @@ extern Entity* paddle;
 
 extern void init_HUD(void);
 extern void draw_HUD(SDL_Color*);
+extern void draw_paused(void);
 
 extern void drawRect(SDL_Rect*, uint8_t, uint8_t, uint8_t, uint8_t, bool);
 extern void drawText(float, float, uint8_t, uint8_t, uint8_t, const char*, ...);
