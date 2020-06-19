@@ -1,4 +1,4 @@
-#include "level.h"
+#include "../include/level.h"
 
 #define MAXC            16
 #define CHAR_OFFSET     48
@@ -28,7 +28,7 @@ Level* add_level(const char* levelData) {
       SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Could not read from file! %s\n", SDL_GetError());
       exit(EXIT_FAILURE);
     }
-    
+
     // Create the buffer for the level data 
     // where each line corresponds to one row
     // of bricks.
@@ -87,7 +87,7 @@ Level* add_level(const char* levelData) {
         level->brickTail = b;
       }
     }
-
+    
     fclose(fptr);
     return level;
 }
@@ -243,32 +243,15 @@ static void ball_hit_brick(Entity* ball) {
     Entity* brick;
 
     for (brick = currentLevel->brickHead.next; brick != NULL; brick = brick->next) {
-      // // If we collide with the top or bottom halfs.
-
-      // bool verticalCollision = collision((int32_t) ball->x, (int32_t) ball->y, ball->w, ball->h, 
-      //                                    (int32_t) brick->x, (int32_t) brick->y, brick->w, 2) 
-      //                       || collision((int32_t) ball->x, (int32_t) ball->y, ball->w, ball->h, 
-      //                                    (int32_t) brick->x, (int32_t) brick->y + brick->h - 2, brick->w, 2);
-
-      // bool horizontalCollision = collision((int32_t) ball->x, (int32_t) ball->y, ball->w, ball->h, 
-      //                                    (int32_t) brick->x, (int32_t) brick->y, 2, brick->h) 
-      //                       || collision((int32_t) ball->x, (int32_t) ball->y, ball->w, ball->h, 
-      //                                    (int32_t) brick->x + brick->w - 2, (int32_t) brick->y, 2, brick->h);                                         
-
-      // if (verticalCollision || horizontalCollision) {
-      //     if (verticalCollision) {
-      //       ball->dy = -ball->dy;
-      //     } else if (horizontalCollision) {
-      //       ball->dx = -ball->dx;
-      //     }
-          
-      //     brick->life--;
-      //     add_debris(brick, 0);
-      //     break;
-      // }      
       if (collision((int32_t) ball->x, (int32_t) ball->y, ball->w, ball->h,
                     (int32_t) brick->x, (int32_t) brick->y, brick->w, brick->h)) {
           brick->life--;
+          if (brick->life > 0) {
+            playSound(SND_BRICK_SHATTER, CH_BRICK);
+          } else {
+            playSound(SND_BRICK_BREAK, CH_BRICK);
+          }
+          
           ball->dy = -ball->dy;
           // Add debris here.
           add_debris(brick, 0);

@@ -1,4 +1,4 @@
-#include "emitter.h"
+#include "../include/emitter.h"
 
 Emitter* add_emitter(int32_t x, int32_t y, uint32_t maxParticles, uint32_t idFlags) {
   Emitter* em;
@@ -132,13 +132,13 @@ void spawn_colorful_particles(Emitter* em, int32_t x, int32_t y, uint32_t n, uin
     uint8_t animationColor = randomInt(0, 2);
     switch(animationColor) {
       case 0:
-        particleAnimation = add_animation("../res/img/particles/red/p", 2, randomFloat(0.166f, 0.70f));
+        particleAnimation = add_animation("res/img/particles/red/p", 2, randomFloat(0.166f, 0.70f));
         break;
       case 1:
-        particleAnimation = add_animation("../res/img/particles/blue/p", 2, randomFloat(0.166f, 0.70f));
+        particleAnimation = add_animation("res/img/particles/blue/p", 2, randomFloat(0.166f, 0.70f));
         break;
       case 2:
-        particleAnimation = add_animation("../res/img/particles/green/p", 2, randomFloat(0.166f, 0.70f));
+        particleAnimation = add_animation("res/img/particles/green/p", 2, randomFloat(0.166f, 0.70f));
         break;
     }
     

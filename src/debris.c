@@ -1,4 +1,4 @@
-#include "debris.h"
+#include "../include/debris.h"
 
 void add_debris(Entity* parentBrick, uint32_t flags) {
   Debris* d;

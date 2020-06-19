@@ -1,4 +1,4 @@
-#include "paddle.h"
+#include "../include/paddle.h"
 
 static void key_input_update(void);
 static void check_bounds(void);
@@ -8,11 +8,11 @@ void init_paddle(void) {
     memset(paddle, 0, sizeof(Entity));
 
     paddle->life = 3;
-    paddle->x = 20;
-    paddle->y = SCREEN_HEIGHT - 40;
-    paddle->texture[0] = loadTexture("../res/img/paddle.png");
+    paddle->texture[0] = loadTexture("res/img/paddle.png");
     SDL_QueryTexture(paddle->texture[0], NULL, NULL, &paddle->w, &paddle->h);
-
+    
+    paddle->x = SCREEN_WIDTH / 2 - paddle->w / 2;
+    paddle->y = SCREEN_HEIGHT - 40;
     paddle->idFlags |= ID_PLAYER_MASK;
 }
 

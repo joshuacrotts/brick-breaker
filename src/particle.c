@@ -1,4 +1,4 @@
-#include "particle.h"
+#include "../include/particle.h"
 
 Entity* add_particle(float x, float y, float dx, float dy, float decX, float decY,
                      uint16_t w, uint16_t h, uint16_t angle, uint8_t r, uint8_t g,

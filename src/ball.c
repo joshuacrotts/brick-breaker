@@ -1,16 +1,16 @@
-#include "ball.h"
+#include "../include/ball.h"
 
 static void check_bounds(Entity*);
 
 Entity* add_ball(float x, float y, uint32_t flags) {
     Entity* b;
-
+    print("adding ball");
     b = malloc(sizeof(Entity));
     memset(b, 0, sizeof(Entity));
 
     b->x = x;
     b->y = y;
-    b->texture[0] = loadTexture("../res/img/ball_sprite_0.png");
+    b->texture[0] = loadTexture("res/img/ball_sprite_1.png");
     SDL_QueryTexture(b->texture[0], NULL, NULL, &b->w, &b->h);
 
     // Continuously generate a speed that is reasonable.

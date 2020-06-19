@@ -1,9 +1,16 @@
-#include "main.h"
+/*
+ * Music and sfx are courtesy of BreakIt! Java game by ndering.
+ * 
+ * https://github.com/ndering/Break-It
+ */
+
+#include "../include/main.h"
 
 static void init_scene(void);
 static void draw(void);
 static void tick(void);
 static void cleanup_stage(void);
+static void start_game(void);
 
 static void create_emitter(int32_t, int32_t, uint32_t, uint32_t);
 static void update_emitters(void);
@@ -17,7 +24,7 @@ static void draw_debris(void);
 // Barebones game. This is the minimum amount of code
 // necessary to run a window.
 int main(int argc, char* argv[]) {
-  initGame("Standards C Library", SCREEN_WIDTH, SCREEN_HEIGHT);
+  initGame("Brick Breaker in C", SCREEN_WIDTH, SCREEN_HEIGHT);
   init_scene();
   loop();
 
@@ -36,20 +43,21 @@ int main(int argc, char* argv[]) {
 static void init_scene(void) {
   app.delegate.tick = tick;
   app.delegate.draw = draw;
-  app.gameState = RUNNING;
+  app.gameState = PREGAME;
 
   memset(&stage, 0, sizeof(Stage));
   app.textureTail = &app.textureHead;
   stage.levelTail = &stage.levelHead;
   stage.debrisTail = &stage.debrisHead;
 
-  Level* level = add_level("../res/level_data/level_1.txt");
+  Level* level = add_level("res/level_data/level_1.txt");
   stage.levelTail->next = level;
   stage.levelTail = level;
   currentLevel = stage.levelTail;
-
+  background = init_background("res/img/background/space-1.png");
+  
   init_paddle();
-  init_background();
+  init_HUD();
 }
 
 /*
@@ -61,42 +69,40 @@ static void tick(void) {
       app.keyboard[SDL_SCANCODE_P] = 0;
   }
 
+  // Initially, we just have the player moving the paddle around,
+  // and no ball or powerups. 
+  if (app.keyboard[SDL_SCANCODE_SPACE] && app.gameState == PREGAME) {
+    app.keyboard[SDL_SCANCODE_SPACE] = 0;
+    Entity* b = add_ball(randomFloat(SCREEN_WIDTH / 3, SCREEN_WIDTH / 2 + SCREEN_WIDTH / 4), SCREEN_HEIGHT / 2, 0); 
+    currentLevel->ballTail->next = b;
+    currentLevel->ballTail = b; 
+    app.gameState = RUNNING;
+  }
+
   if (app.gameState == PAUSED) {
     return;
   }
 
-  background_update();
+  background_update(background);
   update_emitters();
   update_entities();
   update_debris();
   level_update();
   paddle_update();
-  
-  if (app.mouse.button[SDL_BUTTON_LEFT]) {
-    Entity* b = add_ball(app.mouse.x, app.mouse.y, 0);
-    Entity* p = add_powerup(app.mouse.x, app.mouse.y, 0, GOLD_COIN);
-
-    currentLevel->ballTail->next = b;
-    currentLevel->ballTail = b;
-
-    currentLevel->powerupTail->next = p;
-    currentLevel->powerupTail = p;
-    app.mouse.button[SDL_BUTTON_LEFT] = 0;
-  }
+  update_HUD();
 }
 
 /*
  *
  */
 static void draw(void) {
-
-
-  background_draw();
+  background_draw(background);
   draw_emitters();
   draw_entities();
   draw_debris();
   level_draw();
   paddle_draw();
+  draw_HUD();
   
   if (app.gameState == PAUSED) {
     draw_paused();
@@ -279,5 +285,5 @@ static void cleanup_stage(void) {
 
   free(currentLevel);
   paddle_die();
-  background_die();
+  background_die(background);
 }

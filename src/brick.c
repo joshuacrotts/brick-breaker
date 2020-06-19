@@ -1,4 +1,4 @@
-#include "brick.h"
+#include "../include/brick.h"
 
 static void update_brick_status(Entity*);
 static char* get_string_enum(enum Brick);
@@ -20,7 +20,7 @@ Entity* add_brick(float x, float y, uint32_t flags, int8_t identifier) {
 
     // Firstly, load in the animation file.
     memset(buffer, 0, MAX_BUFFER_SIZE);
-    strcat(buffer, "../res/img/brick/");
+    strcat(buffer, "res/img/brick/");
     strcat(buffer, str_identifier);
     strcat(buffer, "/");
     strcat(buffer, str_identifier);
@@ -31,19 +31,20 @@ Entity* add_brick(float x, float y, uint32_t flags, int8_t identifier) {
     
     // Now, load in the default image file.
     memset(buffer, 0, MAX_BUFFER_SIZE);
-    strcat(buffer, "../res/img/brick/");
+    strcat(buffer, "res/img/brick/");
     strcat(buffer, str_identifier);
     strcat(buffer, "/");
     strcat(buffer, str_identifier);
     strcat(buffer, "_0.png");
     b->texture[0] = loadTexture(buffer);
+    
     memset(buffer, 0, MAX_BUFFER_SIZE);
 
     // Next, load in the three files for the damage image.
     for (int i = 1; i <= MAX_DEBRIS_IMGS; i++) {
         char intBuffer[3];
         itoa(i, intBuffer, 10);
-        strcat(buffer, "../res/img/brick/");
+        strcat(buffer, "res/img/brick/");
         strcat(buffer, str_identifier);
         strcat(buffer, "/");
         strcat(buffer, str_identifier);
@@ -51,7 +52,7 @@ Entity* add_brick(float x, float y, uint32_t flags, int8_t identifier) {
         strcat(buffer, intBuffer);   
         strcat(buffer, "_damaged.png");
         b->texture[i] = loadTexture(buffer);
-
+        
         memset(buffer, 0, MAX_BUFFER_SIZE);
     }
 
