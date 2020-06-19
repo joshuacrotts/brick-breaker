@@ -3,6 +3,7 @@
 static void draw_lives(SDL_Color*);
 static void draw_title(SDL_Color*);
 static void draw_pregame_text(SDL_Color*);
+static void draw_score(SDL_Color*);
 
 static SDL_Texture* heartTexture;
 static FadeColor fadeColor;
@@ -37,6 +38,7 @@ void draw_HUD(void) {
     drawRectStroke(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, INSETS, c.r, c.g, c.b, 0xff);
     draw_title(&c);
     draw_lives(&c);
+    draw_score(&c);
 
     if (app.gameState == PREGAME) {
         draw_pregame_text(&c);
@@ -49,10 +51,11 @@ void draw_paused(void) {
     r.y = 0;
     r.w = SCREEN_WIDTH;
     r.h= SCREEN_HEIGHT;
+
     drawRect(&r, 0, 0, 0, 128, true);
     int fw, fh;
-    getStringSize("PAUSED", &fw, &fh);
-    drawText(SCREEN_WIDTH / 2 - fw / 2, SCREEN_HEIGHT / 2, 0xff, 0xff, 0xff, "PAUSED");
+    getStringSize("PAUSED", "res/fonts/nes.ttf", 24, &fw, &fh);
+    drawText(SCREEN_WIDTH / 2 - fw / 2, SCREEN_HEIGHT / 2, 0xff, 0xff, 0xff, "res/fonts/nes.ttf", 24, "PAUSED");
 }
 
 /*
@@ -61,9 +64,20 @@ void draw_paused(void) {
  * purposes (i.e. to change # of lives).
  */
 static void draw_lives(SDL_Color* c) {
-    drawText(20, 20, c->r, c->g, c->b, "LIVES: ");
-    for (int i = 0, x = 160; i < paddle->life; i++, x += 30) {
-        blit(heartTexture, x, 20, false);
+    int fw, fh;
+    int tw, th;
+    int initial_offset = 20;
+    int offset = 5;
+
+    drawText(initial_offset, initial_offset, c->r, c->g, c->b, "res/fonts/nes.ttf", 12, "LIVES: ");
+
+    SDL_QueryTexture(heartTexture, NULL, NULL, &tw, &th);
+    getStringSize("LIVES: ", "res/fonts/nes.ttf", 12, &fw, &fh);
+
+    int v_offset = initial_offset + fh + offset;
+
+    for (int i = 0, x = initial_offset; i < paddle->life; i++, x += (tw + offset)) {
+        blit(heartTexture, x, v_offset, false);
     }
 }
 
@@ -72,8 +86,8 @@ static void draw_lives(SDL_Color* c) {
  */
 static void draw_title(SDL_Color* c) {
     int fw, fh;
-    getStringSize(title, &fw, &fh);
-    drawText((SCREEN_WIDTH >> 1) - (fw >> 1), 20, c->r, c->g, c->b, title);
+    getStringSize(title, "res/fonts/nes.ttf", 12, &fw, &fh);
+    drawText((SCREEN_WIDTH >> 1) - (fw >> 1), 20, c->r, c->g, c->b, "res/fonts/nes.ttf", 12, title);
 }
 
 /*
@@ -81,6 +95,22 @@ static void draw_title(SDL_Color* c) {
  */
 static void draw_pregame_text(SDL_Color* c) {
     int fw, fh;
-    getStringSize(pregame_text, &fw, &fh);    
-    drawText((SCREEN_WIDTH / 2) - (fw / 2), SCREEN_HEIGHT >> 1, c->r, c->g, c->b, pregame_text);
+    getStringSize(pregame_text, "res/fonts/nes.ttf", 24, &fw, &fh);    
+    drawText((SCREEN_WIDTH / 2) - (fw / 2), SCREEN_HEIGHT >> 1, c->r, c->g, c->b, "res/fonts/nes.ttf", 24, pregame_text);
+}
+
+/*
+ *
+ */
+static void draw_score(SDL_Color* c) {
+    int fw, fh;
+    int offset = 20;
+    getStringSize("Score:", "res/fonts/nes.ttf", 12, &fw, &fh);
+    int v_offset = offset + fh + 5;
+
+    // Draw score label.
+    drawText(SCREEN_WIDTH - fw - offset, offset, c->r, c->g, c->b, "res/fonts/nes.ttf", 12, "Score:");
+
+    // Draw numeric score.
+    drawText(SCREEN_WIDTH - fw - offset, v_offset, 0xff, 0xff, 0xff, "res/fonts/nes.ttf", 12, "%d", stage.score);
 }

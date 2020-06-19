@@ -91,7 +91,14 @@ void particle_update(Entity* e) {
       e->flags |= DEATH_MASK;
     }
   }
+  
+  int16_t tmp_alpha = (int16_t) (e->color.a + e->deltaAlpha);
+  
+  if (tmp_alpha < 0) {
+    tmp_alpha = 0;
+  } 
 
+  e->color.a = tmp_alpha;
   e->x += e->dx;
   e->y += e->dy;
 }

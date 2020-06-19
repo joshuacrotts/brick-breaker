@@ -1,5 +1,8 @@
 #include "../include/powerup.h"
 
+#define COIN_SCORE 500
+#define POWERUP_DESCENT 3
+
 Entity* add_powerup(float x, float y, uint32_t flags, int8_t identifier) {
     Entity* p;
     p = malloc(sizeof(Entity));
@@ -9,6 +12,7 @@ Entity* add_powerup(float x, float y, uint32_t flags, int8_t identifier) {
     p->y = y;
     p->idFlags |= ID_DEFAULT_POWERUP_MASK;
     p->flags |= flags | POWERUP_INACTIVE;
+    p->identifier = identifier;
 
     Animation* a;
 
@@ -39,11 +43,20 @@ Entity* add_powerup(float x, float y, uint32_t flags, int8_t identifier) {
 }
 
 void powerup_update(Entity* p) {
+    if (p->flags & POWERUP_ACTIVE) {
+        if (--p->life < 0) {
+            if (p->identifier == LARGE_PADDLE) {
+                powerup_large_deactivate(p);
+                return;
+            }
+        }
+    }
+
     if (p->animation != NULL) {
         animation_update(p);
     }
 
-    p->y += 3;
+    p->y += POWERUP_DESCENT;
 
     if (p->y > SCREEN_HEIGHT) {
         p->flags |= DEATH_MASK;
@@ -51,18 +64,52 @@ void powerup_update(Entity* p) {
 }
 
 void powerup_draw(Entity* p) {
-    if (p->animation != NULL) {
+    if (p->animation != NULL && p->flags & POWERUP_INACTIVE) {
         animation_draw(p);
     }
-}
-
-void powerup_activate(Entity* p) {
-    p->flags |= DEATH_MASK;
-    return;
 }
 
 void powerup_die(Entity* p) {
     if (p->flags & DEATH_MASK) {
         free(p);
     }
+}
+
+void powerup_large_activate(Entity* p) {
+    p->life = FPS * 10;
+    p->flags |= POWERUP_ACTIVE;
+    paddle->scaleX = 2.0f;
+}
+
+void powerup_large_deactivate(Entity* p) {
+    paddle->scaleX = 1.0f;
+    p->flags |= DEATH_MASK;
+}
+
+void powerup_multi_activate(Entity* p) {
+    Entity* b1;
+    Entity* b2;
+    b1 = add_ball(randomFloat(300, 600), SCREEN_HEIGHT / 2, 0);
+    b2 = add_ball(randomFloat(300, 600), SCREEN_HEIGHT / 2, 0);
+    
+    currentLevel->ballTail->next = b1;
+    currentLevel->ballTail = b1;
+    currentLevel->ballTail->next = b2;
+    currentLevel->ballTail = b2;
+
+    p->flags |= DEATH_MASK;
+}
+
+void powerup_coin_activate(Entity* p) {
+    stage.score += COIN_SCORE;
+    playSound(SND_COIN, CH_ANY);
+    p->flags |= DEATH_MASK;
+}
+
+void powerup_life_activate(Entity* p) {
+    if (paddle->life <= 4) {
+        paddle->life++;
+    }
+
+    p->flags |= DEATH_MASK;
 }

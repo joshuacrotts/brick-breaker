@@ -34,9 +34,10 @@ void playSound(int16_t id, int16_t channel) {
 /*
  *
  */
-static void loadSounds(void) {
+void loadSounds(void) {
   sounds[SND_BRICK_SHATTER] = Mix_LoadWAV("res/sfx/explode_1.mp3");
   sounds[SND_BRICK_BREAK] = Mix_LoadWAV("res/sfx/explode_2.mp3");
+  sounds[SND_COIN] = Mix_LoadWAV("res/sfx/coin0.wav");
   sounds[SND_PAUSE] = Mix_LoadWAV("res/sfx/pause.mp3");
   loadMusic("res/sfx/music/metalsong.wav");
   playMusic(true);

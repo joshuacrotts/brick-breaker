@@ -10,9 +10,9 @@
 #define INSETS                           8
 #define BALL_SPEED                       10
 #define ID_BALL_MASK                     0x00000001
-#define POWERUP_ACTIVE                   0x00000002
-#define POWERUP_INACTIVE                 0x00000004
-#define ID_DEFAULT_POWERUP_MASK          0x00000008
+#define POWERUP_ACTIVE                   0x00200000
+#define POWERUP_INACTIVE                 0x00400000
+#define ID_DEFAULT_POWERUP_MASK          0x00100000
 #define ID_DEFAULT_BRICK_MASK            0x00001000
 #define ID_PLAYER_MASK                   0x00002000
 #define ID_PARTICLE_MASK                 0x00004000
@@ -42,6 +42,7 @@ enum Brick {
     DARK_GREEN,//7
     LIGHT_GREEN,//8
     LIGHT_BLUE,//9
+    // THESE NUMBERS ARE NOT CORRECT.
 };
 
 #endif

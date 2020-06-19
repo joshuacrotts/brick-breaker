@@ -2,10 +2,11 @@
 #define BALL_H
 
 #include "commons.h"
+#include "particle.h"
 
 extern App app;
 extern Stage stage;
-
+extern Level* currentLevel;
 /*
  *
  */

@@ -12,6 +12,7 @@ typedef struct Animation Animation;
 typedef struct Texture Texture;
 typedef struct FadeColor FadeColor;
 typedef struct Background Background;
+typedef struct Font Font;
 
 struct Animation {
   Animation* next;
@@ -56,6 +57,13 @@ struct Texture {
   Texture* next;
 };
 
+struct Font {
+  char name[MAX_FILE_NAME_LEN];
+  uint16_t size;
+  TTF_Font* font;
+  Font* next;
+};
+
 struct Delegate {
   void (*tick)(void);
   void (*draw)(void);
@@ -77,6 +85,7 @@ struct App{
   SDL_Rect camera;
   Delegate delegate;
   Texture textureHead, *textureTail;
+  Font fontHead, *fontTail;
 
   enum GameState gameState;
   uint16_t keyboard[MAX_KEYBOARD_KEYS];

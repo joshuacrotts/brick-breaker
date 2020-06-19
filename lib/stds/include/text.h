@@ -11,6 +11,11 @@ extern App app;
 extern void initFonts(void);
 
 /*
+ *
+ */
+extern void loadFonts(void);
+
+/*
  * Frees the fonts that are in use by the standards library.
  */
 extern void freeFonts(void);
@@ -24,13 +29,15 @@ extern void freeFonts(void);
  * @param uint8_t red color value (0-255).
  * @param uint8_t green color value (0-255).
  * @param uint8_t blue color value (0-255).
+ * @param char* font name (use the file name itself with the extension).
+ * @param uint16_t font size.
  * @param const char* string to draw.
  * @param ... formatting args.
  * 
  * To center a string, call getStringSize() or getStringSizeFont (if using a non
  * standard font), and draw the string at SCREEN_WIDTH / 2 - fontWidth / 2.
  */
-extern void drawText(float, float, uint8_t, uint8_t, uint8_t, const char*, ...);
+extern void drawText(float, float, uint8_t, uint8_t, uint8_t, char*, uint16_t, const char*, ...);
 
 /*
  * Computes the size of the string with the default font were it to be drawn
@@ -38,21 +45,11 @@ extern void drawText(float, float, uint8_t, uint8_t, uint8_t, const char*, ...);
  * of the screen if need-be.
  * 
  * @param char* string.
+ * @param char* font name.
+ * @param uint16_t font size.
  * @param pointer to integer (int) where the width of the string is stored.
  * @param pointer to integer (int) where the height of the string is stored.
  */
-extern void getStringSize(char*, int*, int*);
-
-/*
- * Computes the size of the string with the supplied font were it to be drawn
- * to the screen in pixels. This is useful for positioning the string in the middle
- * of the screen if need-be.
- * 
- * @param char* string.
- * @param TTF_Font* font used for determining the size.
- * @param pointer to integer (int) where the width of the string is stored.
- * @param pointer to integer (int) where the height of the string is stored.
- */
-extern void getStringSizeFont(char*, TTF_Font*, int*, int*);
+extern void getStringSize(char*, char*, uint16_t, int*, int*);
 
 #endif

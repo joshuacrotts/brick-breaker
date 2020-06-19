@@ -7,6 +7,8 @@
 #define BRICK_WIDTH     92
 #define BRICK_HEIGHT    32
 
+static Entity* spawn_powerup(Entity*);
+
 static void draw_balls(void);
 static void draw_powerups(void);
 static void draw_bricks(void);
@@ -249,7 +251,16 @@ static void ball_hit_brick(Entity* ball) {
           if (brick->life > 0) {
             playSound(SND_BRICK_SHATTER, CH_BRICK);
           } else {
+            Entity* p;
+            p = spawn_powerup(brick);
+
+            if (p != NULL) {
+              currentLevel->powerupTail->next = p;
+              currentLevel->powerupTail = p;
+            }
+
             playSound(SND_BRICK_BREAK, CH_BRICK);
+            stage.score += 100;
           }
           
           ball->dy = -ball->dy;
@@ -283,8 +294,39 @@ static void ball_hit_paddle(Entity* b) {
  */
 static void powerup_hit_paddle(Entity* p) {
   if (collision((int32_t) paddle->x, (int32_t) paddle->y, (int32_t) paddle->w, (int32_t) paddle->h, 
-                (int32_t) p->x, (int32_t) p->y, (int32_t) p->w, (int32_t) p->h)) {
-    
-    powerup_activate(p);
+                (int32_t) p->x, (int32_t) p->y, (int32_t) p->w, (int32_t) p->h) && p->flags & POWERUP_INACTIVE) {
+
+    if (p->identifier == LARGE_PADDLE) {
+      powerup_large_activate(p);
+    } else if (p->identifier == MULTI_BALL) {
+      powerup_multi_activate(p);
+    } else if (p->identifier == GOLD_COIN) {
+      powerup_coin_activate(p);
+    } else if (p->identifier == EXTRA_LIFE) {
+      powerup_life_activate(p);
+    }
   }
+}
+
+/*
+ *
+ */
+static Entity* spawn_powerup(Entity* parent) {
+  Entity* p;
+
+  float prob = randomFloat(1.0f, 1000.0f);
+
+  if (prob < 50.0f) {
+    p = add_powerup(parent->x, parent->y, 0, EXTRA_LIFE);
+  } else if (prob < 100.0f) {
+    p = add_powerup(parent->x, parent->y, 0, LARGE_PADDLE);
+  } else if (prob < 150.0f) {
+    p = add_powerup(parent->x, parent->y, 0, MULTI_BALL);
+  } else if (prob < 500.0f) {
+    p = add_powerup(parent->x, parent->y, 0, GOLD_COIN);
+  } else {
+    p = NULL;
+  }
+
+  return p;
 }

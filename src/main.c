@@ -9,6 +9,8 @@
 static void init_scene(void);
 static void draw(void);
 static void tick(void);
+static void check_pregame(void);
+static void check_paused(void);
 static void cleanup_stage(void);
 static void start_game(void);
 
@@ -64,20 +66,8 @@ static void init_scene(void) {
  *
  */
 static void tick(void) {
-  if (app.keyboard[SDL_SCANCODE_P]) {
-      app.gameState = app.gameState == PAUSED ? RUNNING : PAUSED;
-      app.keyboard[SDL_SCANCODE_P] = 0;
-  }
-
-  // Initially, we just have the player moving the paddle around,
-  // and no ball or powerups. 
-  if (app.keyboard[SDL_SCANCODE_SPACE] && app.gameState == PREGAME) {
-    app.keyboard[SDL_SCANCODE_SPACE] = 0;
-    Entity* b = add_ball(randomFloat(SCREEN_WIDTH / 3, SCREEN_WIDTH / 2 + SCREEN_WIDTH / 4), SCREEN_HEIGHT / 2, 0); 
-    currentLevel->ballTail->next = b;
-    currentLevel->ballTail = b; 
-    app.gameState = RUNNING;
-  }
+  check_pregame();
+  check_paused();
 
   if (app.gameState == PAUSED) {
     return;
@@ -236,6 +226,38 @@ static void create_emitter(int32_t x, int32_t y, uint32_t maxParticles, uint32_t
 
   currentLevel->emitterTail->next = em;
   currentLevel->emitterTail = em;
+}
+
+/*
+ *
+ */
+static void check_paused(void) {
+  if (app.keyboard[SDL_SCANCODE_P]) {
+      playSound(SND_PAUSE, CH_ANY);
+      app.gameState = app.gameState == PAUSED ? RUNNING : PAUSED;
+      app.keyboard[SDL_SCANCODE_P] = 0;
+  }
+
+  if (app.gameState == PAUSED) {
+    Mix_PauseMusic();
+  } else {
+    Mix_ResumeMusic();
+  }
+}
+
+/*
+ *
+ */
+static void check_pregame(void) {
+  // Initially, we just have the player moving the paddle around,
+  // and no ball or powerups. 
+  if (app.keyboard[SDL_SCANCODE_SPACE] && app.gameState == PREGAME) {
+    app.keyboard[SDL_SCANCODE_SPACE] = 0;
+    Entity* b = add_ball(randomFloat(SCREEN_WIDTH / 3, SCREEN_WIDTH / 2 + SCREEN_WIDTH / 4), SCREEN_HEIGHT / 2, 0); 
+    currentLevel->ballTail->next = b;
+    currentLevel->ballTail = b; 
+    app.gameState = RUNNING;
+  }
 }
 
 /*

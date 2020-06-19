@@ -1,25 +1,27 @@
 #include "../include/draw.h"
 
-#define DEFAULT_FONT_SIZE 24
 #define DEFAULT_FONT_COLOR 0xFF
 
-static char textBuffer[MAX_LINE_LENGTH];
-static TTF_Font* font;
+static TTF_Font* getFont(char*, uint16_t);
+static void loadFonts();
+static void addFont(char*, uint16_t);
 
+static char textBuffer[MAX_LINE_LENGTH];
 static SDL_Surface* messageSurface;
 static SDL_Texture* messageTexture;
 static SDL_Rect messageRect;
 
 void initFonts(void) {
+  app.fontTail = &app.fontHead;
   if (TTF_Init() == -1) {
     SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to initialize TTF_Init: %s.\n", SDL_GetError());
-    exit(EXIT_ERROR);
+    exit(EXIT_FAILURE);
   }
 
-  font = TTF_OpenFont("res/fonts/nes.ttf", DEFAULT_FONT_SIZE);
+  loadFonts();
 }
 
-void drawText(float x, float y, uint8_t r, uint8_t g, uint8_t b, const char* text, ...) {
+void drawText(float x, float y, uint8_t r, uint8_t g, uint8_t b, char* fontString, uint16_t fontSize, const char* text, ...) {
   messageRect.x = (uint16_t) x;
   messageRect.y = (uint16_t) y;
 
@@ -31,6 +33,8 @@ void drawText(float x, float y, uint8_t r, uint8_t g, uint8_t b, const char* tex
   va_end(args);
 
   SDL_Color textColor = {r, g, b};
+  TTF_Font* font = getFont(fontString, fontSize);
+
   messageSurface = TTF_RenderText_Solid(font, textBuffer, textColor);
   TTF_SizeText(font, textBuffer, &messageRect.w, &messageRect.h);
 
@@ -46,14 +50,65 @@ void drawText(float x, float y, uint8_t r, uint8_t g, uint8_t b, const char* tex
 void freeFonts() {
   SDL_DestroyTexture(messageTexture);
   SDL_FreeSurface(messageSurface);
-  TTF_CloseFont(font);
+
+  Font* f;
+  f = app.fontHead.next;
+
+  while (f != NULL) {
+    f = app.fontHead.next;
+    app.fontHead.next = f->next;
+    free(f);
+  }
+
   TTF_Quit();
 }
 
-void getStringSize(char* s, int* w, int* h) {
-  TTF_SizeText(font, s, w, h);
+void getStringSize(char* s, char* font, uint16_t size, int* w, int* h) {
+  TTF_Font* f;
+  f = getFont(font, size);
+
+  if (f != NULL) {
+    TTF_SizeText(f, s, w, h);
+  } else {
+    exit(EXIT_FAILURE);
+  }
 }
 
-void getStringSizeFont(char* s, TTF_Font* f, int* w, int* h) {
-  TTF_SizeText(f, s, w, h);
+/*
+ *
+ */
+static TTF_Font* getFont(char* fontStr, uint16_t fontSize) {
+  Font* f;
+
+  for (f = app.fontHead.next; f != NULL; f = f->next) {
+    if (strcmp(f->name, fontStr) == 0 && f->size == fontSize) {
+      return f->font;
+    }
+  }
+
+  return NULL;
+}
+
+/*
+ *
+ */
+static void loadFonts() {
+  addFont("res/fonts/nes.ttf", 12);
+  addFont("res/fonts/nes.ttf", 24);
+}
+
+/*
+ *
+ */
+static void addFont(char* fontFile, uint16_t size) {
+  Font* f;
+  f = malloc(sizeof(Font));
+  memset(f, 0, sizeof(Font));
+
+  f->font = TTF_OpenFont(fontFile, size);
+  strcpy(f->name, fontFile);
+  f->size = size;
+
+  app.fontTail->next = f;
+  app.fontTail = f;
 }

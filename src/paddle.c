@@ -1,5 +1,8 @@
 #include "../include/paddle.h"
 
+#define H_VELOCITY   15.0f
+#define DECELERATION 0.85f
+
 static void key_input_update(void);
 static void check_bounds(void);
 
@@ -13,6 +16,8 @@ void init_paddle(void) {
     
     paddle->x = SCREEN_WIDTH / 2 - paddle->w / 2;
     paddle->y = SCREEN_HEIGHT - 40;
+    paddle->scaleX = 1.0f;
+    paddle->scaleY = 1.0f;
     paddle->idFlags |= ID_PLAYER_MASK;
 }
 
@@ -25,7 +30,8 @@ void paddle_update(void) {
 }
 
 void paddle_draw(void) {
-    blit(paddle->texture[0], paddle->x, paddle->y, false);
+    blitTextureScaled(paddle->texture[0], paddle->x, paddle->y, 
+                      paddle->scaleX, paddle->scaleY, paddle->angle);
 }
 
 void paddle_die(void) {
@@ -46,15 +52,15 @@ static void check_bounds(void) {
 
 static void key_input_update(void) {
     if (app.gameState != PAUSED) {
-        paddle->dx *= 0.95f;
-        paddle->dy *= 0.95f;
+        paddle->dx *= DECELERATION;
+        paddle->dy *= DECELERATION;
 
         if (app.keyboard[SDL_SCANCODE_A]) {
-            paddle->dx = -10.0f;
+            paddle->dx = -H_VELOCITY;
         }
 
         if (app.keyboard[SDL_SCANCODE_D]) {
-            paddle->dx = 10.0f;
+            paddle->dx = H_VELOCITY;
         }
     }
 }

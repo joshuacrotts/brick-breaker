@@ -12,6 +12,8 @@
 #include "hud.h"
 #include "../lib/stds/include/background.h"
 #include "../lib/stds/include/draw.h"
+#include "../lib/stds/include/sound.h"
+#include "../lib/stds/include/text.h"
 
 App app;
 Stage stage;

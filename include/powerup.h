@@ -2,9 +2,12 @@
 #define POWERUP_H
 
 #include "commons.h"
+#include "ball.h"
 #include "../lib/stds/include/animation.h"
+#include "../lib/stds/include/sound.h"
 
 extern App app;
+extern Entity* paddle;
 extern Stage stage;
 extern Level* currentLevel;
 
@@ -31,7 +34,26 @@ extern void powerup_die(Entity*);
 /*
  *
  */
-extern void powerup_activate(Entity*);
+extern void powerup_large_activate(Entity*);
 
+/*
+ *
+ */
+extern void powerup_large_deactivate(Entity*);
+
+/*
+ *
+ */
+extern void powerup_coin_activate(Entity*);
+
+/*
+ *
+ */
+extern void powerup_life_activate(Entity*);
+
+/*
+ *
+ */
+extern void powerup_multi_activate(Entity*);
 
 #endif

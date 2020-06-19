@@ -46,6 +46,8 @@ struct Stage {
   Animation animationHead, *animationTail;
   Level levelHead, *levelTail;
   Debris debrisHead, *debrisTail;
+
+  uint32_t score;
 };
 
 #endif
