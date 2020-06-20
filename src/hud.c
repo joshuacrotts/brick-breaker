@@ -96,7 +96,7 @@ static void draw_title(SDL_Color* c) {
 static void draw_pregame_text(SDL_Color* c) {
     int fw, fh;
     getStringSize(pregame_text, "res/fonts/nes.ttf", 24, &fw, &fh);    
-    drawText((SCREEN_WIDTH / 2) - (fw / 2), SCREEN_HEIGHT >> 1, c->r, c->g, c->b, "res/fonts/nes.ttf", 24, pregame_text);
+    drawText((SCREEN_WIDTH / 2) - (fw / 2), (SCREEN_HEIGHT >> 1) + (SCREEN_HEIGHT / 4), c->r, c->g, c->b, "res/fonts/nes.ttf", 24, pregame_text);
 }
 
 /*

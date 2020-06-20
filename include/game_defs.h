@@ -3,7 +3,6 @@
 
 #include "commons.h"
 
-#define DEATH_MASK                       0x10000000
 #define MOVE_MASK                        0x20000000
 
 #define MAX_DEBRIS_IMGS                  3

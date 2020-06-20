@@ -33,7 +33,7 @@ Entity* add_ball(float x, float y, uint32_t flags) {
 void ball_update(Entity* b) {
     b->x += b->dx;
     b->y += b->dy;
-
+    add_trail(b, 4, 60);
     check_bounds(b);
 }
 
@@ -69,6 +69,7 @@ static void check_bounds(Entity* b) {
  */
 static void spawn_ball_particles(Entity* b) {
     Entity* p;
+
     for (int i = 0; i < BALL_DEATH_PARTICLES; i++) {
         
         p = add_particle(b->x + b->w / 2, b->y + b->h / 2, randomFloat(-5, 5), randomFloat(-7, -5), 0, 0, 

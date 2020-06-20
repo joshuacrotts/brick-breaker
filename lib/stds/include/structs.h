@@ -13,6 +13,18 @@ typedef struct Texture Texture;
 typedef struct FadeColor FadeColor;
 typedef struct Background Background;
 typedef struct Font Font;
+typedef struct Trail Trail;
+
+struct Trail {
+  SDL_Texture* texture;
+  float x;
+  float y;
+  int16_t alpha;
+  int16_t alpha_decay_rate;
+  uint32_t flags;
+
+  Trail* next;
+};
 
 struct Animation {
   Animation* next;
@@ -84,6 +96,7 @@ struct App{
   SDL_Rect screenBounds;
   SDL_Rect camera;
   Delegate delegate;
+  Trail trailHead, *trailTail;
   Texture textureHead, *textureTail;
   Font fontHead, *fontTail;
 

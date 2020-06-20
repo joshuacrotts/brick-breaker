@@ -18,10 +18,12 @@ static void create_emitter(int32_t, int32_t, uint32_t, uint32_t);
 static void update_emitters(void);
 static void update_entities(void);
 static void update_debris(void);
+static void update_trails(void);
 
 static void draw_emitters(void);
 static void draw_entities(void);
 static void draw_debris(void);
+static void draw_trails(void);
 
 // Barebones game. This is the minimum amount of code
 // necessary to run a window.
@@ -49,10 +51,11 @@ static void init_scene(void) {
 
   memset(&stage, 0, sizeof(Stage));
   app.textureTail = &app.textureHead;
+  app.trailTail = &app.trailHead;
   stage.levelTail = &stage.levelHead;
   stage.debrisTail = &stage.debrisHead;
 
-  Level* level = add_level("res/level_data/level_1.txt");
+  Level* level = add_level("res/level_data/level_2.txt");
   stage.levelTail->next = level;
   stage.levelTail = level;
   currentLevel = stage.levelTail;
@@ -76,6 +79,7 @@ static void tick(void) {
   background_update(background);
   update_emitters();
   update_entities();
+  update_trails();
   update_debris();
   level_update();
   paddle_update();
@@ -89,6 +93,7 @@ static void draw(void) {
   background_draw(background);
   draw_emitters();
   draw_entities();
+  draw_trails();
   draw_debris();
   level_draw();
   paddle_draw();
@@ -181,6 +186,31 @@ static void update_debris(void) {
 /*
  *
  */
+static void update_trails(void) {
+    Trail* t;
+    Trail* prev;
+
+    prev = &app.trailHead;
+
+    for (t = app.trailHead.next; t != NULL; t = t->next) {
+        trail_update(t);
+
+        if (t->flags & DEATH_MASK) {
+            if (t == app.trailTail) {
+                app.trailTail = prev;
+            }
+
+            prev->next = t->next;
+            free(t);
+            t = prev;
+        }
+        prev = t;
+    }
+}
+
+/*
+ *
+ */
 static void draw_emitters(void) {
   Emitter* em;
 
@@ -214,6 +244,17 @@ static void draw_debris(void) {
   for (d = stage.debrisHead.next; d != NULL; d = d->next) {
     debris_draw(d);
   }
+}
+
+/*
+ *
+ */
+static void draw_trails(void) {
+    Trail* t;
+
+    for (t = app.trailHead.next; t != NULL; t = t->next) {
+        trail_draw(t);
+    }
 }
 
 /*

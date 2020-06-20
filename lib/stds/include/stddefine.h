@@ -20,6 +20,7 @@
 #define WINDOW_UPDATE_TIMER     1000
 #define PI                      3.14159265358979323846
 
+#define DEATH_MASK              0x10000000
 #define SPRITE_SHEET_MASK       2
 #define STD_ANIMATION_MASK      1
 #define ANIMATION_ACTIVE_MASK   0x01000000

@@ -2,19 +2,20 @@
 
 #define MAXC            16
 #define CHAR_OFFSET     48
-#define BRICK_ROW_COUNT 10
-#define BRICK_COL_COUNT 8
+#define BRICK_ROW_COUNT 6
+#define BRICK_COL_COUNT 6
 #define BRICK_WIDTH     92
 #define BRICK_HEIGHT    32
 
 static Entity* spawn_powerup(Entity*);
 
-static void draw_balls(void);
-static void draw_powerups(void);
-static void draw_bricks(void);
 static void update_balls(void);
 static void update_powerups(void);
 static void update_bricks(void);
+
+static void draw_balls(void);
+static void draw_powerups(void);
+static void draw_bricks(void);
 
 static void ball_hit_paddle(Entity*);
 static void ball_hit_brick(Entity*);

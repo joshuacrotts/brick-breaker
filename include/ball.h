@@ -3,10 +3,12 @@
 
 #include "commons.h"
 #include "particle.h"
+#include "../lib/stds/include/trail.h"
 
 extern App app;
 extern Stage stage;
 extern Level* currentLevel;
+
 /*
  *
  */
