@@ -313,6 +313,12 @@ cache_texture(char *file_name, SDL_Texture *sdl_texture) {
   texture_t* texture;
 
   texture = malloc(sizeof(texture_t));
+
+  if (texture == NULL) {
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Could not allocate memory for texture_t. %s.\n", SDL_GetError());
+    exit(EXIT_FAILURE);    
+  }
+  
   memset(texture, 0, sizeof(texture_t));
   app.texture_tail->next = texture;
   app.texture_tail = texture;

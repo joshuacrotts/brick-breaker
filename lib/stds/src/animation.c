@@ -6,7 +6,6 @@ static char input_buffer[MAX_BUFFER_SIZE];
 animation_t* 
 add_spritesheet(char *directory, uint8_t no_of_frames, float frame_delay, uint16_t x, uint16_t y) {
   animation_t *a;
-
   a = malloc(sizeof(animation_t));
 
   if (a == NULL) {
@@ -47,6 +46,12 @@ add_animation(char *directory, uint8_t no_of_frames, float frame_delay) {
   memset(a, 0, sizeof(animation_t));
 
   a->frames = malloc(sizeof(SDL_Texture*) * no_of_frames);
+
+  if (a->frames == NULL) {
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Could not allocate memory for a->frames. %s.\n", SDL_GetError());
+    exit(EXIT_FAILURE);
+  }
+
   a->number_of_frames = no_of_frames;
   a->frame_delay = frame_delay;
   a->frame_timer = frame_delay * FPS;

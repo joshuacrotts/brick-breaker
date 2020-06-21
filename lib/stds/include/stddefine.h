@@ -33,15 +33,15 @@ enum GameState {
   PAUSED
 };
 
-enum SoundChannel{
+enum SoundChannel {
   CH_ANY = -1,
   CH_BRICK
 };
 
-enum SFX{
-  SND_BRICK_SHATTER,
-  SND_BRICK_BREAK,
+enum SFX {
   SND_COIN,
+  SND_BRICK_BREAK,
+  SND_BRICK_SHATTER,
   SND_PAUSE,
   SND_MAX
 };

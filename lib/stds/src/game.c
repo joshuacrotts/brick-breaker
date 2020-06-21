@@ -7,6 +7,15 @@ static uint32_t update_window_title(uint32_t, void*);
 
 
 void 
+init_app_structures() {
+  app.parallax_tail = &app.parallax_head;
+  app.texture_tail  = &app.texture_head;
+  app.trail_tail    = &app.trail_head;
+  app.font_tail     = &app.font_head;
+}
+
+
+void 
 loop() {
   long timer;
   long then;

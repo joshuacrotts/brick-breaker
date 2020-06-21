@@ -1,11 +1,12 @@
-#include "stdio.h"
-#include "stdlib.h"
-#include "stddef.h"
-#include "math.h"
-#include "string.h"
-#include "ctype.h"
-#include "stdbool.h"
-#include "time.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <stddef.h>
+#include <math.h>
+#include <string.h>
+#include <ctype.h>
+#include <stdbool.h>
+#include <time.h>
+#include <assert.h>
 
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
@@ -95,14 +96,26 @@ get_distance(int32_t, int32_t, int32_t, int32_t);
 
 
 /*
- *
+ * Prints to the SDL LogInfo stream. This is just to 
+ * prevent having to type out the long line if you
+ * want to do simple debugging. Supports varargs
+ * and formatting.
+ * 
+ * @param const char* string.
+ * @param ... variable arguments.
+ * 
+ * @return void.
  */
 void 
 print(const char*, ...);
 
 
 /*
- *
+ * Converts a float variable in degrees to radians.
+ * 
+ * @param float angle in degrees (0.0f to 360.0f)
+ * 
+ * @return float angle in radians.
  */
 float 
 to_radians(float);

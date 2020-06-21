@@ -3,16 +3,30 @@
 
 #include "stds.h"
 
-typedef struct Delegate delegate_t;
-typedef struct Entity entity_t;
-typedef struct Mouse mouse_t;
-typedef struct App app_t;
-typedef struct Animation animation_t;
-typedef struct Texture texture_t;
-typedef struct FadeColor fade_color_t;
-typedef struct Background background_t;
-typedef struct Font font_t;
-typedef struct Trail trail_t;
+typedef struct Delegate           delegate_t;
+typedef struct Entity             entity_t;
+typedef struct Mouse              mouse_t;
+typedef struct App                app_t;
+typedef struct Animation          animation_t;
+typedef struct Texture            texture_t;
+typedef struct FadeColor          fade_color_t;
+typedef struct Background         background_t;
+typedef struct ParallaxBackground parallax_background_t;
+typedef struct Font               font_t;
+typedef struct Trail              trail_t;
+
+
+/*
+ *
+ */
+struct ParallaxBackground {
+  float                 parallax_scroll_speed;
+  float                 normal_scroll_speed;
+  bool                  infinite_scroll; 
+
+  background_t          *background;
+  parallax_background_t *next;
+};
 
 /*
  *
@@ -26,7 +40,7 @@ struct Trail {
 
   SDL_Texture*  texture;
 
-  trail_t* next;
+  trail_t*      next;
 };
 
 /*
@@ -117,21 +131,22 @@ struct Mouse {
  *
  */
 struct App{
-  uint16_t        keyboard[MAX_KEYBOARD_KEYS];
-  const char      *original_title;
+  uint16_t              keyboard[MAX_KEYBOARD_KEYS];
+  const char            *original_title;
 
-  SDL_Renderer    *renderer;
-  SDL_Window      *window;
-  SDL_Rect        screen_bounds;
-  SDL_Rect        camera;
+  SDL_Renderer          *renderer;
+  SDL_Window            *window;
+  SDL_Rect              screen_bounds;
+  SDL_Rect              camera;
 
-  mouse_t         mouse;
-  delegate_t      delegate;
-  trail_t         trail_head, *trail_tail;
-  texture_t       texture_head, *texture_tail;
-  font_t          font_head, *font_tail;
+  mouse_t               mouse;
+  delegate_t            delegate;
+  trail_t               trail_head, *trail_tail;
+  texture_t             texture_head, *texture_tail;
+  font_t                font_head, *font_tail;
+  parallax_background_t parallax_head, *parallax_tail;
 
-  enum GameState  game_state;
+  enum GameState        game_state;
 };
 
 /*

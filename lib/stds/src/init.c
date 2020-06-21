@@ -12,7 +12,9 @@ init_game(const char *window_name, uint16_t window_width, uint16_t window_height
   init_SDL(window_name, window_width, window_height);
   init_sounds();
   init_fonts();
+
   app.original_title = window_name;
+  
   // Assigns the callback function to clean up the
   // SDL context when closing the program.
   atexit(cleanup);
@@ -40,7 +42,7 @@ init_SDL(const char *window_name, uint16_t window_width, uint16_t window_height)
   window_flags   = 0;
 
   if (debug_mode) {
-    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Initialization started.");
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Initialization of SDL started.");
   }
 
   memset(&app, 0, sizeof(app_t));
@@ -49,6 +51,10 @@ init_SDL(const char *window_name, uint16_t window_width, uint16_t window_height)
   if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
     SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Could not initialize SDL: %s.\n", SDL_GetError());
     exit(EXIT_ERROR);
+  }
+
+  if (debug_mode) {
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Initializing window.");
   }
 
   // Initialize the SDL window.
@@ -60,6 +66,10 @@ init_SDL(const char *window_name, uint16_t window_width, uint16_t window_height)
   }
 
   SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
+
+  if (debug_mode) {
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Creating SDL renderer.");
+  }
 
   // Create renderer with the default graphics context.
   app.renderer = SDL_CreateRenderer(app.window, -1, renderer_flags);
@@ -92,6 +102,10 @@ init_SDL(const char *window_name, uint16_t window_width, uint16_t window_height)
  */
 static void 
 init_audio_context(void) {
+  if (debug_mode) {
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Initializing audio context and SDL Mixer.");
+  }
+
   if (Mix_OpenAudio(44100, AUDIO_S16SYS, 2, 1024) == -1) {
     SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Could not initialize SDL Mixer.\n");
     exit(EXIT_ERROR);
@@ -115,6 +129,42 @@ cleanup(void) {
 
 	SDL_DestroyRenderer(app.renderer);
 	SDL_DestroyWindow(app.window);
+
+  // Free the memory of the linked lists defined by
+  // the app struct.
+  parallax_background_t *pbg;
+  texture_t *t;
+  trail_t *tr;
+
+  if (debug_mode) {
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Freeing parallax backgrounds.");
+  }
+
+  while (app.parallax_head.next) {
+    pbg = app.parallax_head.next;
+    app.parallax_head.next = pbg->next;
+    free(pbg);
+  }
+
+  if (debug_mode) {
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Freeing textures.");
+  }  
+
+  while (app.texture_head.next) {
+    t = app.texture_head.next;
+    app.texture_head.next = t->next;
+    free(t);
+  }
+
+  if (debug_mode) {
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Freeing trails.");
+  }  
+
+  while (app.trail_head.next) {
+    tr = app.trail_head.next;
+    app.trail_head.next = tr->next;
+    free(tr);
+  }      
 
   free(&app);
   free_fonts();

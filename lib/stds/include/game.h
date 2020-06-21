@@ -33,4 +33,12 @@ present_scene(void);
 extern void 
 loop(void);
 
-#endif
+
+/*
+ *
+ */
+extern void 
+init_app_structures(void);
+
+
+#endif // GAME
