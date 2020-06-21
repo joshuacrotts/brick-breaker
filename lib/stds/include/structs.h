@@ -3,84 +3,109 @@
 
 #include "stds.h"
 
-typedef struct Delegate Delegate;
-typedef struct Entity Entity;
-typedef struct Mouse Mouse;
-typedef struct Entity Entity;
-typedef struct App App;
-typedef struct Animation Animation;
-typedef struct Texture Texture;
-typedef struct FadeColor FadeColor;
-typedef struct Background Background;
-typedef struct Font Font;
-typedef struct Trail Trail;
+typedef struct Delegate delegate_t;
+typedef struct Entity entity_t;
+typedef struct Mouse mouse_t;
+typedef struct App app_t;
+typedef struct Animation animation_t;
+typedef struct Texture texture_t;
+typedef struct FadeColor fade_color_t;
+typedef struct Background background_t;
+typedef struct Font font_t;
+typedef struct Trail trail_t;
 
+/*
+ *
+ */
 struct Trail {
-  SDL_Texture* texture;
-  float x;
-  float y;
-  int16_t alpha;
-  int16_t alpha_decay_rate;
-  uint32_t flags;
+  float         x;
+  float         y;
+  int16_t       alpha;
+  int16_t       alpha_decay_rate;
+  uint32_t      flags;
 
-  Trail* next;
+  SDL_Texture*  texture;
+
+  trail_t* next;
 };
 
+/*
+ *
+ */
 struct Animation {
-  Animation* next;
-  SDL_Texture* currentTexture;
-  SDL_Texture* defaultTexture;
-  SDL_Texture** frames;
-  SDL_Texture* spritesheet;
+  uint16_t    x;
+  uint16_t    y;
+  uint32_t    w;
+  uint32_t    h;
+  uint16_t    start_x;
+  uint16_t    start_y;
+  uint32_t    sprite_sheet_width;
+  uint32_t    sprite_sheet_height;
+  bool        cycle_once;
 
-  uint16_t x;
-  uint16_t y;
-  uint32_t w;
-  uint32_t h;
-  uint16_t startX;
-  uint16_t startY;
-  uint32_t spriteSheetW;
-  uint32_t spriteSheetH;
-  bool cycleOnce;
+  uint32_t    id_flags;
+  uint32_t    flags;
+  uint8_t     current_frame_id;
+  size_t      number_of_frames;
+  float       frame_delay;
+  float       frame_timer;
 
-  uint32_t idFlags;
-  uint32_t flags;
-  uint8_t currentFrameID;
-  uint8_t numberOfFrames;
-  float frameDelay;
-  float frameTimer;
+  SDL_Texture *current_texture;
+  SDL_Texture *default_texture;
+  SDL_Texture **frames;
+  SDL_Texture *sprite_sheet;
+
+  animation_t *next;
 };
 
+/*
+ *
+ */
 struct Background {
-  int32_t x;
-  int32_t y;
-  uint32_t w;
-  uint32_t h;
+  int32_t     x;
+  int32_t     y;
+  uint32_t    w;
+  uint32_t    h;
 
-  float scaleX;
-  float scaleY;
+  float       scale_x;
+  float       scale_y;
 
-  SDL_Texture* backgroundTexture;
+  SDL_Texture *background_texture;
 };
 
+/*
+ *
+ */
 struct Texture {
-  char name[MAX_FILE_NAME_LEN];
-  SDL_Texture* texture;
-  Texture* next;
+  char          name[MAX_FILE_NAME_LEN];
+
+  SDL_Texture*  texture;
+
+  texture_t*    next;
 };
 
+/*
+ *
+ */
 struct Font {
-  char name[MAX_FILE_NAME_LEN];
-  uint16_t size;
+  char      name[MAX_FILE_NAME_LEN];
+  uint16_t  size;
+
   TTF_Font* font;
-  Font* next;
+  font_t*   next;
 };
 
+/*
+ *
+ */
 struct Delegate {
   void (*tick)(void);
   void (*draw)(void);
 };
 
+/*
+ *
+ */
 struct Mouse {
   int32_t x;
   int32_t y;
@@ -88,82 +113,93 @@ struct Mouse {
   uint8_t wheel;
 };
 
+/*
+ *
+ */
 struct App{
-  SDL_Renderer *renderer;
-  SDL_Window *window;
-  Mouse mouse;
+  uint16_t        keyboard[MAX_KEYBOARD_KEYS];
+  const char      *original_title;
 
-  SDL_Rect screenBounds;
-  SDL_Rect camera;
-  Delegate delegate;
-  Trail trailHead, *trailTail;
-  Texture textureHead, *textureTail;
-  Font fontHead, *fontTail;
+  SDL_Renderer    *renderer;
+  SDL_Window      *window;
+  SDL_Rect        screen_bounds;
+  SDL_Rect        camera;
 
-  enum GameState gameState;
-  uint16_t keyboard[MAX_KEYBOARD_KEYS];
+  mouse_t         mouse;
+  delegate_t      delegate;
+  trail_t         trail_head, *trail_tail;
+  texture_t       texture_head, *texture_tail;
+  font_t          font_head, *font_tail;
+
+  enum GameState  game_state;
 };
 
+/*
+ *
+ */
 struct FadeColor {
+  bool      is_first_color;
+  float     alpha;
+  float     time;
+
   SDL_Color c1;
   SDL_Color c2;
-
-  bool firstColor;
-  float alpha;
-  float time;
 };
 
-// Update this as needed.
+/*
+ *
+ */
 struct Entity {
-  float x;
-  float y;
+  float         x;
+  float         y;
 
   //  Miscellaneous positioning variable.
-  float variability;
+  float         variability;
 
   // Scales the entity in either the x or y
   // direction. This should default to 1.
-  float scaleX;
-  float scaleY;
+  float         scale_x;
+  float         scale_y;
 
   //  Directional velocity (yes, I know it's redundant).
-  float dx;
-  float dy;
+  float         dx;
+  float         dy;
 
   //  Acceleration or deceleration factors.
-  float deltaAccelX;
-  float deltaAccelY;
+  float         delta_accel_x;
+  float         delta_accel_y;
 
   // Change rate of alpha value.
-  float deltaAlpha;
+  float         delta_alpha;
 
   // Size of entity if not defined by a rectangle. These
   // should either be set manually, or defined by a call
   // to SDL_QueryTexture(...), where you pass the addresses
   // of these variables.
-  uint32_t w;
-  uint32_t h;
-  uint32_t flags;
-  uint32_t idFlags;
-  uint32_t reload;
-  uint32_t identifier;
+  uint32_t      w;
+  uint32_t      h;
+  uint32_t      flags;
+  uint32_t      id_flags;
+  uint32_t      reload;
+  uint32_t      identifier;
   
-  uint16_t angle;
-  uint16_t radius;
+  uint16_t      angle;
+  uint16_t      radius;
 
   // Can be used interchangably for different purposes.
-  int32_t health;
-  int32_t life;
+  int32_t       health;
+  int32_t       life;
 
-  Animation* animation;
-  SDL_Color color;
-  SDL_Texture* texture[TEXTURE_BUFFER_SIZE];
-  Entity* next;
+  SDL_Color     color;
+  SDL_Texture*  texture[TEXTURE_BUFFER_SIZE];
+  
+  animation_t   *animation;
+  entity_t      *next; 
 
-  void (*tick)(Entity*);
-  void (*draw)(Entity*);
-  void (*touch)(Entity*);
-  void (*die)(Entity*);
+  void (*tick)(entity_t*);
+  void (*draw)(entity_t*);
+  void (*touch)(entity_t*);
+  void (*die)(entity_t*);
 };
 
 #endif

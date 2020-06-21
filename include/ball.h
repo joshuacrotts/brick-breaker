@@ -3,35 +3,39 @@
 
 #include "commons.h"
 #include "particle.h"
+#include "../lib/stds/include/draw.h"
 #include "../lib/stds/include/trail.h"
 
-extern App app;
-extern Stage stage;
-extern Level* currentLevel;
+extern app_t app;
+extern stage_t stage;
+extern level_t* currentLevel;
+
 
 /*
  *
  */
-Entity* add_ball(float, float, uint32_t flags);
+entity_t* 
+add_ball(float, float, uint32_t flags);
+
 
 /*
  *
  */
-void ball_update(Entity*);
+void 
+ball_update(entity_t*);
+
 
 /*
  *
  */
-void ball_draw(Entity*);
+void 
+ball_draw(entity_t*);
+
 
 /*
  *
  */
-void ball_die(Entity*);
-
-extern void drawRect(SDL_Rect*, uint8_t, uint8_t, uint8_t, uint8_t, bool);
-extern void blit(SDL_Texture*, float, float, bool);
-extern void blitRotated(SDL_Texture*, float, float, uint16_t);
-extern SDL_Texture* loadTexture(char*);
+void 
+ball_die(entity_t*);
 
 #endif

@@ -1,20 +1,23 @@
 #include "../include/powerup.h"
 
-#define COIN_SCORE 500
+#define COIN_SCORE      500
 #define POWERUP_DESCENT 3
+#define MAX_LIVES       4
 
-Entity* add_powerup(float x, float y, uint32_t flags, int8_t identifier) {
-    Entity* p;
-    p = malloc(sizeof(Entity));
-    memset(p, 0, sizeof(Entity));
+
+entity_t* 
+add_powerup(float x, float y, uint32_t flags, int8_t identifier) {
+    entity_t *p;
+    p = malloc(sizeof(entity_t));
+    memset(p, 0, sizeof(entity_t));
 
     p->x = x;
     p->y = y;
-    p->idFlags |= ID_DEFAULT_POWERUP_MASK;
+    p->id_flags |= ID_DEFAULT_POWERUP_MASK;
     p->flags |= flags | POWERUP_INACTIVE;
     p->identifier = identifier;
 
-    Animation* a;
+    animation_t *a;
 
     switch(identifier) {
         case MULTI_BALL:
@@ -42,7 +45,9 @@ Entity* add_powerup(float x, float y, uint32_t flags, int8_t identifier) {
     return p;
 }
 
-void powerup_update(Entity* p) {
+
+void 
+powerup_update(entity_t *p) {
     if (p->flags & POWERUP_ACTIVE) {
         if (--p->life < 0) {
             if (p->identifier == LARGE_PADDLE) {
@@ -63,51 +68,65 @@ void powerup_update(Entity* p) {
     }
 }
 
-void powerup_draw(Entity* p) {
+
+void 
+powerup_draw(entity_t *p) {
     if (p->animation != NULL && p->flags & POWERUP_INACTIVE) {
         animation_draw(p);
     }
 }
 
-void powerup_die(Entity* p) {
+
+void 
+powerup_die(entity_t *p) {
     if (p->flags & DEATH_MASK) {
         free(p);
     }
 }
 
-void powerup_large_activate(Entity* p) {
+
+void 
+powerup_large_activate(entity_t *p) {
     p->life = FPS * 10;
     p->flags |= POWERUP_ACTIVE;
-    paddle->scaleX = 2.0f;
+    paddle->scale_x = 2.0f;
 }
 
-void powerup_large_deactivate(Entity* p) {
-    paddle->scaleX = 1.0f;
+
+void 
+powerup_large_deactivate(entity_t *p) {
+    paddle->scale_x = 1.0f;
     p->flags |= DEATH_MASK;
 }
 
-void powerup_multi_activate(Entity* p) {
-    Entity* b1;
-    Entity* b2;
-    b1 = add_ball(randomFloat(300, 600), SCREEN_HEIGHT / 2, 0);
-    b2 = add_ball(randomFloat(300, 600), SCREEN_HEIGHT / 2, 0);
+
+void 
+powerup_multi_activate(entity_t *p) {
+    entity_t *b1;
+    entity_t *b2;
+    b1 = add_ball(random_float(300, 600), SCREEN_HEIGHT / 2, 0);
+    b2 = add_ball(random_float(300, 600), SCREEN_HEIGHT / 2, 0);
     
-    currentLevel->ballTail->next = b1;
-    currentLevel->ballTail = b1;
-    currentLevel->ballTail->next = b2;
-    currentLevel->ballTail = b2;
+    currentLevel->ball_tail->next = b1;
+    currentLevel->ball_tail = b1;
+    currentLevel->ball_tail->next = b2;
+    currentLevel->ball_tail = b2;
 
     p->flags |= DEATH_MASK;
 }
 
-void powerup_coin_activate(Entity* p) {
+
+void 
+powerup_coin_activate(entity_t *p) {
     stage.score += COIN_SCORE;
-    playSound(SND_COIN, CH_ANY);
+    play_sound(SND_COIN, CH_ANY);
     p->flags |= DEATH_MASK;
 }
 
-void powerup_life_activate(Entity* p) {
-    if (paddle->life <= 4) {
+
+void 
+powerup_life_activate(entity_t *p) {
+    if (paddle->life <= MAX_LIVES) {
         paddle->life++;
     }
 

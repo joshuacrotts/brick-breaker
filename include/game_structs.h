@@ -3,32 +3,32 @@
 
 #include "commons.h"
 
-typedef struct Stage Stage;
-typedef struct Emitter Emitter;
-typedef struct Level Level;
-typedef struct Debris Debris;
+typedef struct Stage stage_t;
+typedef struct Emitter emitter_t;
+typedef struct Level level_t;
+typedef struct Debris debris_t;
 
 struct Emitter {
-  Entity particleHead, *particleTail;
   int32_t x;
   int32_t y;
   uint32_t maxParticles;
-  uint32_t idFlags;
+  uint32_t id_flags;
   uint32_t flags;
 
-  Emitter* next;
+  entity_t particle_head, *particle_tail;
+  emitter_t *next;
 };
 
 struct Level {
-  Entity ballHead, *ballTail;
-  Entity brickHead, *brickTail;
-  Entity powerupHead, *powerupTail;
-  Entity entityHead, *entityTail;
-  Emitter emitterHead, *emitterTail;
+  entity_t ball_head, *ball_tail;
+  entity_t brick_head, *brick_tail;
+  entity_t powerup_head, *powerup_tail;
+  entity_t entity_head, *entity_tail;
+  emitter_t emitter_head, *emitter_tail;
 
-  Background background;
+  background_t background;
 
-  Level* next;
+  level_t *next;
 };
 
 struct Debris {
@@ -37,15 +37,15 @@ struct Debris {
   float dx;
   float dy;
   uint32_t flags;
-  SDL_Texture* texture;
+  SDL_Texture *texture;
   SDL_Rect rect;
-  Debris* next;
+  debris_t *next;
 };
 
 struct Stage {
-  Animation animationHead, *animationTail;
-  Level levelHead, *levelTail;
-  Debris debrisHead, *debrisTail;
+  animation_t animationHead, *animationTail;
+  level_t levelHead, *levelTail;
+  debris_t debris_head, *debris_tail;
 
   uint32_t score;
 };

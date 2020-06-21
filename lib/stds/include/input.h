@@ -3,11 +3,13 @@
 
 #include "stds.h"
 
-extern App app;
+extern app_t app;
+
 
 /*
  * Starts the SDL event loop.
  */
-extern void processInput(void);
+extern void 
+process_input(void);
 
 #endif

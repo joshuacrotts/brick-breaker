@@ -3,11 +3,34 @@
 
 #include "stds.h"
 
-extern App app;
+extern app_t app;
 
-extern void prepareScene(void);
-extern void processInput(void);
-extern void presentScene(void);
-extern void loop(void);
+
+/*
+ *
+ */
+extern void 
+prepare_scene(void);
+
+
+/*
+ *
+ */
+extern void 
+process_input(void);
+
+
+/*
+ *
+ */
+extern void 
+present_scene(void);
+
+
+/*
+ *
+ */
+extern void 
+loop(void);
 
 #endif

@@ -1,16 +1,18 @@
 #include "../include/brick.h"
 
-static void update_brick_status(Entity*);
+static void update_brick_status(entity_t *);
 static char* get_string_enum(enum Brick);
 
-Entity* add_brick(float x, float y, uint32_t flags, int8_t identifier) {
-    Entity* b;
-    b = malloc(sizeof(Entity));
-    memset(b, 0, sizeof(Entity));
+
+entity_t* 
+add_brick(float x, float y, uint32_t flags, int8_t identifier) {
+    entity_t *b;
+    b = malloc(sizeof(entity_t));
+    memset(b, 0, sizeof(entity_t));
     
     b->x = x;
     b->y = y;
-    b->idFlags |= ID_DEFAULT_BRICK_MASK;
+    b->id_flags |= ID_DEFAULT_BRICK_MASK;
     b->flags |= flags;
     b->life = 4;
     b->identifier = identifier;
@@ -26,7 +28,7 @@ Entity* add_brick(float x, float y, uint32_t flags, int8_t identifier) {
     strcat(buffer, str_identifier);
     strcat(buffer, "_animated.png");
 
-    b->animation = add_spritesheet(buffer, 7, randomFloat(0.05f, 0.111f), 0, 0);
+    b->animation = add_spritesheet(buffer, 7, random_float(0.05f, 0.111f), 0, 0);
     memset(buffer, 0, MAX_BUFFER_SIZE);
     
     // Now, load in the default image file.
@@ -36,7 +38,7 @@ Entity* add_brick(float x, float y, uint32_t flags, int8_t identifier) {
     strcat(buffer, "/");
     strcat(buffer, str_identifier);
     strcat(buffer, "_0.png");
-    b->texture[0] = loadTexture(buffer);
+    b->texture[0] = load_texture(buffer);
     
     memset(buffer, 0, MAX_BUFFER_SIZE);
 
@@ -51,7 +53,7 @@ Entity* add_brick(float x, float y, uint32_t flags, int8_t identifier) {
         strcat(buffer, "_");
         strcat(buffer, intBuffer);   
         strcat(buffer, "_damaged.png");
-        b->texture[i] = loadTexture(buffer);
+        b->texture[i] = load_texture(buffer);
         
         memset(buffer, 0, MAX_BUFFER_SIZE);
     }
@@ -62,36 +64,44 @@ Entity* add_brick(float x, float y, uint32_t flags, int8_t identifier) {
     return b;
 }
 
-void brick_update(Entity* b) {
-    int32_t randInt = randomInt(1, 2000);
-    if (!b->animation->cycleOnce && randInt == 1 && b->life == 4) {
-        b->animation->cycleOnce = true;
+
+void 
+brick_update(entity_t *b) {
+    int32_t randInt = random_int(1, 2000);
+    if (!b->animation->cycle_once && randInt == 1 && b->life == 4) {
+        b->animation->cycle_once = true;
         b->animation->flags |= ANIMATION_ACTIVE_MASK;
     }
     
-    if (b->animation->cycleOnce) {
+    if (b->animation->cycle_once) {
         animation_update(b);
     } 
 
     update_brick_status(b);
 }
 
-void brick_draw(Entity* b) {
-    if (b->animation->cycleOnce && b->life == 4) {
+
+void 
+brick_draw(entity_t *b) {
+    if (b->animation->cycle_once && b->life == 4) {
         animation_draw(b);
     } else {
-        blit(b->texture[0], b->x, b->y, false);
+        blit_texture(b->texture[0], b->x, b->y, false);
     }
 }
 
-void brick_die(Entity* b) {
+
+void 
+brick_die(entity_t *b) {
     free(b);
 }
+
 
 /*
  *
  */
-static void update_brick_status(Entity* b) {
+static void 
+update_brick_status(entity_t *b) {
     switch(b->life) {
         case 4: return;
         case 3: b->texture[0] = b->texture[1];
@@ -105,7 +115,9 @@ static void update_brick_status(Entity* b) {
     }
 }
 
-static char* get_string_enum(enum Brick b) {
+
+static char* 
+get_string_enum(enum Brick b) {
     switch(b) {
         case RED: return "red";
         case BLUE: return "blue";

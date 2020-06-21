@@ -6,22 +6,26 @@
 static void key_input_update(void);
 static void check_bounds(void);
 
-void init_paddle(void) {
-    paddle = malloc(sizeof(Entity));
-    memset(paddle, 0, sizeof(Entity));
+
+void 
+init_paddle(void) {
+    paddle = malloc(sizeof(entity_t));
+    memset(paddle, 0, sizeof(entity_t));
 
     paddle->life = 3;
-    paddle->texture[0] = loadTexture("res/img/paddle.png");
+    paddle->texture[0] = load_texture("res/img/paddle.png");
     SDL_QueryTexture(paddle->texture[0], NULL, NULL, &paddle->w, &paddle->h);
     
     paddle->x = SCREEN_WIDTH / 2 - paddle->w / 2;
     paddle->y = SCREEN_HEIGHT - 40;
-    paddle->scaleX = 1.0f;
-    paddle->scaleY = 1.0f;
-    paddle->idFlags |= ID_PLAYER_MASK;
+    paddle->scale_x = 1.0f;
+    paddle->scale_y = 1.0f;
+    paddle->id_flags |= ID_PLAYER_MASK;
 }
 
-void paddle_update(void) {
+
+void 
+paddle_update(void) {
     paddle->x += paddle->dx;
     paddle->y += paddle->dy;
 
@@ -29,16 +33,22 @@ void paddle_update(void) {
     key_input_update();
 }
 
-void paddle_draw(void) {
-    blitTextureScaled(paddle->texture[0], paddle->x, paddle->y, 
-                      paddle->scaleX, paddle->scaleY, paddle->angle);
+
+void 
+paddle_draw(void) {
+    blit_texture_scaled(paddle->texture[0], paddle->x, paddle->y, 
+                      paddle->scale_x, paddle->scale_y, paddle->angle);
 }
 
-void paddle_die(void) {
+
+void 
+paddle_die(void) {
     free(paddle);
 }
 
-static void check_bounds(void) {
+
+static void 
+check_bounds(void) {
     if (paddle->x < 0) {
         paddle->x = 0;
     } else if (paddle->x + paddle->w > SCREEN_WIDTH) {
@@ -50,8 +60,10 @@ static void check_bounds(void) {
     }
 }
 
-static void key_input_update(void) {
-    if (app.gameState != PAUSED) {
+
+static void 
+key_input_update(void) {
+    if (app.game_state != PAUSED) {
         paddle->dx *= DECELERATION;
         paddle->dy *= DECELERATION;
 

@@ -1,24 +1,29 @@
 #include "../include/init.h"
 
-static void initSDL(const char*, uint16_t, uint16_t);
-static void initAudioContext(void);
+static bool debug_mode = false;
+
+static void init_SDL(const char*, uint16_t, uint16_t);
+static void init_audio_context(void);
 static void cleanup(void);
 
-static bool debugMode = false;
 
-void initGame(const char* windowName, uint16_t windowWidth, uint16_t windowHeight) {
-  initSDL(windowName, windowWidth, windowHeight);
-  initSounds();
-  initFonts();
-
+void 
+init_game(const char *window_name, uint16_t window_width, uint16_t window_height) {
+  init_SDL(window_name, window_width, window_height);
+  init_sounds();
+  init_fonts();
+  app.original_title = window_name;
   // Assigns the callback function to clean up the
   // SDL context when closing the program.
   atexit(cleanup);
 }
 
-void toggleDebugMode(bool db) {
-  debugMode = db;
+
+void 
+toggle_debug_mode(bool db) {
+  debug_mode = db;
 }
+
 
 /*
  * Initializes the SDL context, renderer, and window.
@@ -26,18 +31,19 @@ void toggleDebugMode(bool db) {
  * @param window name, window width, and window height.
  * @return none.
  */
-static void initSDL(const char* windowName, uint16_t windowWidth, uint16_t windowHeight) {
-  int8_t rendererFlags;
-  int8_t windowFlags;
+static void 
+init_SDL(const char *window_name, uint16_t window_width, uint16_t window_height) {
+  int8_t renderer_flags;
+  int8_t window_flags;
 
-  rendererFlags = SDL_RENDERER_ACCELERATED;
-  windowFlags   = 0;
+  renderer_flags = SDL_RENDERER_ACCELERATED;
+  window_flags   = 0;
 
-  if (debugMode) {
+  if (debug_mode) {
     SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Initialization started.");
   }
 
-  memset(&app, 0, sizeof(App));
+  memset(&app, 0, sizeof(app_t));
 
   // Initialize SDL and exit if we fail.
   if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
@@ -46,7 +52,7 @@ static void initSDL(const char* windowName, uint16_t windowWidth, uint16_t windo
   }
 
   // Initialize the SDL window.
-  app.window = SDL_CreateWindow(windowName, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, windowWidth, windowHeight, windowFlags);
+  app.window = SDL_CreateWindow(window_name, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_width, window_height, window_flags);
 
   if (!app.window) {
     SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Could not open window. %s.\n", SDL_GetError());
@@ -56,14 +62,14 @@ static void initSDL(const char* windowName, uint16_t windowWidth, uint16_t windo
   SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
 
   // Create renderer with the default graphics context.
-  app.renderer = SDL_CreateRenderer(app.window, -1, rendererFlags);
+  app.renderer = SDL_CreateRenderer(app.window, -1, renderer_flags);
 
   if (!app.renderer) {
     SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to initialize renderer: %s.\n", SDL_GetError());
     exit(EXIT_ERROR);
   }
 
-  if (debugMode) {
+  if (debug_mode) {
     SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Initialization Completed.");
   }
 
@@ -73,8 +79,9 @@ static void initSDL(const char* windowName, uint16_t windowWidth, uint16_t windo
   //  Remove cursor.
   SDL_ShowCursor(true);
 
-  initAudioContext();
+  init_audio_context();
 }
+
 
 /*
  * Initializes the SDL audio context, and allocates the necessary
@@ -83,7 +90,8 @@ static void initSDL(const char* windowName, uint16_t windowWidth, uint16_t windo
  * @param none.
  * @return void.
  */
-static void initAudioContext(void) {
+static void 
+init_audio_context(void) {
   if (Mix_OpenAudio(44100, AUDIO_S16SYS, 2, 1024) == -1) {
     SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Could not initialize SDL Mixer.\n");
     exit(EXIT_ERROR);
@@ -92,14 +100,16 @@ static void initAudioContext(void) {
   Mix_AllocateChannels(MAX_SND_CHANNELS);
 }
 
+
 /*
  * Cleans up the SDL context and game upon closing the application.
  * 
  * @param none.
  * @return void.
  */
-static void cleanup(void) {
-  if (debugMode) {
+static void 
+cleanup(void) {
+  if (debug_mode) {
     SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Cleaning up.");
   }
 
@@ -107,10 +117,10 @@ static void cleanup(void) {
 	SDL_DestroyWindow(app.window);
 
   free(&app);
-  freeFonts();
+  free_fonts();
 	SDL_Quit();
 
-  if (debugMode) {
+  if (debug_mode) {
     SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Program quit.");
   }
 }

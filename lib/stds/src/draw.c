@@ -1,18 +1,24 @@
 #include "../include/draw.h"
 
-static SDL_Texture* getTexture(char*);
-static void addTextureToCache(char*, SDL_Texture*);
+static SDL_Texture* get_texture(char*);
+static void cache_texture(char*, SDL_Texture*);
 
-void prepareScene() {
+
+void 
+prepare_scene() {
   SDL_SetRenderDrawColor(app.renderer, 0, 0, 0, 0);
   SDL_RenderClear(app.renderer);
 }
 
-void presentScene() {
+
+void 
+present_scene() {
   SDL_RenderPresent(app.renderer);
 }
 
-void blit(SDL_Texture* texture, float x, float y, bool isCenter) {
+
+void 
+blit_texture(SDL_Texture* texture, float x, float y, bool is_center) {
   SDL_Rect dest;
 
   dest.x = (int) x;
@@ -20,7 +26,7 @@ void blit(SDL_Texture* texture, float x, float y, bool isCenter) {
 
   SDL_QueryTexture(texture, NULL, NULL, &dest.w, &dest.h);
 
-  if (isCenter) {
+  if (is_center) {
     dest.x -= (dest.w >> 1);
     dest.y -= (dest.h >> 1);
   }
@@ -28,7 +34,9 @@ void blit(SDL_Texture* texture, float x, float y, bool isCenter) {
   SDL_RenderCopy(app.renderer, texture, NULL, &dest);
 }
 
-void blitRect(SDL_Texture* texture, SDL_Rect* src, float x, float y) {
+
+void 
+blit_rect(SDL_Texture* texture, SDL_Rect* src, float x, float y) {
   SDL_Rect dest;
   dest.x = (int) x;
   dest.y = (int) y;
@@ -38,30 +46,34 @@ void blitRect(SDL_Texture* texture, SDL_Rect* src, float x, float y) {
   SDL_RenderCopy(app.renderer, texture, src, &dest);
 }
 
-void blitRotated(SDL_Texture* texture, float x, float y, uint16_t angle) {
-  SDL_Rect destRect;
-  destRect.x = (int) x;
-  destRect.y = (int) y;
-  SDL_QueryTexture(texture, NULL, NULL, &destRect.w, &destRect.h);
 
-  destRect.x -= (destRect.w >> 1);
-  destRect.y -= (destRect.h >> 1);
+void 
+blit_texture_rotated(SDL_Texture* texture, float x, float y, uint16_t angle) {
+  SDL_Rect dest;
+  dest.x = (int) x;
+  dest.y = (int) y;
+  SDL_QueryTexture(texture, NULL, NULL, &dest.w, &dest.h);
 
-  SDL_RenderCopyEx(app.renderer, texture, NULL, &destRect, angle, NULL, SDL_FLIP_NONE);
+  dest.x -= (dest.w >> 1);
+  dest.y -= (dest.h >> 1);
+
+  SDL_RenderCopyEx(app.renderer, texture, NULL, &dest, angle, NULL, SDL_FLIP_NONE);
 }
 
-void blitColorTextureScaled(SDL_Texture* texture, float x, float y, float scaleX, float scaleY, uint16_t angle, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
-  uint32_t textureWidth = 0;
-  uint32_t textureHeight = 0;
 
-  SDL_QueryTexture(texture, NULL, NULL, &textureWidth, &textureHeight);
+void 
+blit_texture_color_scaled(SDL_Texture* texture, float x, float y, float scale_x, float scale_y, uint16_t angle, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+  uint32_t texture_width = 0;
+  uint32_t texture_height = 0;
+
+  SDL_QueryTexture(texture, NULL, NULL, &texture_width, &texture_height);
 
   // Apply the scaling procedure to the image.
   SDL_Rect dest_rect;
   dest_rect.x = (int32_t) x;
   dest_rect.y = (int32_t) y;
-  dest_rect.w = (uint32_t) (textureWidth * scaleX);
-  dest_rect.h = (uint32_t) (textureHeight * scaleY);
+  dest_rect.w = (uint32_t) (texture_width * scale_x);
+  dest_rect.h = (uint32_t) (texture_height * scale_y);
 
   // If all four color values are less than 0, don't draw a color.
   if (r >= 0 && g >= 0 && b >= 0 && a >= 0) {
@@ -71,15 +83,19 @@ void blitColorTextureScaled(SDL_Texture* texture, float x, float y, float scaleX
   SDL_RenderCopyEx(app.renderer, texture, NULL, &dest_rect, angle, NULL, SDL_FLIP_NONE);
 }
 
-void blitTextureScaled(SDL_Texture* texture, float x, float y, float scaleX, float scaleY, uint16_t angle) {
-  blitColorTextureScaled(texture, x, y, scaleX, scaleY, angle, -1, -1, -1, -1);
+
+void 
+blit_texture_scaled(SDL_Texture* texture, float x, float y, float scale_x, float scale_y, uint16_t angle) {
+  blit_texture_color_scaled(texture, x, y, scale_x, scale_y, angle, -1, -1, -1, -1);
 }
 
-void drawRect(SDL_Rect* rect, uint8_t r, uint8_t g, uint8_t b, uint8_t a, bool isFilled) {
+
+void 
+draw_rect(SDL_Rect* rect, uint8_t r, uint8_t g, uint8_t b, uint8_t a, bool is_filled) {
   SDL_SetRenderDrawBlendMode(app.renderer, SDL_BLENDMODE_BLEND);
   SDL_SetRenderDrawColor(app.renderer, r, g, b, a);
 
-  if (isFilled) {
+  if (is_filled) {
     SDL_RenderFillRect(app.renderer, rect);
   } else {
     SDL_RenderDrawRect(app.renderer, rect);
@@ -87,7 +103,9 @@ void drawRect(SDL_Rect* rect, uint8_t r, uint8_t g, uint8_t b, uint8_t a, bool i
   SDL_SetRenderDrawBlendMode(app.renderer, SDL_BLENDMODE_NONE);
 }
 
-void drawRectStroke(int32_t x, int32_t y, uint32_t w, uint32_t h, uint32_t stroke, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+
+void 
+draw_rect_stroke(int32_t x, int32_t y, uint32_t w, uint32_t h, uint32_t stroke, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
   if (stroke <= 0) {
     SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Error: stroke %d cannot be a negative or zero value!", stroke);
     exit(EXIT_FAILURE);
@@ -120,19 +138,23 @@ void drawRectStroke(int32_t x, int32_t y, uint32_t w, uint32_t h, uint32_t strok
     r4.w = stroke;
     r4.h = h;
 
-    drawRect(&r1, r, g, b, a, true);
-    drawRect(&r2, r, g, b, a, true);
-    drawRect(&r3, r, g, b, a, true);
-    drawRect(&r4, r, g, b, a, true);
+    draw_rect(&r1, r, g, b, a, true);
+    draw_rect(&r2, r, g, b, a, true);
+    draw_rect(&r3, r, g, b, a, true);
+    draw_rect(&r4, r, g, b, a, true);
   }
 }
 
-void drawLine(float x1, float y1, float x2, float y2, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+
+void 
+draw_line(float x1, float y1, float x2, float y2, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
   SDL_SetRenderDrawColor(app.renderer, r, g, b, a);
   SDL_RenderDrawLine(app.renderer, (int32_t) x1, (int32_t) y1, (int32_t) x2, (int32_t) y2);
 }
 
-void drawCircle(int32_t centerX, int32_t centerY, uint32_t radius, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+
+void 
+draw_circle(int32_t center_x, int32_t center_y, uint32_t radius, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
    const int32_t diameter = (radius * 2);
 
    int32_t x = (radius - 1);
@@ -145,14 +167,14 @@ void drawCircle(int32_t centerX, int32_t centerY, uint32_t radius, uint8_t r, ui
    while (x >= y)
    {
       //  Each of the following renders an octant of the circle
-      SDL_RenderDrawPoint(app.renderer, centerX + x, centerY - y);
-      SDL_RenderDrawPoint(app.renderer, centerX + x, centerY + y);
-      SDL_RenderDrawPoint(app.renderer, centerX - x, centerY - y);
-      SDL_RenderDrawPoint(app.renderer, centerX - x, centerY + y);
-      SDL_RenderDrawPoint(app.renderer, centerX + y, centerY - x);
-      SDL_RenderDrawPoint(app.renderer, centerX + y, centerY + x);
-      SDL_RenderDrawPoint(app.renderer, centerX - y, centerY - x);
-      SDL_RenderDrawPoint(app.renderer, centerX - y, centerY + x);
+      SDL_RenderDrawPoint(app.renderer, center_x + x, center_y - y);
+      SDL_RenderDrawPoint(app.renderer, center_x + x, center_y + y);
+      SDL_RenderDrawPoint(app.renderer, center_x - x, center_y - y);
+      SDL_RenderDrawPoint(app.renderer, center_x - x, center_y + y);
+      SDL_RenderDrawPoint(app.renderer, center_x + y, center_y - x);
+      SDL_RenderDrawPoint(app.renderer, center_x + y, center_y + x);
+      SDL_RenderDrawPoint(app.renderer, center_x - y, center_y - x);
+      SDL_RenderDrawPoint(app.renderer, center_x - y, center_y + x);
 
       if (error <= 0)
       {
@@ -170,7 +192,9 @@ void drawCircle(int32_t centerX, int32_t centerY, uint32_t radius, uint8_t r, ui
    }
 }
 
-void fillCircle(int32_t x, int32_t y, uint32_t radius, uint8_t r, uint8_t g, uint8_t b, uint8_t a)
+
+void 
+fill_circle(int32_t x, int32_t y, uint32_t radius, uint8_t r, uint8_t g, uint8_t b, uint8_t a)
 {
   int offsetx, offsety, d;
   int status;
@@ -208,17 +232,19 @@ void fillCircle(int32_t x, int32_t y, uint32_t radius, uint8_t r, uint8_t g, uin
   }
 }
 
-SDL_Color combineFadeColor(FadeColor* f) {
-  if (f->time <= 1.0f && f->firstColor) {
+
+SDL_Color 
+combine_fade_color(fade_color_t *f) {
+  if (f->time <= 1.0f && f->is_first_color) {
     f->time = (float) (f->time + f->alpha);
   } else {
-    f->firstColor = false;
+    f->is_first_color = false;
   }
 
-  if (f->time >= 0.0f && !f->firstColor) {
+  if (f->time >= 0.0f && !f->is_first_color) {
     f->time = (float) (f->time - f->alpha);
   } else {
-    f->firstColor = true;
+    f->is_first_color = true;
   }
 
   int r = (int) (f->time * f->c2.r + (1.0f - f->time) * f->c1.r);
@@ -233,10 +259,12 @@ SDL_Color combineFadeColor(FadeColor* f) {
   return c;
 }
 
-SDL_Texture* loadTexture(char* fileName) {
+
+SDL_Texture* 
+load_texture(char *fileName) {
   SDL_Texture* texture;
 
-  texture = getTexture(fileName);
+  texture = get_texture(fileName);
 
   if (texture == NULL) {
     texture = IMG_LoadTexture(app.renderer, fileName);
@@ -245,11 +273,12 @@ SDL_Texture* loadTexture(char* fileName) {
       exit(EXIT_FAILURE);
     }
     
-    addTextureToCache(fileName, texture);
+    cache_texture(fileName, texture);
   }
 
   return texture;
 }
+
 
 /*
  * Searches through the SDL_Texture list to see if we have previously
@@ -258,15 +287,17 @@ SDL_Texture* loadTexture(char* fileName) {
  * @param file name of SDL_Texture.
  * @return SDL_Texture pointer - either NULL or object.
  */
-static SDL_Texture* getTexture(char* fileName) {
-  Texture* t;
+static SDL_Texture* 
+get_texture(char *file_name) {
+  texture_t* t;
 
-  for (t = app.textureHead.next; t != NULL; t = t->next) {
-    if (strcmp(t->name, fileName) == 0) {
+  for (t = app.texture_head.next; t != NULL; t = t->next) {
+    if (strcmp(t->name, file_name) == 0) {
       return t->texture;
     }
   }
 }
+
 
 /*
  * If a SDL_Texture has not been previously loaded in, we add it to
@@ -277,14 +308,15 @@ static SDL_Texture* getTexture(char* fileName) {
  * @param file name, and pointer to the texture.
  * @return void.
  */
-static void addTextureToCache(char* fileName, SDL_Texture* sdlTexture) {
-  Texture* texture;
+static void 
+cache_texture(char *file_name, SDL_Texture *sdl_texture) {
+  texture_t* texture;
 
-  texture = malloc(sizeof(Texture));
-  memset(texture, 0, sizeof(Texture));
-  app.textureTail->next = texture;
-  app.textureTail = texture;
+  texture = malloc(sizeof(texture_t));
+  memset(texture, 0, sizeof(texture_t));
+  app.texture_tail->next = texture;
+  app.texture_tail = texture;
 
-  strncpy(texture->name, fileName, MAX_FILE_NAME_LEN);
-  texture->texture = sdlTexture;
+  strncpy(texture->name, file_name, MAX_FILE_NAME_LEN);
+  texture->texture = sdl_texture;
 }

@@ -11,7 +11,7 @@
 #define FPS                     60
 #define MAX_SND_CHANNELS        16
 #define MAX_LINE_LENGTH         1024
-#define SMALL_TEXT_BUFFER       32
+#define SMALL_TEXT_BUFFER       64
 #define MAX_KEYBOARD_KEYS       350
 #define MAX_MOUSE_BUTTONS       350
 #define MAX_BUFFER_SIZE         128

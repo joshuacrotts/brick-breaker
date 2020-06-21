@@ -2,53 +2,63 @@
 
 #define BALL_DEATH_PARTICLES 20
 
-static void check_bounds(Entity*);
-static void spawn_ball_particles(Entity*);
+static void check_bounds(entity_t *);
+static void spawn_ball_particles(entity_t *);
 
-Entity* add_ball(float x, float y, uint32_t flags) {
-    Entity* b;
-    b = malloc(sizeof(Entity));
-    memset(b, 0, sizeof(Entity));
+
+entity_t*
+add_ball(float x, float y, uint32_t flags) {
+    entity_t *b;
+    b = malloc(sizeof(entity_t));
+    memset(b, 0, sizeof(entity_t));
 
     b->x = x;
     b->y = y;
-    b->texture[0] = loadTexture("res/img/ball_sprite_1.png");
+    b->texture[0] = load_texture("res/img/ball_sprite_1.png");
     SDL_QueryTexture(b->texture[0], NULL, NULL, &b->w, &b->h);
 
     // Continuously generate a speed that is reasonable.
     do {
-        b->dx = randomFloat(-10.0f, 10.0f);
+        b->dx = random_float(-10.0f, 10.0f);
     } while(b->dx < 7.0f && b->dx > -7.0f);
 
     do {
-        b->dy = randomFloat(-10.0f, 10.0f);
+        b->dy = random_float(-10.0f, 10.0f);
     } while(b->dy < 7.0f && b->dy > -7.0f);
 
-    b->idFlags |= ID_BALL_MASK;
+    b->id_flags |= ID_BALL_MASK;
     b->flags |= flags;
 
     return b;
 }
 
-void ball_update(Entity* b) {
+
+void 
+ball_update(entity_t *b) {
     b->x += b->dx;
     b->y += b->dy;
     add_trail(b, 4, 60);
     check_bounds(b);
 }
 
-void ball_draw(Entity* b) {
-    blit(b->texture[0], b->x, b->y, false);
+
+void 
+ball_draw(entity_t *b) {
+    blit_texture(b->texture[0], b->x, b->y, false);
 }
 
-void ball_die(Entity* b) {
+
+void 
+ball_die(entity_t *b) {
     free(b);
 }
+
 
 /* 
  *
  */
-static void check_bounds(Entity* b) {
+static void 
+check_bounds(entity_t *b) {
     if (b->x < 0) {
         b->x = 0;
         b->dx = -b->dx;
@@ -64,17 +74,19 @@ static void check_bounds(Entity* b) {
     }
 }
 
+
 /* 
  *
  */
-static void spawn_ball_particles(Entity* b) {
-    Entity* p;
+static void 
+spawn_ball_particles(entity_t *b) {
+    entity_t *p;
 
     for (int i = 0; i < BALL_DEATH_PARTICLES; i++) {
         
-        p = add_particle(b->x + b->w / 2, b->y + b->h / 2, randomFloat(-5, 5), randomFloat(-7, -5), 0, 0, 
+        p = add_particle(b->x + b->w / 2, b->y + b->h / 2, random_float(-5, 5), random_float(-7, -5), 0, 0, 
                          3, 3, 0, 0xff, 0, 0, 0xff, -3, ID_P_SQUARE_MASK);
-        currentLevel->entityTail->next = p;
-        currentLevel->entityTail = p;
+        currentLevel->entity_tail->next = p;
+        currentLevel->entity_tail = p;
     }
 }

@@ -1,10 +1,18 @@
 #include "../include/background.h"
 
-Background* init_background(char* file) {
-  Background* background;
+
+background_t* 
+init_background(char *file) {
+  background_t *background;
   
-  background = malloc(sizeof(Background));
-  memset(background, 0, sizeof(Background));
+  background = malloc(sizeof(background_t));
+
+  if (background == NULL) {
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Could not allocate memory for background_t. %s.\n", SDL_GetError());
+    exit(EXIT_FAILURE);
+  }
+
+  memset(background, 0, sizeof(background_t));
 
   background->x = 0;
   background->y = 0;
@@ -12,27 +20,33 @@ Background* init_background(char* file) {
   uint32_t w;
   uint32_t h;
 
-  background->backgroundTexture = loadTexture(file);
-  SDL_QueryTexture(background->backgroundTexture, NULL, NULL, &w, &h);
+  background->background_texture = load_texture(file);
+  SDL_QueryTexture(background->background_texture, NULL, NULL, &w, &h);
 
   background->w = w;
   background->h = h;
-  background->scaleX = 1.0;
-  background->scaleY = 1.0;
+  background->scale_x = 1.0;
+  background->scale_y = 1.0;
 
   return background;
 }
 
-void background_update(Background* background) {
+
+void 
+background_update(background_t *background) {
   background->x = 0 - app.camera.x;
   background->y = 0 - app.camera.y;
 }
 
-void background_draw(Background* background) {
-  blitTextureScaled(background->backgroundTexture, background->x, background->y, background->scaleX, background->scaleY, 0);
+
+void 
+background_draw(background_t *background) {
+  blit_texture_scaled(background->background_texture, background->x, background->y, background->scale_x, background->scale_y, 0);
 }
 
-void background_die(Background* background) {
-  SDL_DestroyTexture(background->backgroundTexture);
+
+void 
+background_die(background_t *background) {
+  SDL_DestroyTexture(background->background_texture);
   free(background);
 }

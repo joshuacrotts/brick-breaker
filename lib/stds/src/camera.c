@@ -1,9 +1,11 @@
 #include "../include/camera.h"
 
-void updateCamera(Entity* focusPoint) {
-  if (focusPoint != NULL) {
-    app.camera.x = ((int32_t) focusPoint->x + focusPoint->w / 2) - (SCREEN_WIDTH >> 1);
-    app.camera.y = ((int32_t) focusPoint->y + focusPoint->h / 2) - (SCREEN_HEIGHT >> 1);
+
+void 
+update_camera(entity_t *focus_point) {
+  if (focus_point != NULL) {
+    app.camera.x = ((int32_t) focus_point->x + focus_point->w / 2) - (SCREEN_WIDTH >> 1);
+    app.camera.y = ((int32_t) focus_point->y + focus_point->h / 2) - (SCREEN_HEIGHT >> 1);
     app.camera.w = SCREEN_WIDTH;
     app.camera.h = SCREEN_HEIGHT;
 

@@ -2,25 +2,68 @@
 #define EMITTER_H
 
 #include "commons.h"
+#include "particle.h"
+#include "commons.h"
 
-extern Level* currentLevel;
-extern Entity* e;
-extern App app;
-extern Stage stage;
+extern level_t* currentLevel;
+extern entity_t* e;
+extern app_t app;
+extern stage_t stage;
 
-extern Emitter* add_emitter(int32_t, int32_t, uint32_t, uint32_t);
-extern void emitter_update(Emitter*);
-extern void emitter_draw(Emitter*);
-extern void emitter_die(Emitter*);
-extern void particle_update(Entity*);
-extern void particle_draw(Entity*);
-extern void particle_die(Entity*);
-extern Entity* add_particle(float, float, float, float, float, float, uint16_t, uint16_t, uint16_t, uint8_t, uint8_t, uint8_t, uint8_t, float, uint32_t);
-extern Entity* add_animated_particle(float, float, float, float, float, float, uint16_t, uint32_t, Animation*);
-extern Animation* add_animation(char*, uint8_t, float);
-extern void spawn_blood_particles(Emitter*, int32_t, int32_t, uint32_t, uint32_t);
-extern void spawn_colorful_particles(Emitter*, int32_t, int32_t, uint32_t, uint32_t);
-extern void spawn_sinusoidal_particles(Emitter*, int32_t, int32_t, uint32_t, uint32_t);
-extern void spawn_star_particles(Emitter*, int32_t, int32_t, uint32_t, uint32_t);
+
+/*
+ *
+ */
+extern emitter_t* 
+add_emitter(int32_t, int32_t, uint32_t, uint32_t);
+
+
+/*
+ *
+ */
+extern void 
+emitter_update(emitter_t*);
+
+
+/*
+ *
+ */
+extern void 
+emitter_draw(emitter_t*);
+
+
+/*
+ *
+ */
+extern void 
+emitter_die(emitter_t*);
+
+
+/*
+ *
+ */
+extern void 
+spawn_blood_particles(emitter_t*, int32_t, int32_t, uint32_t, uint32_t);
+
+
+/*
+ *
+ */
+extern void 
+spawn_colorful_particles(emitter_t*, int32_t, int32_t, uint32_t, uint32_t);
+
+
+/*
+ *
+ */
+extern void 
+spawn_sinusoidal_particles(emitter_t*, int32_t, int32_t, uint32_t, uint32_t);
+
+
+/*
+ *
+ */
+extern void 
+spawn_star_particles(emitter_t*, int32_t, int32_t, uint32_t, uint32_t);
 
 #endif

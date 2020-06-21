@@ -10,12 +10,29 @@
 #include "../lib/stds/include/sound.h"
 #include "../lib/stds/include/draw.h"
 
-Level* currentLevel;
-extern Entity* paddle;
-extern Stage stage;
+level_t* currentLevel;
+extern entity_t *paddle;
+extern stage_t stage;
 
-extern Level* add_level(const char*);
-extern void level_update(void);
-extern void level_draw(void);
+
+/*
+ *
+ */
+extern level_t* 
+add_level(const char*);
+
+
+/*
+ *
+ */
+extern void 
+level_update(void);
+
+
+/*
+ *
+ */
+extern void 
+level_draw(void);
 
 #endif

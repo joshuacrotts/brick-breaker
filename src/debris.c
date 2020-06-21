@@ -1,7 +1,9 @@
 #include "../include/debris.h"
 
-void add_debris(Entity* parentBrick, uint32_t flags) {
-  Debris* d;
+
+void 
+add_debris(entity_t *parentBrick, uint32_t flags) {
+  debris_t *d;
   int x, y, w, h;
 
 
@@ -11,15 +13,15 @@ void add_debris(Entity* parentBrick, uint32_t flags) {
 
   for (y = 0; y <= h * 2; y += h) {
     for (x = 0; x <= w * 2; x += w) {
-      d = malloc(sizeof(Debris));
-      memset(d, 0, sizeof(Debris));
-      stage.debrisTail->next = d;
-      stage.debrisTail = d;
+      d = malloc(sizeof(debris_t));
+      memset(d, 0, sizeof(debris_t));
+      stage.debris_tail->next = d;
+      stage.debris_tail = d;
 
       d->x = parentBrick->x + parentBrick->w / 2;
       d->y = parentBrick->y + parentBrick->h / 2;
-      d->dx = randomFloat(-5.0f, 5.0f);
-      d->dy = randomFloat(1.0f, 2.0f);
+      d->dx = random_float(-5.0f, 5.0f);
+      d->dy = random_float(1.0f, 2.0f);
       d->texture = parentBrick->texture[0];
 
       d->rect.x = x;
@@ -30,7 +32,9 @@ void add_debris(Entity* parentBrick, uint32_t flags) {
   }
 }
 
-void debris_update(Debris* d) {
+
+void 
+debris_update(debris_t *d) {
     d->x += d->dx;
     d->y += d->dy;
 
@@ -42,10 +46,14 @@ void debris_update(Debris* d) {
     }
 }
 
-void debris_draw(Debris* d) {
-    blitRect(d->texture, &d->rect, d->x, d->y);
+
+void 
+debris_draw(debris_t *d) {
+    blit_rect(d->texture, &d->rect, d->x, d->y);
 }
 
-void debris_die(Debris* d) {
+
+void 
+debris_die(debris_t *d) {
     free(d);
 }

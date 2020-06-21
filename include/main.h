@@ -11,21 +11,22 @@
 #include "ball.h"
 #include "hud.h"
 #include "../lib/stds/include/background.h"
+#include "../lib/stds/include/game.h"
 #include "../lib/stds/include/draw.h"
 #include "../lib/stds/include/sound.h"
 #include "../lib/stds/include/text.h"
 
-App app;
-Stage stage;
-Entity *paddle;
-Background *background;
-extern Level *currentLevel;
+app_t app;
+stage_t stage;
+entity_t *paddle;
+background_t *background;
+extern level_t *currentLevel;
 
-extern void spawn_blood_particles(Emitter *, int32_t, int32_t, uint32_t, uint32_t);
-extern void spawn_colorful_particles(Emitter *, int32_t, int32_t, uint32_t, uint32_t);
 
-extern void initGame(const char *, int, int);
-extern void updateCamera(Entity *);
-extern void loop();
+/*
+ *
+ */
+extern void 
+init_game(const char*, uint32_t, uint32_t);
 
 #endif

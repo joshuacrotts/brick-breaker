@@ -3,7 +3,7 @@
 
 #include "stds.h"
 
-extern App app;
+extern app_t app;
 
 /*
  * Applies an offset from the supplied entity, and stores
@@ -13,6 +13,6 @@ extern App app;
  * coordinates from your other entities/objects in the world
  * (i.e. entity.x - app.camera.x and entity.y - app.camera.y).
  */
-extern void updateCamera(Entity*);
+extern void update_camera(entity_t*);
 
 #endif
