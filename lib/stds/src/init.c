@@ -134,6 +134,7 @@ cleanup(void) {
   // the app struct.
   parallax_background_t *pbg;
   texture_t *t;
+  button_t *b;
   trail_t *tr;
 
   if (debug_mode) {
@@ -165,6 +166,16 @@ cleanup(void) {
     app.trail_head.next = tr->next;
     free(tr);
   }      
+
+  if (debug_mode) {
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Freeing buttons.");
+  }
+
+  while (app.button_head.next) {
+    b = app.button_head.next;
+    app.button_head.next = b->next;
+    free(b);
+  }
 
   free(&app);
   free_fonts();

@@ -10,6 +10,7 @@ void
 init_app_structures() {
   app.parallax_tail = &app.parallax_head;
   app.texture_tail  = &app.texture_head;
+  app.button_tail   = &app.button_head;
   app.trail_tail    = &app.trail_head;
   app.font_tail     = &app.font_head;
 }

@@ -14,6 +14,30 @@ typedef struct Background         background_t;
 typedef struct ParallaxBackground parallax_background_t;
 typedef struct Font               font_t;
 typedef struct Trail              trail_t;
+typedef struct Button             button_t;
+
+
+/*
+ *
+ */
+struct Button {
+  char        *text;
+  bool        is_filled;
+  uint8_t     texture_id;
+
+  int32_t     text_x;
+  int32_t     text_y;
+  float       scale_x;
+  float       scale_y;
+
+  SDL_Texture *texture[TEXTURE_BUFFER_SIZE];
+  SDL_Color   color;
+  SDL_Color   text_color;
+  SDL_Rect    rect;
+
+  font_t      *font;
+  button_t    *next;
+};  
 
 
 /*
@@ -145,6 +169,7 @@ struct App{
   texture_t             texture_head, *texture_tail;
   font_t                font_head, *font_tail;
   parallax_background_t parallax_head, *parallax_tail;
+  button_t              button_head, *button_tail;
 
   enum GameState        game_state;
 };
@@ -206,7 +231,7 @@ struct Entity {
   int32_t       life;
 
   SDL_Color     color;
-  SDL_Texture*  texture[TEXTURE_BUFFER_SIZE];
+  SDL_Texture  *texture[TEXTURE_BUFFER_SIZE];
   
   animation_t   *animation;
   entity_t      *next; 

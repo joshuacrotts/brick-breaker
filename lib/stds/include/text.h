@@ -42,8 +42,7 @@ free_fonts(void);
  * @param ... formatting args.
  * 
  * To center a string, call get_string_size() or get_string_sizeFont (if using a non
- * standard font), and draw the string at SCREEN_WIDTH / 2 - fontWidth / 2, or rect.width,
- * depending on where you want it to be drawn.
+ * standard font), and draw the string at SCREEN_WIDTH / 2 - fontWidth / 2.
  */
 extern void 
 draw_text(float, float, uint8_t, uint8_t, uint8_t, char*, uint16_t, const char*, ...);
