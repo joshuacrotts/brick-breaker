@@ -2,11 +2,17 @@
 #define GAME_STRUCTS_H
 
 #include "commons.h"
+#include "game_defs.h"
 
 typedef struct Stage stage_t;
 typedef struct Emitter emitter_t;
 typedef struct Level level_t;
 typedef struct Debris debris_t;
+typedef enum BrickBreakerState {
+    MENU,
+    GAME,
+    TRANSITION
+} BrickBreakerState;
 
 struct Emitter {
   int32_t x;
@@ -43,11 +49,14 @@ struct Debris {
 };
 
 struct Stage {
+  uint32_t score;
+  uint16_t level_id;
+
+  BrickBreakerState state;
+
   animation_t animationHead, *animationTail;
   level_t levelHead, *levelTail;
   debris_t debris_head, *debris_tail;
-
-  uint32_t score;
 };
 
 #endif

@@ -16,7 +16,7 @@ void
 init_fonts(void) {
   app.font_tail = &app.font_head;
   if (TTF_Init() == -1) {
-    SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to initialize TTF_Init: %s.\n", SDL_GetError());
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Failed to initialize TTF_Init: %s.\n", SDL_GetError());
     exit(EXIT_FAILURE);
   }
 
@@ -38,12 +38,11 @@ draw_text(float x, float y, uint8_t r, uint8_t g, uint8_t b, char *font_string, 
 
   SDL_Color textColor = {r, g, b};
   TTF_Font* font = get_font(font_string, font_size);
-
   message_surface = TTF_RenderText_Solid(font, text_buffer, textColor);
   TTF_SizeText(font, text_buffer, &message_rect.w, &message_rect.h);
 
   if (message_surface == NULL) {
-    SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to write message: %s.\n", SDL_GetError());
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Failed to write message: %s.\n", SDL_GetError());
     exit(EXIT_ERROR);
   }
 
@@ -96,6 +95,10 @@ get_font(char *font_str, uint16_t font_size) {
     }
   }
 
+  if (f == NULL) {
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Could not find font %s, %d.", font_str, font_size);
+  }
+
   return NULL;
 }
 
@@ -125,6 +128,11 @@ add_font(char *font_file, uint16_t size) {
   memset(f, 0, sizeof(font_t));
 
   f->font = TTF_OpenFont(font_file, size);
+
+  if (f->font == NULL) {
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Could not load font %s, %d.", font_file, size);
+  }
+
   strcpy(f->name, font_file);
   f->size = size;
 

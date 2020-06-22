@@ -22,20 +22,22 @@ typedef struct Button             button_t;
  */
 struct Button {
   char        *text;
+  char        *font_path;
   bool        is_filled;
   uint8_t     texture_id;
 
   int32_t     text_x;
   int32_t     text_y;
+  uint16_t    font_size;
   float       scale_x;
   float       scale_y;
+
 
   SDL_Texture *texture[TEXTURE_BUFFER_SIZE];
   SDL_Color   color;
   SDL_Color   text_color;
   SDL_Rect    rect;
 
-  font_t      *font;
   button_t    *next;
 };  
 

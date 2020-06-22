@@ -45,7 +45,7 @@ free_fonts(void);
  * standard font), and draw the string at SCREEN_WIDTH / 2 - fontWidth / 2.
  */
 extern void 
-draw_text(float, float, uint8_t, uint8_t, uint8_t, char*, uint16_t, const char*, ...);
+draw_text(float, float, uint8_t, uint8_t, uint8_t, char*, uint16_t, char*, ...);
 
 
 /*

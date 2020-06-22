@@ -2,7 +2,7 @@
 
 #define MAXC            16
 #define CHAR_OFFSET     48
-#define BRICK_ROW_COUNT 6
+#define BRICK_ROW_COUNT 9
 #define BRICK_COL_COUNT 6
 #define BRICK_WIDTH     92
 #define BRICK_HEIGHT    32
@@ -50,7 +50,7 @@ add_level(const char *levelData) {
 
     uint8_t brick_data = 1;
 
-    for (int y = 120; y < 120 + (BRICK_HEIGHT * BRICK_COL_COUNT); y += 32) {
+    for (int y = 120; y < 120 + (BRICK_HEIGHT * BRICK_ROW_COUNT); y += 32) {
       fgets(buffer, MAXC, fptr);
       for (int x = 20, bi = 0; x <= SCREEN_WIDTH - 80; x += 92, bi++) {
         entity_t *b;

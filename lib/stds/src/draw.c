@@ -107,7 +107,7 @@ draw_rect(SDL_Rect* rect, uint8_t r, uint8_t g, uint8_t b, uint8_t a, bool is_fi
 void 
 draw_rect_stroke(int32_t x, int32_t y, uint32_t w, uint32_t h, uint32_t stroke, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
   if (stroke <= 0) {
-    SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Error: stroke %d cannot be a negative or zero value!", stroke);
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Error: stroke %d cannot be a negative or zero value!", stroke);
     exit(EXIT_FAILURE);
   } else {
     SDL_Rect r1;

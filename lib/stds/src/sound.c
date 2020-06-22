@@ -46,6 +46,6 @@ load_sounds(void) {
   sounds[SND_BRICK_BREAK] = Mix_LoadWAV("res/sfx/explode_2.mp3");
   sounds[SND_COIN] = Mix_LoadWAV("res/sfx/coin0.wav");
   sounds[SND_PAUSE] = Mix_LoadWAV("res/sfx/pause.mp3");
-  load_music("res/sfx/music/metalsong.wav");
+  load_music("res/sfx/music/titlesong.wav");
   play_music(true);
 }

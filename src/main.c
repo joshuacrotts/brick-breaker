@@ -31,7 +31,9 @@ static void draw_trails(void);
 int 
 main(int argc, char* argv[]) {
   init_game("Brick Breaker in C", SCREEN_WIDTH, SCREEN_HEIGHT);
+  init_app_structures();
   init_scene();
+  init_menu();
   loop();
 
   atexit(cleanup_stage);
@@ -54,12 +56,12 @@ init_scene(void) {
   app.game_state = PREGAME;
 
   memset(&stage, 0, sizeof(stage_t));
-  app.texture_tail = &app.texture_head;
-  app.trail_tail = &app.trail_head;
   stage.levelTail = &stage.levelHead;
   stage.debris_tail = &stage.debris_head;
+  stage.state = MENU;
+  stage.level_id = 1;
 
-  level_t *level = add_level("res/level_data/level_2.txt");
+  level_t *level = add_level("res/level_data/level_1.txt");
   stage.levelTail->next = level;
   stage.levelTail = level;
   currentLevel = stage.levelTail;
@@ -81,15 +83,18 @@ tick(void) {
   if (app.game_state == PAUSED) {
     return;
   }
-
+  
   background_update(background);
-  update_emitters();
-  update_entities();
-  update_trails();
-  update_debris();
-  level_update();
-  paddle_update();
   update_HUD();
+
+  if (stage.state == GAME) {  
+    update_emitters();
+    update_entities();
+    update_trails();
+    update_debris();
+    level_update();
+    paddle_update();
+  }
 }
 
 
@@ -99,12 +104,16 @@ tick(void) {
 static void 
 draw(void) {
   background_draw(background);
-  draw_emitters();
-  draw_entities();
-  draw_trails();
-  draw_debris();
-  level_draw();
-  paddle_draw();
+
+  if (stage.state == GAME) {
+    draw_emitters();
+    draw_entities();
+    draw_trails();
+    draw_debris();
+    level_draw();
+    paddle_draw();
+  }
+
   draw_HUD();
   
   if (app.game_state == PAUSED) {
@@ -301,7 +310,7 @@ create_emitter(int32_t x, int32_t y, uint32_t maxParticles, uint32_t flags) {
  */
 static void 
 check_paused(void) {
-  if (app.keyboard[SDL_SCANCODE_P]) {
+  if (app.keyboard[SDL_SCANCODE_P] && stage.state == GAME) {
       play_sound(SND_PAUSE, CH_ANY);
       app.game_state = app.game_state == PAUSED ? RUNNING : PAUSED;
       app.keyboard[SDL_SCANCODE_P] = 0;
@@ -381,4 +390,19 @@ cleanup_stage(void) {
   free(currentLevel);
   paddle_die();
   background_die(background);
+}
+
+
+/*
+ *
+ */
+void 
+load_level_music(uint16_t level) {
+  switch (level) {
+    case 1: load_music("res/sfx/music/metalsong.wav");
+            play_music(true);
+            break;
+            
+    default: break;
+  }
 }

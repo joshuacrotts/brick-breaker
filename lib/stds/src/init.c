@@ -49,7 +49,7 @@ init_SDL(const char *window_name, uint16_t window_width, uint16_t window_height)
 
   // Initialize SDL and exit if we fail.
   if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
-    SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Could not initialize SDL: %s.\n", SDL_GetError());
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Could not initialize SDL: %s.\n", SDL_GetError());
     exit(EXIT_ERROR);
   }
 
@@ -61,7 +61,7 @@ init_SDL(const char *window_name, uint16_t window_width, uint16_t window_height)
   app.window = SDL_CreateWindow(window_name, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_width, window_height, window_flags);
 
   if (!app.window) {
-    SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Could not open window. %s.\n", SDL_GetError());
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Could not open window. %s.\n", SDL_GetError());
     exit(EXIT_ERROR);
   }
 
@@ -75,7 +75,7 @@ init_SDL(const char *window_name, uint16_t window_width, uint16_t window_height)
   app.renderer = SDL_CreateRenderer(app.window, -1, renderer_flags);
 
   if (!app.renderer) {
-    SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to initialize renderer: %s.\n", SDL_GetError());
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Failed to initialize renderer: %s.\n", SDL_GetError());
     exit(EXIT_ERROR);
   }
 
@@ -107,7 +107,7 @@ init_audio_context(void) {
   }
 
   if (Mix_OpenAudio(44100, AUDIO_S16SYS, 2, 1024) == -1) {
-    SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Could not initialize SDL Mixer.\n");
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Could not initialize SDL Mixer.\n");
     exit(EXIT_ERROR);
   }
 

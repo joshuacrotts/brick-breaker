@@ -29,4 +29,11 @@ extern level_t *currentLevel;
 extern void 
 init_game(const char*, uint32_t, uint32_t);
 
+
+/*
+ *
+ */
+extern void 
+load_level_music(uint16_t);
+
 #endif

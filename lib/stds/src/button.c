@@ -1,22 +1,15 @@
 #include "../include/button.h"
 
 
-/*
- *
- */
 void 
 update_buttons(void) {
     button_t *b;
-
     for (b = app.button_head.next; b != NULL; b = b->next) {
         button_update(b);
     }
+
 }
 
-
-/*
- *
- */
 void 
 draw_buttons(void) {
     button_t *b;
@@ -27,11 +20,8 @@ draw_buttons(void) {
 }
 
 
-/* 
- *
- */
-void 
-add_button(float x, float y, uint32_t w, uint32_t h, bool is_filled, font_t *f, SDL_Color *fc, char *text) {
+button_t* 
+add_button(float x, float y, uint32_t w, uint32_t h, bool is_filled, char *font_path, uint16_t size, SDL_Color *fc, char *text) {
     button_t *button;
 
     button = malloc(sizeof(button_t));
@@ -42,22 +32,29 @@ add_button(float x, float y, uint32_t w, uint32_t h, bool is_filled, font_t *f, 
     }
 
     memset(button, 0, sizeof(button_t));
+    SDL_Color black     = {0, 0, 0};
+    button->rect.x      = (int32_t) x;
+    button->rect.y      = (int32_t) y;
+    button->rect.w      = w;
+    button->rect.h      = h;
+    button->font_path   = font_path;
+    button->font_size   = size;
+    button->color       = black;
+    button->text_color  = *fc;
+    button->is_filled   = is_filled;
+    
+    int fw, fh;
+    get_string_size(text, button->font_path, button->font_size, &fw, &fh);
 
-    button->rect.x = (int32_t) x;
-    button->rect.y = (int32_t) y;
-    button->rect.w = w;
-    button->rect.h = h;
-    button->font = f;
-    button->text_color = *fc;
-    button->is_filled = is_filled;
+    button->text_x = button->rect.x + ((button->rect.w - fw) / 2);
+    button->text_y = button->rect.y + ((button->rect.h - fh) / 2);
 
-    app.button_tail->next = button;
-    app.button_tail = button;
+    return button;
 }
 
 
-void 
-add_button_texture(float x, float y, char *file_path, font_t *f, SDL_Color *fc, char *text) {
+button_t* 
+add_button_texture(float x, float y, char *file_path, char *font_path, uint16_t size, SDL_Color *fc, char *text) {
     button_t *button;
 
     button = malloc(sizeof(button_t));
@@ -69,17 +66,27 @@ add_button_texture(float x, float y, char *file_path, font_t *f, SDL_Color *fc, 
 
     memset(button, 0, sizeof(button_t));
 
-    button->texture_id = 0;
+    button->texture_id                  = 0;
     button->texture[button->texture_id] = load_texture(file_path);
-    button->rect.x = (int32_t) x;
-    button->rect.y = (int32_t) y;
-    button->font = f;
-    button->text_color = *fc;    
+
+    button->rect.x      = (int32_t) x;
+    button->rect.y      = (int32_t) y;
+    button->font_path   = font_path;    
+    button->font_size   = size;
+    button->scale_x     = 1.0f;
+    button->scale_y     = 1.0f;
+    button->text        = text;
+    button->text_color  = *fc;    
 
     SDL_QueryTexture(button->texture[button->texture_id], NULL, NULL, &button->rect.w, &button->rect.h);
 
-    app.button_tail->next = button;
-    app.button_tail = button;
+    int fw, fh;
+    get_string_size(text, button->font_path, button->font_size, &fw, &fh);
+
+    button->text_x = button->rect.x + ((button->rect.w - fw) / 2);
+    button->text_y = button->rect.y + ((button->rect.h - fh) / 2);
+
+    return button;
 }
 
 
@@ -96,7 +103,7 @@ button_draw(button_t *b) {
     } else {
         draw_rect(&b->rect, b->color.r, b->color.g, b->color.b, b->color.a, b->is_filled);
     }
-    draw_text(b->text_x, b->text_y, b->text_color.r, b->text_color.g, b->text_color.b, b->font->name, b->font->size, b->text);
+    draw_text(b->text_x, b->text_y, b->text_color.r, b->text_color.g, b->text_color.b, b->font_path, b->font_size, b->text);
 }
 
 
@@ -116,5 +123,11 @@ is_mouse_over_button(button_t *b) {
 bool 
 is_button_clicked(button_t *b, int32_t mouse_code) {
     assert(mouse_code == SDL_BUTTON_LEFT || mouse_code == SDL_BUTTON_RIGHT);
-    return is_mouse_over_button(b) && app.mouse.button[mouse_code];
+
+    if (is_mouse_over_button(b) && app.mouse.button[mouse_code]) {
+        app.mouse.button[mouse_code] = 0;
+        return true;
+    }
+
+    return false;
 }
