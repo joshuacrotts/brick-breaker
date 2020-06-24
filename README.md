@@ -1,7 +1,7 @@
 <h1 align="center">Lock Out Protocol</h1>
 
 <p align="center">
-  <img width="200" height="500" src="sdl-brick-breaker.gif">
+  <img width="300" height="488" src="sdl-brick-breaker.gif">
 </p>
 
 [![CodeFactor](https://www.codefactor.io/repository/github/joshuacrotts/sdl-brick-breaker/badge)](https://www.codefactor.io/repository/github/joshuacrotts/Lock-out-protocol) ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/JoshuaCrotts/SDL-Brick-Breaker) ![GitHub repo size](https://img.shields.io/github/repo-size/JoshuaCrotts/SDL-Brick-Breaker) ![GitHub contributors](https://img.shields.io/github/contributors/JoshuaCrotts/SDL-Brick-Breaker)
