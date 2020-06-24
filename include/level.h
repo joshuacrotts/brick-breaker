@@ -5,6 +5,7 @@
 #include "paddle.h"
 #include "brick.h"
 #include "ball.h"
+#include "transition.h"
 #include "debris.h"
 #include "powerup.h"
 #include "../lib/stds/include/sound.h"
@@ -19,7 +20,7 @@ extern stage_t stage;
  *
  */
 extern level_t* 
-add_level(const char*);
+add_level(uint16_t);
 
 
 /*
@@ -34,5 +35,26 @@ level_update(void);
  */
 extern void 
 level_draw(void);
+
+
+/*
+ *
+ */
+extern void
+remove_balls(void);
+
+
+/*
+ *
+ */
+extern void
+set_next_level(void);
+
+/*
+ *
+ */
+extern void 
+load_level_music(uint16_t);
+
 
 #endif

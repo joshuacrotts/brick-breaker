@@ -1,3 +1,6 @@
+#ifndef STDS_H
+#define STDS_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
@@ -25,29 +28,22 @@
 /*
  *
  */
-int32_t 
+extern int32_t 
 random_int(int32_t, int32_t);
 
 
 /*
  *
  */
-float 
+extern float 
 random_float(float, float);
 
 
 /*
  *
  */
-int32_t 
+extern int32_t 
 clamp(int32_t, int32_t, int32_t);
-
-
-/*
- *
- */
-bool 
-collision(float, float, int32_t, int32_t, float, float, int32_t, int32_t);
 
 
 /*
@@ -63,7 +59,7 @@ collision(float, float, int32_t, int32_t, float, float, int32_t, int32_t);
  * 
  * @return void.
  */
-void 
+extern void 
 calc_slope(int32_t, int32_t, int32_t, int32_t, float*, float*);
 
 
@@ -77,7 +73,7 @@ calc_slope(int32_t, int32_t, int32_t, int32_t, float*, float*);
  * 
  * @return float angle.
  */
-float 
+extern float 
 get_angle(int32_t, int32_t, int32_t, int32_t);
 
 
@@ -91,7 +87,7 @@ get_angle(int32_t, int32_t, int32_t, int32_t);
  * 
  * @return int32_t distance.
  */
-int32_t 
+extern int32_t 
 get_distance(int32_t, int32_t, int32_t, int32_t);
 
 
@@ -106,7 +102,7 @@ get_distance(int32_t, int32_t, int32_t, int32_t);
  * 
  * @return void.
  */
-void 
+extern void 
 print(const char*, ...);
 
 
@@ -117,5 +113,7 @@ print(const char*, ...);
  * 
  * @return float angle in radians.
  */
-float 
+extern float 
 to_radians(float);
+
+#endif
