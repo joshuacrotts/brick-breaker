@@ -5,6 +5,7 @@
 #include "paddle.h"
 #include "brick.h"
 #include "ball.h"
+#include "score_item.h"
 #include "transition.h"
 #include "debris.h"
 #include "powerup.h"

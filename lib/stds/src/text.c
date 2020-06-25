@@ -105,6 +105,7 @@ get_font( char *font_str, uint16_t font_size ) {
 static void
 load_fonts() {
   add_font( "res/fonts/nes.ttf", 12 );
+  add_font( "res/fonts/nes.ttf", 18 );
   add_font( "res/fonts/nes.ttf", 24 );
 }
 

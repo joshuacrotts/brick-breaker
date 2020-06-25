@@ -9,12 +9,13 @@ add_brick( float x, float y, uint32_t flags, int8_t identifier ) {
   b = malloc( sizeof( entity_t ) );
   memset( b, 0, sizeof( entity_t ) );
 
-  b->x = x;
-  b->y = y;
-  b->id_flags |= ID_DEFAULT_BRICK_MASK;
-  b->flags |= flags;
+  b->x          = x;
+  b->y          = y;
   b->life       = 4;
   b->identifier = identifier;
+
+  b->id_flags |= ID_DEFAULT_BRICK_MASK;
+  b->flags |= flags;
 
   char *str_identifier = get_string_enum( identifier );
   char  buffer[MAX_BUFFER_SIZE];

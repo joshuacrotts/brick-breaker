@@ -55,16 +55,16 @@ init_scene( void ) {
   app.game_state    = PREGAME;
 
   memset( &stage, 0, sizeof( stage_t ) );
-  stage.levelTail   = &stage.levelHead;
+  stage.level_tail  = &stage.level_head;
   stage.debris_tail = &stage.debris_head;
   stage.state       = MENU;
   stage.level_id    = 1;
 
-  level_t *level        = add_level( stage.level_id );
-  stage.levelTail->next = level;
-  stage.levelTail       = level;
-  currentLevel          = stage.levelTail;
-  background            = init_background( "res/img/background/space-1.png" );
+  level_t *level         = add_level( stage.level_id );
+  stage.level_tail->next = level;
+  stage.level_tail       = level;
+  currentLevel           = stage.level_tail;
+  background             = init_background( "res/img/background/space-1.png" );
 
   init_paddle();
   init_HUD();
@@ -357,7 +357,7 @@ cleanup_stage( void ) {
 
   // Iterate through the levels and free all allocated memory
   // to each level.
-  for ( l = stage.levelHead.next; l != NULL; l = l->next ) {
+  for ( l = stage.level_head.next; l != NULL; l = l->next ) {
     while ( l->ball_head.next ) {
       ball              = l->ball_head.next;
       l->ball_head.next = ball->next;
@@ -383,9 +383,9 @@ cleanup_stage( void ) {
     }
   }
 
-  while ( stage.animationHead.next ) {
-    a                        = stage.animationHead.next;
-    stage.animationHead.next = a->next;
+  while ( stage.animation_head.next ) {
+    a                         = stage.animation_head.next;
+    stage.animation_head.next = a->next;
     free( a );
   }
 

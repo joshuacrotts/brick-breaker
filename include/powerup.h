@@ -3,6 +3,7 @@
 
 #include "commons.h"
 #include "ball.h"
+#include "score_item.h"
 #include "../lib/stds/include/animation.h"
 #include "../lib/stds/include/sound.h"
 

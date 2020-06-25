@@ -12,10 +12,12 @@ static entity_t *spawn_powerup( entity_t * );
 static void update_balls( void );
 static void update_powerups( void );
 static void update_bricks( void );
+static void update_score_items( void );
 
 static void draw_balls( void );
 static void draw_powerups( void );
 static void draw_bricks( void );
+static void draw_score_items( void );
 
 static void ball_hit_paddle( entity_t * );
 static void ball_hit_brick( entity_t * );
@@ -50,13 +52,14 @@ add_level( uint16_t level_id ) {
   level = malloc( sizeof( level_t ) );
   memset( level, 0, sizeof( level_t ) );
 
-  level->ball_tail    = &level->ball_head;
-  level->emitter_tail = &level->emitter_head;
-  level->entity_tail  = &level->entity_head;
-  level->ball_tail    = &level->ball_head;
-  level->brick_tail   = &level->brick_head;
-  level->powerup_tail = &level->powerup_head;
-  level->brick_count  = 0;
+  level->ball_tail       = &level->ball_head;
+  level->emitter_tail    = &level->emitter_head;
+  level->entity_tail     = &level->entity_head;
+  level->ball_tail       = &level->ball_head;
+  level->brick_tail      = &level->brick_head;
+  level->powerup_tail    = &level->powerup_head;
+  level->score_item_tail = &level->score_item_head;
+  level->brick_count     = 0;
 
   uint8_t brick_data = 1;
 
@@ -73,7 +76,7 @@ add_level( uint16_t level_id ) {
 
       // Depending on the char value, add its corresponding
       // brick ID.
-      if (c != 0) {
+      if ( c != 0 ) {
         b = add_brick( x, y, 0, c );
 
         level->brick_tail->next = b;
@@ -92,6 +95,7 @@ level_update() {
   if ( app.game_state != TRANSITION ) {
     update_balls();
     update_powerups();
+    update_score_items();
   }
   update_bricks();
 }
@@ -100,6 +104,7 @@ void
 level_draw() {
   draw_balls();
   draw_powerups();
+  draw_score_items();
   draw_bricks();
 }
 
@@ -107,16 +112,16 @@ void
 set_next_level( void ) {
   level_t *l = add_level( stage.level_id );
   load_level_music( stage.level_id );
-  stage.levelTail->next = l;
-  stage.levelTail       = l;
-  currentLevel          = l;
+  stage.level_tail->next = l;
+  stage.level_tail       = l;
+  currentLevel           = l;
 }
 
 void
 level_die() {
   level_t *l;
 
-  for ( l = stage.levelHead.next; l != NULL; l = l->next ) {
+  for ( l = stage.level_head.next; l != NULL; l = l->next ) {
     free( l );
   }
 
@@ -248,6 +253,32 @@ update_bricks( void ) {
  *
  */
 static void
+update_score_items( void ) {
+  score_item_t *s;
+  score_item_t *prev;
+
+  prev = &currentLevel->score_item_head;
+
+  for ( s = currentLevel->score_item_head.next; s != NULL; s = s->next ) {
+    score_item_update( s );
+
+    if ( s->flags & DEATH_MASK ) {
+      if ( s == currentLevel->score_item_tail ) {
+        currentLevel->score_item_tail = prev;
+      }
+
+      prev->next = s->next;
+      free( s );
+      s = prev;
+    }
+    prev = s;
+  }
+}
+
+/*
+ *
+ */
+static void
 draw_powerups( void ) {
   entity_t *p;
 
@@ -255,6 +286,18 @@ draw_powerups( void ) {
     if ( p->id_flags & ID_DEFAULT_POWERUP_MASK ) {
       powerup_draw( p );
     }
+  }
+}
+
+/*
+ *
+ */
+static void
+draw_score_items( void ) {
+  score_item_t *s;
+
+  for ( s = currentLevel->score_item_head.next; s != NULL; s = s->next ) {
+    score_item_draw( s );
   }
 }
 
@@ -306,9 +349,11 @@ ball_hit_brick( entity_t *ball ) {
           currentLevel->powerup_tail       = p;
         }
 
-        play_sound( SND_BRICK_BREAK, CH_BRICK );
-        stage.score += 100;
         currentLevel->brick_count--;
+        currentLevel->last_break_timer++;
+
+        play_sound( SND_BRICK_BREAK, CH_BRICK );
+        add_score_item( brick->x + brick->w / 4, brick->y + brick->h / 4, 0);
 
         if ( currentLevel->brick_count == 0 ) {
           activate_transition( false );

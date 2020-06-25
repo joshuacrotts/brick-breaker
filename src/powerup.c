@@ -51,9 +51,10 @@ powerup_update( entity_t *p ) {
     if ( --p->life < 0 ) {
       if ( p->identifier == LARGE_PADDLE ) {
         powerup_large_deactivate( p );
-        return;
       }
     }
+
+    return;
   }
 
   if ( p->animation != NULL ) {
@@ -69,7 +70,7 @@ powerup_update( entity_t *p ) {
 
 void
 powerup_draw( entity_t *p ) {
-  if ( p->animation != NULL && p->flags & POWERUP_INACTIVE ) {
+  if ( p->animation != NULL && ( ( p->flags & POWERUP_ACTIVE ) == 0 ) ) {
     animation_draw( p );
   }
 }
@@ -83,14 +84,20 @@ powerup_die( entity_t *p ) {
 
 void
 powerup_large_activate( entity_t *p ) {
+  if ( paddle->scale_x >= 2.0f ) {
+    return;
+  }
+
   p->life = FPS * 10;
   p->flags |= POWERUP_ACTIVE;
   paddle->scale_x = 2.0f;
+  paddle->w *= ( uint32_t ) paddle->scale_x;
 }
 
 void
 powerup_large_deactivate( entity_t *p ) {
   paddle->scale_x = 1.0f;
+  paddle->w /= 2;
   p->flags |= DEATH_MASK;
 }
 
@@ -111,8 +118,9 @@ powerup_multi_activate( entity_t *p ) {
 
 void
 powerup_coin_activate( entity_t *p ) {
-  stage.score += COIN_SCORE;
+  add_score_item( p->x, p->y, COIN_SCORE );
   play_sound( SND_COIN, CH_ANY );
+  stage.score += COIN_SCORE;
   p->flags |= DEATH_MASK;
 }
 
@@ -121,6 +129,7 @@ powerup_life_activate( entity_t *p ) {
   if ( paddle->life <= MAX_LIVES ) {
     paddle->life++;
   }
+  add_score_item( p->x, p->y, LIFE_SCORE );
   play_sound( SND_EXTRA_LIFE, CH_ANY );
   stage.score += LIFE_SCORE;
   p->flags |= DEATH_MASK;

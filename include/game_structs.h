@@ -4,10 +4,12 @@
 #include "commons.h"
 #include "game_defs.h"
 
-typedef struct Stage   stage_t;
-typedef struct Emitter emitter_t;
-typedef struct Level   level_t;
-typedef struct Debris  debris_t;
+typedef struct Stage     stage_t;
+typedef struct Emitter   emitter_t;
+typedef struct Level     level_t;
+typedef struct Debris    debris_t;
+typedef struct ScoreItem score_item_t;
+
 typedef enum BrickBreakerState {
   MENU,
   GAME,
@@ -24,15 +26,28 @@ struct Emitter {
   emitter_t *next;
 };
 
-struct Level {
-  size_t brick_count;
-  size_t ball_count;
+struct ScoreItem {
+  float    x;
+  float    y;
+  char     text[16];
+  int32_t  score;
+  int32_t  life;
+  uint32_t flags;
 
-  entity_t  ball_head, *ball_tail;
-  entity_t  brick_head, *brick_tail;
-  entity_t  powerup_head, *powerup_tail;
-  entity_t  entity_head, *entity_tail;
-  emitter_t emitter_head, *emitter_tail;
+  score_item_t *next;
+};
+
+struct Level {
+  size_t  brick_count;
+  size_t  ball_count;
+  int32_t last_break_timer;
+
+  entity_t     ball_head, *ball_tail;
+  entity_t     brick_head, *brick_tail;
+  entity_t     powerup_head, *powerup_tail;
+  entity_t     entity_head, *entity_tail;
+  emitter_t    emitter_head, *emitter_tail;
+  score_item_t score_item_head, *score_item_tail;
 
   background_t background;
 
@@ -47,7 +62,7 @@ struct Debris {
   uint32_t     flags;
   SDL_Texture *texture;
   SDL_Rect     rect;
-  debris_t *   next;
+  debris_t    *next;
 };
 
 struct Stage {
@@ -56,8 +71,8 @@ struct Stage {
 
   BrickBreakerState state;
 
-  animation_t animationHead, *animationTail;
-  level_t     levelHead, *levelTail;
+  animation_t animation_head, *animation_tail;
+  level_t     level_head, *level_tail;
   debris_t    debris_head, *debris_tail;
 };
 
