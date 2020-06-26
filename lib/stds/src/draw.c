@@ -16,43 +16,50 @@ present_scene() {
 
 void
 blit_texture( SDL_Texture *texture, float x, float y, bool is_center ) {
-  SDL_Rect dest;
+  SDL_FRect dest;
 
-  dest.x = ( int ) x;
-  dest.y = ( int ) y;
+  dest.x = ( x - app.camera.x );
+  dest.y = ( y - app.camera.y );
 
-  SDL_QueryTexture( texture, NULL, NULL, &dest.w, &dest.h );
+  int32_t w, h;
+
+  SDL_QueryTexture( texture, NULL, NULL, &w, &h );
+
+  dest.w = ( float ) w;
+  dest.h = ( float ) h;
 
   if ( is_center ) {
-    dest.x -= ( dest.w >> 1 );
-    dest.y -= ( dest.h >> 1 );
+    dest.x -= ( dest.w / 2.0f );
+    dest.y -= ( dest.h / 2.0f );
   }
 
-  SDL_RenderCopy( app.renderer, texture, NULL, &dest );
+  SDL_RenderCopyF( app.renderer, texture, NULL, &dest );
 }
 
 void
 blit_rect( SDL_Texture *texture, SDL_Rect *src, float x, float y ) {
-  SDL_Rect dest;
-  dest.x = ( int ) x;
-  dest.y = ( int ) y;
+  SDL_FRect dest;
+  dest.x = ( x - app.camera.x );
+  dest.y = ( y - app.camera.y );
 
   dest.w = src->w;
   dest.h = src->h;
-  SDL_RenderCopy( app.renderer, texture, src, &dest );
+  SDL_RenderCopyF( app.renderer, texture, src, &dest );
 }
 
 void
 blit_texture_rotated( SDL_Texture *texture, float x, float y, uint16_t angle ) {
-  SDL_Rect dest;
-  dest.x = ( int ) x;
-  dest.y = ( int ) y;
-  SDL_QueryTexture( texture, NULL, NULL, &dest.w, &dest.h );
+  SDL_FRect dest;
+  dest.x = ( x - app.camera.x );
+  dest.y = ( y - app.camera.y );
+  int32_t w, h;
 
-  dest.x -= ( dest.w >> 1 );
-  dest.y -= ( dest.h >> 1 );
+  SDL_QueryTexture( texture, NULL, NULL, &w, &h );
 
-  SDL_RenderCopyEx( app.renderer, texture, NULL, &dest, angle, NULL, SDL_FLIP_NONE );
+  dest.w = ( float ) w;
+  dest.h = ( float ) h;
+
+  SDL_RenderCopyExF( app.renderer, texture, NULL, &dest, angle, NULL, SDL_FLIP_NONE );
 }
 
 void
@@ -64,23 +71,25 @@ blit_texture_color_scaled( SDL_Texture *texture, float x, float y, float scale_x
   SDL_QueryTexture( texture, NULL, NULL, &texture_width, &texture_height );
 
   // Apply the scaling procedure to the image.
-  SDL_Rect dest_rect;
-  dest_rect.x = ( int32_t ) x;
-  dest_rect.y = ( int32_t ) y;
-  dest_rect.w = ( uint32_t )( texture_width * scale_x );
-  dest_rect.h = ( uint32_t )( texture_height * scale_y );
+  SDL_FRect dest_rect;
+  dest_rect.x = ( x - app.camera.x );
+  dest_rect.y = ( y - app.camera.y );
+  dest_rect.w = ( texture_width * scale_x );
+  dest_rect.h = ( texture_height * scale_y );
 
   // If all four color values are less than 0, don't draw a color.
   if ( r >= 0 && g >= 0 && b >= 0 && a >= 0 ) {
     SDL_SetTextureColorMod( texture, r, g, b );
     SDL_SetTextureAlphaMod( texture, a );
   }
-  SDL_RenderCopyEx( app.renderer, texture, NULL, &dest_rect, angle, NULL, SDL_FLIP_NONE );
+  SDL_RenderCopyExF( app.renderer, texture, NULL, &dest_rect, angle, NULL, SDL_FLIP_NONE );
 }
 
 void
 blit_texture_scaled( SDL_Texture *texture, float x, float y, float scale_x, float scale_y,
                      uint16_t angle ) {
+
+  // Camera offsets are applied in color_scaled method.
   blit_texture_color_scaled( texture, x, y, scale_x, scale_y, angle, -1, -1, -1, -1 );
 }
 
@@ -88,6 +97,9 @@ void
 draw_rect( SDL_Rect *rect, uint8_t r, uint8_t g, uint8_t b, uint8_t a, bool is_filled ) {
   SDL_SetRenderDrawBlendMode( app.renderer, SDL_BLENDMODE_BLEND );
   SDL_SetRenderDrawColor( app.renderer, r, g, b, a );
+  
+  rect->x -= app.camera.x;
+  rect->y -= app.camera.y;
 
   if ( is_filled ) {
     SDL_RenderFillRect( app.renderer, rect );
@@ -105,6 +117,9 @@ draw_rect_stroke( int32_t x, int32_t y, uint32_t w, uint32_t h, uint32_t stroke,
                  "Error: stroke %d cannot be a negative or zero value!", stroke );
     exit( EXIT_FAILURE );
   } else {
+    x += app.camera.x;
+    y += app.camera.y;
+
     SDL_Rect r1;
     SDL_Rect r2;
     SDL_Rect r3;
@@ -124,11 +139,11 @@ draw_rect_stroke( int32_t x, int32_t y, uint32_t w, uint32_t h, uint32_t stroke,
 
     // BL to BR
     r3.x = x;
-    r3.y = h - stroke;
+    r3.y = h - stroke + app.camera.y;
     r3.w = w;
     r3.h = stroke;
 
-    r4.x = w - stroke;
+    r4.x = w - stroke + app.camera.x;
     r4.y = y;
     r4.w = stroke;
     r4.h = h;

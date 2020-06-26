@@ -9,9 +9,9 @@ extern app_t app;
  * Applies an offset from the supplied entity, and stores
  * the coordinates in the App struct. Typically, in an overhead
  * style game, this supplied entity will be a reference to the
- * player. Then, whenever you draw anything, just subtract the
- * coordinates from your other entities/objects in the world
- * (i.e. entity.x - app.camera.x and entity.y - app.camera.y).
+ * player. All offsets are pre-applied to the draw functions. 
+ * To keep something from being updated, just re-add the values
+ * x + app.camera.x, y + app.camera.y.
  */
 extern void update_camera(entity_t*);
 

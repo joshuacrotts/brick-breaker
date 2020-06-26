@@ -37,11 +37,10 @@ init_parallax_background( char *directory, size_t count, float normal_scroll_spe
     // Display a warning message if the parallax background won't scroll
     // due to the settings the user chose.
     if ( ( int32_t ) round( ( layer->normal_scroll_speed * layer->parallax_scroll_speed ) ) == 0 ) {
-      SDL_LogInfo(
-          SDL_LOG_CATEGORY_APPLICATION,
-          "WARNING! Layer %d in your parallax effect will not scroll because it has 0 as a "
-          "speed after normalizing it!",
-          i );
+      SDL_LogInfo( SDL_LOG_CATEGORY_APPLICATION,
+                   "WARNING! Layer %d in your parallax effect will not scroll because it has 0 as "
+                   "a speed after normalizing it!",
+                   i );
     }
 
     memset( input_buffer, '\0', sizeof( input_buffer ) );
@@ -103,10 +102,7 @@ init_background( char *file ) {
 }
 
 void
-background_update( background_t *background ) {
-  background->x = 0 - app.camera.x;
-  background->y = 0 - app.camera.y;
-}
+background_update( background_t *background ) {}
 
 void
 background_draw( background_t *background ) {
@@ -137,11 +133,10 @@ check_duplicate_speeds( float scroll_speeds[], float normal_scroll_size, size_t 
   for ( int i = 1; i < count; i++ ) {
     if ( ( int32_t )( scroll_speeds[i] * normal_scroll_size ) ==
          ( int32_t )( scroll_speeds[i - 1] ) * normal_scroll_size ) {
-      SDL_LogInfo(
-          SDL_LOG_CATEGORY_APPLICATION,
-          "WARNING! Layers %d and %d in your parallax background will have the same scroll "
-          "speed of %d due to integer truncating.",
-          i - 1, i, ( int32_t )( scroll_speeds[i] * normal_scroll_size ) );
+      SDL_LogInfo( SDL_LOG_CATEGORY_APPLICATION,
+                   "WARNING! Layers %d and %d in your parallax background will have the same "
+                   "scroll speed of %d due to integer truncating.",
+                   i - 1, i, ( int32_t )( scroll_speeds[i] * normal_scroll_size ) );
     }
   }
 }

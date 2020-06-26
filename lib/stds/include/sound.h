@@ -20,7 +20,7 @@ init_sounds(void);
  * @return void.
  */
 extern void 
-load_music(const char*);
+load_music(const char *music_path);
 
 
 /*
@@ -31,7 +31,7 @@ load_music(const char*);
  * @return void.
  */
 extern void 
-play_music(bool);
+play_music(bool is_playing);
 
 
 /*
@@ -44,6 +44,6 @@ play_music(bool);
  * @param int16_t channel from enum. 
  */
 extern void 
-play_sound(int16_t, int16_t);
+play_sound(int16_t sound_effect_id, int16_t channel);
 
 #endif

@@ -35,9 +35,6 @@ play_sound( int16_t id, int16_t channel ) {
   Mix_PlayChannel( channel, sounds[id], 0 );
 }
 
-/*
- *
- */
 static void
 load_sounds( void ) {
   sounds[SND_BRICK_SHATTER] = Mix_LoadWAV( "res/sfx/explode_1.ogg" );

@@ -77,7 +77,43 @@ print( const char *str, ... ) {
   SDL_LogInfo( SDL_LOG_CATEGORY_APPLICATION, text_buffer );
 }
 
+bool is_mouse_over_rect( float x, float y, SDL_Rect rect ){
+	return ( x > rect.x && x < rect.x + rect.w ) && ( y > rect.y && y < rect.y + rect.h );
+}
+
 float
 to_radians( float degrees ) {
   return ( float ) ( degrees * ( PI / 180.0 ) );
+}
+
+char *
+str_substring( char *str, int first, int last ) {
+  char *s = malloc( sizeof( char ) * ( last - first ) );
+  memcpy( s, str + first, last - first );
+  return s;
+}
+
+int32_t
+str_index_of( char *s, const char *search_str ) {
+  const char *ptr = strstr( s, search_str );
+
+  if ( ptr ) {
+    int32_t index = ptr - s;
+    return index;
+  }
+
+  return -1;
+}
+
+char *
+strcat_int( char *s, int n ) {
+  // Create a char buffer with the number of digits with an
+  // extra character for null terminator.
+  int32_t digits = ( int32_t ) ceil( log10( n ) ) + 1;
+  char *  buffer = malloc( ( sizeof( char ) * strlen( s ) ) + digits );
+  strcpy( buffer, s );
+  char num_buf[MAX_INT_DIGITS];
+  sprintf( num_buf, "%d", n);
+  strcat( buffer, num_buf );
+  return buffer;
 }

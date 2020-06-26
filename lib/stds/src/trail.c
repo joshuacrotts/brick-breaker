@@ -3,7 +3,7 @@
 void
 add_trail( entity_t *parent, int16_t alpha_decay, int16_t initial_alpha ) {
   trail_t *t;
-  ;
+  
   t = malloc( sizeof( trail_t ) );
 
   if ( t == NULL ) {

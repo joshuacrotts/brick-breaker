@@ -10,14 +10,14 @@ extern app_t app;
  * Clears the screen with a black color.
  */
 extern void 
-prepare_scene();
+prepare_scene(void);
 
 
 /*
  * Presents the current scene from the application.
  */
 extern void 
-present_scene();
+present_scene(void);
 
 
 /*
@@ -29,17 +29,16 @@ present_scene();
  * to integers.
  */
 extern void 
-blit_rect(SDL_Texture*, SDL_Rect*, float, float);
+blit_rect(SDL_Texture *texture, SDL_Rect *src, float x, float y);
 
 
 /*
  * Renders a texture, specified by src, at
  * coordinates (x, y). You may pass in both integers or
- * floating-point numbers to this function, but any floating-point
- * values will be down-casted to integers.
+ * floating-point numbers to this function.
  */
 extern void 
-blit_texture(SDL_Texture*, float, float, bool);
+blit_texture(SDL_Texture *texture, float x, float y, bool is_center);
 
 
 /*
@@ -53,7 +52,7 @@ blit_texture(SDL_Texture*, float, float, bool);
  * @param uint16_t angle of rotation (0 to 360).
  */
 extern void 
-blit_texture_rotated(SDL_Texture*, float, float, uint16_t);
+blit_texture_rotated(SDL_Texture *texture, float x, float y, uint16_t angle);
 
 
 /*
@@ -72,7 +71,8 @@ blit_texture_rotated(SDL_Texture*, float, float, uint16_t);
  * @param uint8_t a color value.
  */
 extern void 
-blit_texture_color_scaled(SDL_Texture*, float, float, float, float, uint16_t, uint8_t, uint8_t, uint8_t, uint8_t);
+blit_texture_color_scaled(SDL_Texture *texture, float x, float y, float scale_x, float scale_y, 
+                          uint16_t angle, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 
 
 /*
@@ -81,7 +81,8 @@ blit_texture_color_scaled(SDL_Texture*, float, float, float, float, uint16_t, ui
  * yourself in your game (i.e. handling collisions if applicable).
  */
 extern void 
-blit_texture_scaled(SDL_Texture*, float, float, float, float, uint16_t);
+blit_texture_scaled(SDL_Texture *texture, float x, float y, float scale_x, float scale_y, 
+                    uint16_t angle);
 
 
 /*
@@ -90,7 +91,7 @@ blit_texture_scaled(SDL_Texture*, float, float, float, float, uint16_t);
  * If the last parameter is true, the shape will be filled.
  */
 extern void 
-draw_rect(SDL_Rect*, uint8_t, uint8_t, uint8_t, uint8_t, bool);
+draw_rect(SDL_Rect *rect, uint8_t r, uint8_t g, uint8_t b, uint8_t a, bool is_center);
 
 
 /*
@@ -100,7 +101,8 @@ draw_rect(SDL_Rect*, uint8_t, uint8_t, uint8_t, uint8_t, bool);
  * specify the RGBA values.
  */
 extern void 
-draw_rect_stroke(int32_t, int32_t, uint32_t, uint32_t, uint32_t, uint8_t, uint8_t, uint8_t, uint8_t);
+draw_rect_stroke(int32_t x, int32_t y, uint32_t w, uint32_t h, uint32_t thickness, 
+                 uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 
 
 /*
@@ -108,21 +110,24 @@ draw_rect_stroke(int32_t, int32_t, uint32_t, uint32_t, uint32_t, uint8_t, uint8_
  * the radius, and RGBA.
  */
 extern void 
-draw_circle(int32_t, int32_t, uint32_t, uint8_t, uint8_t, uint8_t, uint8_t);
+draw_circle(int32_t center_x, int32_t center_y, uint32_t radius, uint8_t r, uint8_t g, 
+            uint8_t b, uint8_t a);
 
 
 /*
  * Fills a circle. Simple as that.
  */
 extern void 
-fill_circle(int32_t, int32_t, uint32_t, uint8_t, uint8_t, uint8_t, uint8_t);
+fill_circle(int32_t center_x, int32_t center_y, uint32_t radius, uint8_t r, uint8_t g, 
+            uint8_t b, uint8_t a);
 
 
 /*
  * Draws a line with the specified color to the screen.
  */
 extern void 
-draw_line(float, float, float, float, uint8_t, uint8_t, uint8_t, uint8_t);
+draw_line(float x1, float y1, float x2, float y2, uint8_t r, uint8_t g, uint8_t b, 
+          uint8_t a);
 
 
 /*
@@ -131,13 +136,14 @@ draw_line(float, float, float, float, uint8_t, uint8_t, uint8_t, uint8_t);
  * loadable.
  */
 extern SDL_Texture* 
-load_texture(char*);
+load_texture(char *directory);
 
 
 /*
- *
+ * Completes one iteration of the color-merge procedure.
+ * The speed is dependent on the fade_color_t struct passed. 
  */
 extern SDL_Color 
-combine_fade_color(fade_color_t*);
+combine_fade_color(fade_color_t *fade_color);
 
 #endif

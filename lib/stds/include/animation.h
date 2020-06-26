@@ -14,7 +14,8 @@ extern app_t app;
  * @param y = starting top-left y pos of the sprite sheet.
  */
 extern animation_t* 
-add_spritesheet(char*, uint8_t, float, uint16_t, uint16_t);
+add_spritesheet(char *file_directory, uint8_t n, float frame_time, 
+                uint16_t start_x, uint16_t start_y);
 
 
 /*
@@ -26,7 +27,7 @@ add_spritesheet(char*, uint8_t, float, uint16_t, uint16_t);
  *, etc.).
  */
 extern animation_t* 
-add_animation(char*, uint8_t, float);
+add_animation(char *files_directory, uint8_t n, float frame_time);
 
 
 /*
@@ -42,7 +43,7 @@ add_animation(char*, uint8_t, float);
  * @return void.
  */
 extern void 
-animation_update(entity_t*);
+animation_update(entity_t *parent_entity);
 
 
 /*
@@ -53,7 +54,7 @@ animation_update(entity_t*);
  * @return void.
  */
 extern void 
-animation_draw(entity_t*);
+animation_draw(entity_t *parent_entity);
 
 
 /*
@@ -64,6 +65,6 @@ animation_draw(entity_t*);
  * @return void.
  */
 extern void 
-animation_die(entity_t*);
+animation_die(entity_t *parent_entity);
 
 #endif

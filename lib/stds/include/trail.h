@@ -20,7 +20,7 @@ extern app_t app;
  * @return void.
  */
 extern void 
-add_trail(entity_t*, int16_t, int16_t);
+add_trail(entity_t *parent_entity, int16_t alpha_decay_rate, int16_t starting_alpha);
 
 
 /*
@@ -34,7 +34,7 @@ add_trail(entity_t*, int16_t, int16_t);
  * @return void
  */
 extern void 
-trail_update(trail_t*);
+trail_update(trail_t *t);
 
 
 /*
@@ -44,6 +44,6 @@ trail_update(trail_t*);
  * 
  * @return void.
  */
-extern void trail_draw(trail_t*);
+extern void trail_draw(trail_t *t);
 
 #endif
