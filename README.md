@@ -6,7 +6,7 @@
 
 [![CodeFactor](https://www.codefactor.io/repository/github/joshuacrotts/sdl-brick-breaker/badge)](https://www.codefactor.io/repository/github/joshuacrotts/Lock-out-protocol) ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/JoshuaCrotts/SDL-Brick-Breaker) ![GitHub repo size](https://img.shields.io/github/repo-size/JoshuaCrotts/SDL-Brick-Breaker) ![GitHub contributors](https://img.shields.io/github/contributors/JoshuaCrotts/SDL-Brick-Breaker)
 
-Brick Breaker is a remake of the original arcade Arkanoid, Breakout, or Brick Breaker (depending on which version that you have seen). Using my Standards library as a framework, combined with SDL, I decided to remake one of my oldest projects in C nonetheless. Everything here is written from scratch, including the data structures and algorithms. The only unoriginal parts are the sound effects/music, the bricks/balls, and the background.
+Brick Breaker is a remake of the original arcade Arkanoid, Breakout, or Brick Breaker (depending on which version that you have seen). Using my Standards library as a framework, combined with SDL, I decided to remake one of my oldest projects in C nonetheless. Everything here is written from scratch, including the data structures and algorithms. The only unoriginal parts are the sound effects/music, the bricks/balls, and the background. ![Viola Crotts](https://github.com/vcmunos) drew the life graphic, the various powerup animations, the ball, and paddle. Everything else is from an assets package I purchased.
 
 ## Dependencies
 
