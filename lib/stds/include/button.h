@@ -36,8 +36,8 @@ draw_buttons(void);
  * 
  * @return button_t pointer.
  */
-extern button_t*
-add_button(float, float, uint32_t, uint32_t, bool, char*, uint16_t, SDL_Color*, char*);
+extern button_t* add_button(float x, float y, uint32_t w, uint32_t h, bool filled, char* font_directory, 
+                            uint16_t font_size, SDL_Color *font_color, char *text);
 
 
 /* 
@@ -54,34 +54,36 @@ add_button(float, float, uint32_t, uint32_t, bool, char*, uint16_t, SDL_Color*, 
  * @return button_t pointer.
  */
 extern button_t* 
-add_button_texture(float, float, char*, char*, uint16_t, SDL_Color*, char*);
+add_button_texture(float x, float y, char *texture_directory, char *font_directory, 
+                   uint16_t font_size, SDL_Color *color, char *text);
 
 
 /*
  *
  */
 void 
-button_update(button_t*);
+button_update(button_t *button);
 
 
 /*
  *
  */
 void 
-button_draw(button_t*);
+button_draw(button_t *button);
 
 
 /*
  *
  */
 bool 
-is_mouse_over_button(button_t*);
+is_mouse_over_button(button_t *button);
 
 
 /*
- *
+ * Determines if the button was clicked on by the provided mouse-code.
+ * This should most often be SDL_BUTTON_LEFT for the left mouse button.
  */
 bool 
-is_button_clicked(button_t*, int32_t);
+is_button_clicked(button_t *button, int32_t mouse_code);
 
 #endif

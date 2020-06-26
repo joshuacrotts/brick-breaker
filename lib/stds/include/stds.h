@@ -19,6 +19,8 @@
 #include "stddefine.h"
 #include "structs.h"
 
+#define MAX_INT_DIGITS 11
+
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #define MAX3(a, b, c) (MAX(MAX(a, b), c))
@@ -115,5 +117,55 @@ print(const char*, ...);
  */
 extern float 
 to_radians(float);
+
+
+/*
+ *
+ */
+extern bool
+is_mouse_over_rect(float x, float y, SDL_Rect rect);
+
+/*
+ * Finds and returns the substring between the indices 
+ * [first, last). (last - first) gives the number of characters
+ * inside the returning char*. 
+ *
+ * @precondition last > first, first >= 0 and last >= 0,
+ *               first < length of str and last < length of
+ *               str.
+ *
+ * @param char * string with substring to find.
+ * @param int first index of substring.
+ * @param int index to stop the search (not inclusive!).
+ *
+ * @return char* substring.
+ */
+extern char* 
+str_substring(char* str, int first, int last);
+
+
+/*
+ * Returns the index of the first occurrence of search_str
+ * inside s. 
+ *
+ * @param char* string to search in.
+ * @param char* string to search for.
+ *
+ * @return int32_t >= 0 for index, -1 if not in string.
+ */
+extern int32_t
+str_index_of( char* s, const char* search_str );
+
+/*
+ * Concatenates a signed 32-bit integer to the end of 
+ * a string. 
+ *
+ * @param char* string to concatenate onto.
+ * @param int32_t integer to concatenate.
+ *
+ * @return modified string with number on end.
+ */ 
+extern char*
+strcat_int( char *s, int32_t n );
 
 #endif

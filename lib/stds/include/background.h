@@ -28,7 +28,8 @@ extern app_t app;
  *        of an infinite background.
  */
 extern void
-init_parallax_background(char*, size_t, float, float[], bool);
+init_parallax_background(char* bg_directory, size_t n, float default_scroll_speed, 
+                         float modified_scroll_speeds[], bool is_infinite);
 
 
 /*
@@ -42,7 +43,7 @@ init_parallax_background(char*, size_t, float, float[], bool);
  * @return void.
  */
 extern void
-parallax_background_update(parallax_background_t*);
+parallax_background_update(parallax_background_t *parallax);
 
 
 /*
@@ -53,7 +54,7 @@ parallax_background_update(parallax_background_t*);
  * @param parallax_background_t pointer to struct.
  */
 extern void
-parallax_background_draw(parallax_background_t*);
+parallax_background_draw(parallax_background_t *parallax);
 
 
 /*
@@ -65,7 +66,7 @@ parallax_background_draw(parallax_background_t*);
  * @return void.
  */
 extern background_t* 
-init_background(char*);
+init_background(char *bg_directory);
 
 
 /*
@@ -78,7 +79,7 @@ init_background(char*);
  * @return void.
  */
 extern void 
-background_update(background_t*);
+background_update(background_t *bg);
 
 
 /*
@@ -90,13 +91,13 @@ background_update(background_t*);
  * @return void.
  */
 extern void 
-background_draw(background_t*);
+background_draw(background_t *bg);
 
 
 /*
  * Frees the context of the background struct and image.
  */
 extern void 
-background_die(background_t*);
+background_die(background_t *bg);
 
 #endif

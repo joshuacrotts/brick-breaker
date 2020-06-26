@@ -45,7 +45,8 @@ free_fonts(void);
  * standard font), and draw the string at SCREEN_WIDTH / 2 - fontWidth / 2.
  */
 extern void 
-draw_text(float, float, uint8_t, uint8_t, uint8_t, char*, uint16_t, char*, ...);
+draw_text(float x, float y, uint8_t r, uint8_t g, uint8_t b, char *font_directory, 
+          uint16_t font_size, char *str, ...);
 
 
 /*
@@ -60,6 +61,6 @@ draw_text(float, float, uint8_t, uint8_t, uint8_t, char*, uint16_t, char*, ...);
  * @param pointer to integer (int) where the height of the string is stored.
  */
 extern void 
-get_string_size(char*, char*, uint16_t, int*, int*);
+get_string_size(char *str, char *font_name, uint16_t font_size, int *stored_width, int *stored_height);
 
 #endif

@@ -47,7 +47,7 @@ init_fonts(void);
  * @return void.
  */
 extern void 
-toggle_debug_mode(bool);
+toggle_debug_mode(bool is_debugging);
 
 
 /*
