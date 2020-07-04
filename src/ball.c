@@ -35,7 +35,7 @@ void
 ball_update( entity_t *b ) {
   b->x += b->dx;
   b->y += b->dy;
-  add_trail( b, 4, 60 );
+  add_trail( b, 4, 60, false, SDL_FLIP_NONE );
   check_bounds( b );
 }
 

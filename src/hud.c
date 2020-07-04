@@ -21,6 +21,8 @@ static void draw_level_number( void );
 void
 init_HUD( void ) {
   heartTexture = load_texture( "res/img/life.png" );
+  load_music( "res/sfx/music/titlesong.ogg" );
+  play_music( true );
 
   SDL_Color c1;
   SDL_Color c2;

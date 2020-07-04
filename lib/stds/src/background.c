@@ -65,9 +65,10 @@ parallax_background_update( parallax_background_t *p ) {
 void
 parallax_background_draw( parallax_background_t *p ) {
   blit_texture_scaled( p->background->background_texture, p->background->x, p->background->y,
-                       p->background->scale_x, p->background->scale_y, 0 );
+                       p->background->scale_x, p->background->scale_y, 0, SDL_FLIP_NONE );
   blit_texture_scaled( p->background->background_texture, p->background->x + p->background->w,
-                       p->background->y, p->background->scale_x, p->background->scale_y, 0 );
+                       p->background->y, p->background->scale_x, p->background->scale_y, 0,
+                       SDL_FLIP_NONE );
 }
 
 background_t *
@@ -107,7 +108,7 @@ background_update( background_t *background ) {}
 void
 background_draw( background_t *background ) {
   blit_texture_scaled( background->background_texture, background->x, background->y,
-                       background->scale_x, background->scale_y, 0 );
+                       background->scale_x, background->scale_y, 0, SDL_FLIP_NONE );
 }
 
 void

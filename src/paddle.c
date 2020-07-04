@@ -34,7 +34,7 @@ paddle_update( void ) {
 void
 paddle_draw( void ) {
   blit_texture_scaled( paddle->texture[0], paddle->x, paddle->y, paddle->scale_x, paddle->scale_y,
-                       paddle->angle );
+                       paddle->angle, SDL_FLIP_NONE );
 }
 
 void

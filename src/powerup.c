@@ -58,7 +58,9 @@ powerup_update( entity_t *p ) {
   }
 
   if ( p->animation != NULL ) {
-    animation_update( p );
+    p->animation->pos_x = p->x;
+    p->animation->pos_y = p->y;
+    animation_update( p->animation );
   }
 
   p->y += POWERUP_DESCENT;
@@ -71,7 +73,7 @@ powerup_update( entity_t *p ) {
 void
 powerup_draw( entity_t *p ) {
   if ( p->animation != NULL && ( ( p->flags & POWERUP_ACTIVE ) == 0 ) ) {
-    animation_draw( p );
+    animation_draw( p->animation );
   }
 }
 

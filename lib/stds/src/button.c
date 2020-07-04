@@ -97,7 +97,7 @@ void
 button_draw( button_t *b ) {
   if ( b->texture[b->texture_id] != NULL ) {
     blit_texture_scaled( b->texture[b->texture_id], b->rect.x, b->rect.y, b->scale_x, b->scale_y,
-                         0 );
+                         0, SDL_FLIP_NONE );
   } else {
     draw_rect( &b->rect, b->color.r, b->color.g, b->color.b, b->color.a, b->is_filled );
   }

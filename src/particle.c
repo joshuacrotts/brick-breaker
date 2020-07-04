@@ -76,7 +76,9 @@ particle_update( entity_t *e ) {
   }
 
   if ( e->animation != NULL ) {
-    animation_update( e );
+    e->animation->pos_x = e->x;
+    e->animation->pos_y = e->y;
+    animation_update( e->animation );
   }
 
   if ( floor( e->delta_accel_x ) != 0 ) {
@@ -121,7 +123,7 @@ particle_draw( entity_t *e ) {
       fill_circle( rect.x, rect.y, r, e->color.r, e->color.g, e->color.b, e->color.a );
     }
   } else {
-    animation_draw( e );
+    animation_draw( e->animation );
   }
 }
 

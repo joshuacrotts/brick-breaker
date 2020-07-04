@@ -78,30 +78,20 @@ static uint32_t
 update_window_title( uint32_t interval, void *args ) {
   uint16_t fps = *( uint16_t * ) args;
   // Create text window buffer.
-  char window_buffer[SMALL_TEXT_BUFFER];
-
-  // Buffer for FPS string representation.
-  char num_buffer[3];
-
-  // Convert fps to string - store in num_buffer.
-  itoa( fps, num_buffer, 10 );
+  char *window_buffer = malloc(sizeof(char) * SMALL_TEXT_BUFFER);
 
   // Copy the title to the buffer.
   strcpy( window_buffer, app.original_title );
 
-  // Create temp variable for title.
-  char *title = " | FPS: ";
-
   // Move temp var to buffer. Receive ptr.
-  strcat( window_buffer, title );
+  strcat( window_buffer, " | FPS: " );
 
   // Concatenate number to title variable.
-  strcat( window_buffer, num_buffer );
+  strcat_int( &window_buffer, fps );
 
   SDL_SetWindowTitle( app.window, window_buffer );
 
-  memset( num_buffer, '\0', sizeof( num_buffer ) );
-  memset( window_buffer, '\0', sizeof( window_buffer ) );
+  free(window_buffer);
 
   return interval;
 }

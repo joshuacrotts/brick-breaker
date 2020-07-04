@@ -73,7 +73,9 @@ brick_update( entity_t *b ) {
   }
 
   if ( b->animation->cycle_once ) {
-    animation_update( b );
+    b->animation->pos_x = b->x;
+    b->animation->pos_y = b->y;
+    animation_update( b->animation );
   }
 
   update_brick_status( b );
@@ -82,7 +84,7 @@ brick_update( entity_t *b ) {
 void
 brick_draw( entity_t *b ) {
   if ( b->animation->cycle_once && b->life == 4 ) {
-    animation_draw( b );
+    animation_draw( b->animation );
   } else {
     blit_texture( b->texture[0], b->x, b->y, false );
   }

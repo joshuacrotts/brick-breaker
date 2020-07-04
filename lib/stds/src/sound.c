@@ -36,12 +36,4 @@ play_sound( int16_t id, int16_t channel ) {
 }
 
 static void
-load_sounds( void ) {
-  sounds[SND_BRICK_SHATTER] = Mix_LoadWAV( "res/sfx/explode_1.ogg" );
-  sounds[SND_BRICK_BREAK]   = Mix_LoadWAV( "res/sfx/explode_2.ogg" );
-  sounds[SND_COIN]          = Mix_LoadWAV( "res/sfx/coin0.ogg" );
-  sounds[SND_EXTRA_LIFE]    = Mix_LoadWAV( "res/sfx/extra-life.ogg" );
-  sounds[SND_PAUSE]         = Mix_LoadWAV( "res/sfx/pause.ogg" );
-  load_music( "res/sfx/music/titlesong.ogg" );
-  play_music( true );
-}
+load_sounds( void ) {}
