@@ -10,7 +10,13 @@ Brick Breaker is a remake of the original arcade Arkanoid, Breakout, or Brick Br
 
 ## Dependencies
 
-In the /lib/ directory is my Standards library, converted to C. This, unlike the Java version, does not have an external component (such as a .JAR file). So, the Standards files are simply copied from that project to this one.
+In the /lib/ directory is my Standards library, converted to C. This, unlike the Java version, does not have an external component (such as a .JAR file). So, the Standards files are simply copied from that project to this one. There are, however, SDL dependencies.
+
+If you want to run the game, just download the runtime binaries at the provided links below. Conversely, if you wish to build the project, you will need to grab the development libraries for your system. For my purposes, I used the MinGW versions.
+
+1. [SDL TTF Library (sdl_ttf)](https://www.libsdl.org/projects/SDL_ttf/)
+2. [SDL Image-Loading Library (sdl_image)](https://www.libsdl.org/projects/SDL_image/)
+3. [SDL Audio Library (sdl_mixer)](https://www.libsdl.org/projects/SDL_mixer/)
 
 ## Rebuilding Brick Breaker
 
@@ -21,4 +27,4 @@ To rebuild the code, clone the repository to your computer. This project is comp
 See the Issues Tab.
 
 ## Version History
-The **master** branch encompasses all changes. A development branch is in the works.
+The **master** branch encompasses all significant changes. The **development** branch is used for in-progress modifications.
