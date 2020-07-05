@@ -30,6 +30,9 @@ extern void init_parallax_background( char *bg_directory, size_t n, float defaul
                                       float modified_scroll_speeds[], bool is_infinite );
 
 /**
+ * @warning this function is broken as of 7/4/2020. 
+ * @TODO: Fix camera offset.
+ * 
  * Updates the position of the parallax background element.
  * The offset is applied by multiplying the default scroll speed
  * multiplied by the scroll offset to give the illusion of
@@ -92,4 +95,4 @@ extern void background_draw( background_t *bg );
  */
 extern void background_die( background_t *bg );
 
-#endif
+#endif // BACKGROUND_H

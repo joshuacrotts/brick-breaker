@@ -48,7 +48,7 @@ trail_draw( trail_t *t ) {
   }
 
   SDL_SetTextureAlphaMod( t->texture, t->alpha );
-  blit_texture_rotated( t->texture, t->x, t->y, 0, t->flip );
+  blit_texture_rotated( t->texture, t->x, t->y, 0, t->flip, true );
 
   if ( !t->is_texture ) {
     SDL_SetTextureBlendMode( t->texture, SDL_BLENDMODE_NONE );

@@ -7,9 +7,11 @@
 #define VELOCITY      5.0f
 #define GRAVITY       0.3f
 
-static bool         is_moving = false;
+static bool         is_moving    = false;
+static bool         is_attacking = false;
 static animation_t *idle_animation;
 static animation_t *walk_animation;
+static animation_t *attack_animation;
 
 static void key_input_listener( void );
 static void check_bounds( void );
@@ -30,15 +32,27 @@ init_player() {
   player->y     = SCREEN_HEIGHT / 2.0f;
   player->angle = 0;
 
-  idle_animation = add_animation( "tests/res/img/player/idle/tile00", 8, 0.09f );
-  walk_animation = add_animation( "tests/res/img/player/run/tile00", 8, 0.09f );
+  idle_animation   = add_animation( "tests/res/img/player/8bitidle/idle_", 2, 0.33f );
+  walk_animation   = add_animation( "tests/res/img/player/8bitwalk/walk_", 4, 0.1f );
+  attack_animation = add_animation( "tests/res/img/player/8bitattack/attack_", 7, 0.05f );
 }
 
 void
 player_update( void ) {
   key_input_listener();
 
-  player->animation = is_moving ? walk_animation : idle_animation;
+  if ( is_moving ) {
+    player->animation = walk_animation;
+  } else if ( is_attacking ) {
+    player->animation = attack_animation;
+    if ( attack_animation->cycle_once && attack_animation->current_frame_id == attack_animation->number_of_frames - 1) {
+      is_attacking = false;
+    }
+  } else {
+    player->animation = idle_animation;
+  }
+
+  //print("%d, %d, %d", is_attacking, is_moving, attack_animation->flags);
 
   SDL_QueryTexture( player->animation->frames[player->animation->current_frame_id], NULL, NULL,
                     &player->w, &player->h );
@@ -54,9 +68,9 @@ player_update( void ) {
   check_bounds();
   animation_update( player->animation );
 
-  if ( is_moving ) {
-    add_trail( player, DECAY_RATE, INITIAL_ALPHA, player->animation->flip );
-  }
+   if ( is_attacking ) {
+     add_trail( player, DECAY_RATE, INITIAL_ALPHA, true, player->animation->flip );
+   }
 }
 
 void
@@ -84,6 +98,13 @@ key_input_listener( void ) {
   else if ( app.keyboard[SDL_SCANCODE_D] ) {
     player->dx              = VELOCITY;
     player->animation->flip = SDL_FLIP_NONE;
+  }
+
+  else if ( app.keyboard[SDL_SCANCODE_SPACE] ) {
+    is_attacking = true;
+    attack_animation->flip = player->animation->flip;
+    attack_animation->cycle_once = true;
+    attack_animation->flags |= ANIMATION_ACTIVE_MASK;
   }
 
   else {

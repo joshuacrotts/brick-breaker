@@ -84,4 +84,4 @@ extern void animation_draw( animation_t *animation );
  */
 extern void animation_die( animation_t *animation );
 
-#endif
+#endif // ANIMATION_H

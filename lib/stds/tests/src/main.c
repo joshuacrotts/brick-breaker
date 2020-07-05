@@ -49,19 +49,19 @@ init_scene( void ) {
 
   init_player();
 
-  for ( int i = 0, x = 0; i < 30; i++, x += 64 ) {
+  for ( int i = 0, x = 0; i < 30; i++, x += 48 ) {
     entity_t *e;
-    e = add_enemy( x, 620 );
+    e = add_enemy( x, 680 );
 
     stage.enemy_tail->next = e;
     stage.enemy_tail       = e;
   }
 
-  uint8_t parallax_frames = 5;
+  uint8_t parallax_frames = 1;
 
-  float parallax_scroll[5] = {0.10f, 0.15f, 0.20f, 0.25f, 0.30f};
-  init_parallax_background( "tests/res/img/background_3/Layer", parallax_frames, 4.0f,
-                            parallax_scroll, true );
+  float parallax_scroll[1] = {0.10f};//, 0.15f, 0.20f, 0.25f, 0.30f, 0.35f, 0.40f, 0.45f, 0.50f, 0.55f, 0.60f};
+  init_parallax_background( "tests/res/img/background_5/layer_", parallax_frames, 1.0f,
+                            parallax_scroll, false );
   // bg = init_background( "tests/res/img/background_0.png" );
 
   SDL_Color c1;
@@ -156,7 +156,7 @@ static void
 draw( void ) {
   draw_parallax_backgrounds();
   SDL_Color c = combine_fade_color( &f );
-  draw_rect_stroke( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 8, c.r, c.g, c.b, 0xff );
+  draw_rect_stroke( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 8, &c, 0xff );
   draw_trails();
   draw_enemies();
   player_draw();

@@ -107,8 +107,11 @@ struct Animation {
  *
  */
 struct Background {
-  int32_t  x;
-  int32_t  y;
+  float    x;
+  float    y;
+  float    scroll_x;
+  float    scroll_y;
+  
   uint32_t w;
   uint32_t h;
 

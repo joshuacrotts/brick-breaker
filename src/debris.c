@@ -45,7 +45,7 @@ debris_update( debris_t *d ) {
 
 void
 debris_draw( debris_t *d ) {
-  blit_rect( d->texture, &d->rect, d->x, d->y );
+  blit_rect( d->texture, &d->rect, d->x, d->y, false );
 }
 
 void

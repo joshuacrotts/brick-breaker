@@ -41,7 +41,7 @@ ball_update( entity_t *b ) {
 
 void
 ball_draw( entity_t *b ) {
-  blit_texture( b->texture[0], b->x, b->y, false );
+  blit_texture( b->texture[0], b->x, b->y, false, false );
 }
 
 void

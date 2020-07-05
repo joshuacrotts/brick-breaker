@@ -86,7 +86,7 @@ brick_draw( entity_t *b ) {
   if ( b->animation->cycle_once && b->life == 4 ) {
     animation_draw( b->animation );
   } else {
-    blit_texture( b->texture[0], b->x, b->y, false );
+    blit_texture( b->texture[0], b->x, b->y, false, false );
   }
 }
 

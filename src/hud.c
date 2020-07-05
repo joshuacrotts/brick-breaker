@@ -47,14 +47,19 @@ init_menu( void ) {
   play_color.g = 0xff;
   play_color.b = 0xff;
 
+  // ===== PLAY BUTTON ===== //
   play_button =
       add_button_texture( SCREEN_WIDTH / 2 - 150, SCREEN_HEIGHT / 2, "res/img/ui/buttonStock1.png",
                           "res/fonts/nes.ttf", 24, &play_color, "PLAY" );
   play_button->texture[1] = load_texture( "res/img/ui/buttonStock1h.png" );
+
+  // ===== HELP BUTTON ===== //
   help_button             = add_button_texture( SCREEN_WIDTH / 2 - 150, SCREEN_HEIGHT / 2 + 100,
                                     "res/img/ui/buttonStock1.png", "res/fonts/nes.ttf", 24,
                                     &play_color, "HELP" );
   help_button->texture[1] = load_texture( "res/img/ui/buttonStock1h.png" );
+
+  // ===== EXIT BUTTON ===== //
   exit_button             = add_button_texture( SCREEN_WIDTH / 2 - 150, SCREEN_HEIGHT / 2 + 200,
                                     "res/img/ui/buttonStock1.png", "res/fonts/nes.ttf", 24,
                                     &play_color, "QUIT" );
@@ -115,7 +120,8 @@ menu_update( void ) {
 void
 draw_HUD( void ) {
   SDL_Color c = combine_fade_color( &fadeColor );
-  draw_rect_stroke( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, INSETS, c.r, c.g, c.b, 0xff );
+  c.a = 0xff;
+  draw_rect_stroke( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, INSETS, &c, false );
 
   if ( stage.state == MENU ) {
     draw_buttons();
@@ -162,7 +168,11 @@ draw_paused( void ) {
   r.w = SCREEN_WIDTH;
   r.h = SCREEN_HEIGHT;
 
-  draw_rect( &r, 0, 0, 0, 128, true );
+  SDL_Color c;
+  c.r = c.g = c.b = 0;
+  c.a = 128;
+
+  draw_rect( &r, &c, true, false );
   int fw, fh;
   get_string_size( "PAUSED", "res/fonts/nes.ttf", 24, &fw, &fh );
   draw_text( SCREEN_WIDTH / 2 - fw / 2, SCREEN_HEIGHT / 2, 0xff, 0xff, 0xff, "res/fonts/nes.ttf",
@@ -189,7 +199,7 @@ draw_lives( SDL_Color *c ) {
   int v_offset = initial_offset + fh + offset;
 
   for ( int i = 0, x = initial_offset; i < paddle->life; i++, x += ( tw + offset ) ) {
-    blit_texture( heartTexture, x, v_offset, false );
+    blit_texture( heartTexture, x, v_offset, false, false );
   }
 }
 

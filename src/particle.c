@@ -112,15 +112,15 @@ void
 particle_draw( entity_t *e ) {
   if ( e->animation == NULL ) {
     SDL_Rect rect;
-    rect.x = ( int32_t )( e->x - app.camera.x );
-    rect.y = ( int32_t )( e->y - app.camera.y );
+    rect.x = ( int32_t )( e->x );
+    rect.y = ( int32_t )( e->y );
     rect.w = e->w;
     rect.h = e->h;
     if ( e->id_flags & ID_P_SQUARE_MASK ) {
-      draw_rect( &rect, e->color.r, e->color.g, e->color.b, e->color.a, true );
+      draw_rect( &rect, &e->color, true, false );
     } else if ( e->id_flags & ID_P_CIRCLE_MASK ) {
       uint32_t r = rect.w >> 1;
-      fill_circle( rect.x, rect.y, r, e->color.r, e->color.g, e->color.b, e->color.a );
+      fill_circle( rect.x, rect.y, r, &e->color );
     }
   } else {
     animation_draw( e->animation );

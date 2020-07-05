@@ -19,18 +19,25 @@ extern void present_scene( void );
  * Copies the graphics from the texture to a different
  * rectangle. You can specify what portion of the src
  * SDL_Texture* to render by the size attributes of the
- * SDL_Rect* pointer. Integers and floats can be passed
- * for the location parameters, but they will be down-casted
- * to integers.
+ * SDL_Rect* pointer
  */
-extern void blit_rect( SDL_Texture *texture, SDL_Rect *src, float x, float y );
+extern void blit_rect( SDL_Texture *texture, SDL_Rect *src, float x, float y, bool camera_offset );
 
 /**
  * Renders a texture, specified by src, at
  * coordinates (x, y). You may pass in both integers or
  * floating-point numbers to this function.
+ *
+ * @param SDL_Texture*
+ * @param float x
+ * @param float y
+ * @param bool if the texture should be centered or not.
+ * @param bool applies the camera offset or not.
+ *
+ * @return void.
  */
-extern void blit_texture( SDL_Texture *texture, float x, float y, bool is_center );
+extern void blit_texture( SDL_Texture *texture, float x, float y, bool is_center,
+                          bool camera_offset );
 
 /**
  * Draws a rotated SDL_Texture pointer at an x, y coordinate. The
@@ -39,13 +46,14 @@ extern void blit_texture( SDL_Texture *texture, float x, float y, bool is_center
  * @param SDL_Texture* pointer to texture object.
  * @param float x coordinate.
  * @param float y coordinate.
- * @param uint16_t angle of rotation (0 to 360).
+ * @param uint16_t angle of rotation in degrees (0 to 360).
  * @param SDL_RendererFlip flip status (SDL_FLIP_HORIZONTAL/VERTICAL).
+ * @param bool applies the camera offset or not.
  *
  * @return void.
  */
 extern void blit_texture_rotated( SDL_Texture *texture, float x, float y, uint16_t angle,
-                                  SDL_RendererFlip flip );
+                                  SDL_RendererFlip flip, bool camera_offset );
 
 /**
  * Blits a rotated SDL texture at an x and y coordinate with a given
@@ -58,16 +66,14 @@ extern void blit_texture_rotated( SDL_Texture *texture, float x, float y, uint16
  * @param scale_y scale factor on y-axis.
  * @param uint16_t angle of rotation (0 to 360).
  * @param SDL_RendererFlip flip status (SDL_FLIP_HORIZONTAL/VERTICAL)
- * @param int16_t r color value.
- * @param int16_t g color value.
- * @param int16_t b color value.
- * @param int16_t a color value.
+ * @param SDL_Color* color to apply.
+ * @param bool applies camera offset or not.
  *
  * @return void.
  */
 extern void blit_texture_color_scaled( SDL_Texture *texture, float x, float y, float scale_x,
                                        float scale_y, uint16_t angle, SDL_RendererFlip flip,
-                                       int16_t r, int16_t g, int16_t b, int16_t a );
+                                       SDL_Color *c, bool camera_offset );
 
 /**
  * Blits a rotated SDL texture at an x and y coordinate with a given
@@ -81,11 +87,13 @@ extern void blit_texture_color_scaled( SDL_Texture *texture, float x, float y, f
  * @param float scale_y
  * @param uint16_t angle
  * @param SDL_RendererFlip flip status (SDL_FLIP_HORIZONTAL/VERTICAL)
+ * @param bool applies the camera offset or not.
  *
  * @return void.
  */
 extern void blit_texture_scaled( SDL_Texture *texture, float x, float y, float scale_x,
-                                 float scale_y, uint16_t angle, SDL_RendererFlip flip );
+                                 float scale_y, uint16_t angle, SDL_RendererFlip flip,
+                                 bool camera_offset );
 
 /**
  * Draws a rectangle with the supplied color to the screen. The
@@ -93,15 +101,13 @@ extern void blit_texture_scaled( SDL_Texture *texture, float x, float y, float s
  * If the last parameter is true, the shape will be filled.
  *
  * @param SDL_Rect*
- * @param uint8_t r
- * @param uint8_t g
- * @param uint8_t b
- * @param uint8_t a
+ * @param SDL_Color color to fill.
  * @param bool
+ * @param bool applies the camera offset or not.
  *
  * @return void.
  */
-extern void draw_rect( SDL_Rect *rect, uint8_t r, uint8_t g, uint8_t b, uint8_t a, bool is_center );
+extern void draw_rect( SDL_Rect *rect, SDL_Color *c, bool is_center, bool camera_offset );
 
 /**
  * Draws a rectangle with the specified stroke (pixel width) and color.
@@ -114,15 +120,13 @@ extern void draw_rect( SDL_Rect *rect, uint8_t r, uint8_t g, uint8_t b, uint8_t 
  * @param uint32_t w
  * @param uint32_t h
  * @param uint32_t stroke thickness
- * @param uint8_t r
- * @param uint8_t g
- * @param uint8_t b
- * @param uint8_t a
+ * @param SDL_Color *c color.
+ * @param bool applies the camera offset or not.
  *
  * @return void.
  */
 extern void draw_rect_stroke( int32_t x, int32_t y, uint32_t w, uint32_t h, uint32_t thickness,
-                              uint8_t r, uint8_t g, uint8_t b, uint8_t a );
+                              SDL_Color *c, bool camera_offset );
 
 /**
  * Draws a circle. Simple as that. Takes in the circle's center coordinates,
@@ -131,15 +135,11 @@ extern void draw_rect_stroke( int32_t x, int32_t y, uint32_t w, uint32_t h, uint
  * @param int32_t x-center of circle.
  * @param int32_t y-center of circle.
  * @param uint32_t radius of circle.
- * @param uint8_t r
- * @param uint8_t g
- * @param uint8_t b
- * @param uint8_t a
+ * @param SDL_Color *c color to draw.
  *
  * @return void.
  */
-extern void draw_circle( int32_t center_x, int32_t center_y, uint32_t radius, uint8_t r, uint8_t g,
-                         uint8_t b, uint8_t a );
+extern void draw_circle( int32_t center_x, int32_t center_y, uint32_t radius, SDL_Color *c );
 
 /**
  * Fills a circle. Simple as that.
@@ -147,21 +147,16 @@ extern void draw_circle( int32_t center_x, int32_t center_y, uint32_t radius, ui
  * @param int32_t x-center of circle.
  * @param int32_t y-center of circle.
  * @param uint32_t radius of circle.
- * @param uint8_t r
- * @param uint8_t g
- * @param uint8_t b
- * @param uint8_t a
+ * @param SDL_Color *c color to fill.
  *
  * @return void.
  */
-extern void fill_circle( int32_t center_x, int32_t center_y, uint32_t radius, uint8_t r, uint8_t g,
-                         uint8_t b, uint8_t a );
+extern void fill_circle( int32_t center_x, int32_t center_y, uint32_t radius, SDL_Color *c );
 
 /*
  * Draws a line with the specified color to the screen.
  */
-extern void draw_line( float x1, float y1, float x2, float y2, uint8_t r, uint8_t g, uint8_t b,
-                       uint8_t a );
+extern void draw_line( float x1, float y1, float x2, float y2, SDL_Color *c );
 
 /*
  * Loads an image from the specified path. An error is

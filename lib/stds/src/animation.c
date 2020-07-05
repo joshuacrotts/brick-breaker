@@ -113,6 +113,7 @@ animation_update( animation_t *a ) {
       if ( a->cycle_once ) {
         a->flags ^= ANIMATION_ACTIVE_MASK;
         a->cycle_once = false;
+        a->current_frame_id = 0;
         return;
       }
     }
@@ -123,7 +124,7 @@ void
 animation_draw( animation_t *a ) {
   if ( a->flags & ANIMATION_ACTIVE_MASK ) {
     if ( a->id_flags & STD_ANIMATION_MASK ) {
-      blit_texture_rotated( a->frames[a->current_frame_id], a->pos_x, a->pos_y, a->angle, a->flip);
+      blit_texture_rotated( a->frames[a->current_frame_id], a->pos_x, a->pos_y, a->angle, a->flip, true);
     } else if ( a->id_flags & SPRITE_SHEET_MASK ) {
       // Yes, the math IS correct; don't second-guess yourself!
       // The offset is due to the RECTANGLE!
@@ -135,7 +136,7 @@ animation_draw( animation_t *a ) {
       curr_rect.y = ( int32_t ) a->splice_y;
       curr_rect.w = a->w;
       curr_rect.h = a->h;
-      blit_rect( a->current_texture, &curr_rect, a->pos_x, a->pos_y );
+      blit_rect( a->current_texture, &curr_rect, a->pos_x, a->pos_y, true );
     }
   }
 }

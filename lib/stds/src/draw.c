@@ -15,11 +15,11 @@ present_scene() {
 }
 
 void
-blit_texture( SDL_Texture *texture, float x, float y, bool is_center ) {
+blit_texture( SDL_Texture *texture, float x, float y, bool is_center, bool camera_offset ) {
   SDL_FRect dest;
 
-  dest.x = ( x - app.camera.x );
-  dest.y = ( y - app.camera.y );
+  dest.x = camera_offset ? x - app.camera.x : x;
+  dest.y = camera_offset ? y - app.camera.y : y;
 
   int32_t w, h;
 
@@ -37,10 +37,10 @@ blit_texture( SDL_Texture *texture, float x, float y, bool is_center ) {
 }
 
 void
-blit_rect( SDL_Texture *texture, SDL_Rect *src, float x, float y ) {
+blit_rect( SDL_Texture *texture, SDL_Rect *src, float x, float y, bool camera_offset ) {
   SDL_FRect dest;
-  dest.x = ( x - app.camera.x );
-  dest.y = ( y - app.camera.y );
+  dest.x = camera_offset ? x - app.camera.x : x;
+  dest.y = camera_offset ? y - app.camera.y : y;
 
   dest.w = src->w;
   dest.h = src->h;
@@ -48,10 +48,11 @@ blit_rect( SDL_Texture *texture, SDL_Rect *src, float x, float y ) {
 }
 
 void
-blit_texture_rotated( SDL_Texture *texture, float x, float y, uint16_t angle, SDL_RendererFlip flip ) {
+blit_texture_rotated( SDL_Texture *texture, float x, float y, uint16_t angle,
+                      SDL_RendererFlip flip, bool camera_offset ) {
   SDL_FRect dest;
-  dest.x = ( x - app.camera.x );
-  dest.y = ( y - app.camera.y );
+  dest.x = camera_offset ? x - app.camera.x : x;
+  dest.y = camera_offset ? y - app.camera.y : y;
   int32_t w, h;
 
   SDL_QueryTexture( texture, NULL, NULL, &w, &h );
@@ -64,7 +65,8 @@ blit_texture_rotated( SDL_Texture *texture, float x, float y, uint16_t angle, SD
 
 void
 blit_texture_color_scaled( SDL_Texture *texture, float x, float y, float scale_x, float scale_y,
-                           uint16_t angle, SDL_RendererFlip flip, int16_t r, int16_t g, int16_t b, int16_t a ) {
+                           uint16_t angle, SDL_RendererFlip flip, SDL_Color *c,
+                           bool camera_offset ) {
   uint32_t texture_width  = 0;
   uint32_t texture_height = 0;
 
@@ -72,15 +74,16 @@ blit_texture_color_scaled( SDL_Texture *texture, float x, float y, float scale_x
 
   // Apply the scaling procedure to the image.
   SDL_FRect dest_rect;
-  dest_rect.x = ( x - app.camera.x );
-  dest_rect.y = ( y - app.camera.y );
+
+  dest_rect.x = camera_offset ? x - app.camera.x : x;
+  dest_rect.y = camera_offset ? y - app.camera.y : y;
   dest_rect.w = ( texture_width * scale_x );
   dest_rect.h = ( texture_height * scale_y );
 
-  // If all four color values are less than 0, don't draw a color.
-  if ( r >= 0 && g >= 0 && b >= 0 && a >= 0 ) {
-    SDL_SetTextureColorMod( texture, r, g, b );
-    SDL_SetTextureAlphaMod( texture, a );
+  // If the color pointer is not null, draw a color.
+  if ( c != NULL ) {
+    SDL_SetTextureColorMod( texture, c->r, c->g, c->b );
+    SDL_SetTextureAlphaMod( texture, c->a );
   }
 
   SDL_RenderCopyExF( app.renderer, texture, NULL, &dest_rect, angle, NULL, flip );
@@ -88,19 +91,21 @@ blit_texture_color_scaled( SDL_Texture *texture, float x, float y, float scale_x
 
 void
 blit_texture_scaled( SDL_Texture *texture, float x, float y, float scale_x, float scale_y,
-                     uint16_t angle, SDL_RendererFlip flip ) {
+                     uint16_t angle, SDL_RendererFlip flip, bool camera_offset ) {
 
   // Camera offsets are applied in color_scaled method.
-  blit_texture_color_scaled( texture, x, y, scale_x, scale_y, angle, flip, -1, -1, -1, -1);
+  blit_texture_color_scaled( texture, x, y, scale_x, scale_y, angle, flip, NULL, camera_offset );
 }
 
 void
-draw_rect( SDL_Rect *rect, uint8_t r, uint8_t g, uint8_t b, uint8_t a, bool is_filled ) {
+draw_rect( SDL_Rect *rect, SDL_Color *c, bool is_filled, bool camera_offset ) {
   SDL_SetRenderDrawBlendMode( app.renderer, SDL_BLENDMODE_BLEND );
-  SDL_SetRenderDrawColor( app.renderer, r, g, b, a );
+  SDL_SetRenderDrawColor( app.renderer, c->r, c->g, c->b, c->a );
 
-  rect->x -= app.camera.x;
-  rect->y -= app.camera.y;
+  if ( camera_offset ) {
+    rect->x -= app.camera.x;
+    rect->y -= app.camera.y;
+  }
 
   if ( is_filled ) {
     SDL_RenderFillRect( app.renderer, rect );
@@ -111,15 +116,17 @@ draw_rect( SDL_Rect *rect, uint8_t r, uint8_t g, uint8_t b, uint8_t a, bool is_f
 }
 
 void
-draw_rect_stroke( int32_t x, int32_t y, uint32_t w, uint32_t h, uint32_t stroke, uint8_t r,
-                  uint8_t g, uint8_t b, uint8_t a ) {
+draw_rect_stroke( int32_t x, int32_t y, uint32_t w, uint32_t h, uint32_t stroke, SDL_Color *c,
+                  bool camera_offset ) {
   if ( stroke <= 0 ) {
     SDL_LogInfo( SDL_LOG_CATEGORY_APPLICATION,
                  "Error: stroke %d cannot be a negative or zero value!", stroke );
     exit( EXIT_FAILURE );
   } else {
-    x += app.camera.x;
-    y += app.camera.y;
+    if ( camera_offset ) {
+      x += app.camera.x;
+      y += app.camera.y;
+    }
 
     SDL_Rect r1;
     SDL_Rect r2;
@@ -140,32 +147,32 @@ draw_rect_stroke( int32_t x, int32_t y, uint32_t w, uint32_t h, uint32_t stroke,
 
     // BL to BR
     r3.x = x;
-    r3.y = h - stroke + app.camera.y;
+    
+    r3.y = camera_offset ? h - stroke + app.camera.y : h - stroke;
     r3.w = w;
     r3.h = stroke;
 
-    r4.x = w - stroke + app.camera.x;
+    r4.x = camera_offset ? w - stroke + app.camera.x : w - stroke;
     r4.y = y;
     r4.w = stroke;
     r4.h = h;
 
-    draw_rect( &r1, r, g, b, a, true );
-    draw_rect( &r2, r, g, b, a, true );
-    draw_rect( &r3, r, g, b, a, true );
-    draw_rect( &r4, r, g, b, a, true );
+    draw_rect( &r1, c, true, camera_offset );
+    draw_rect( &r2, c, true, camera_offset );
+    draw_rect( &r3, c, true, camera_offset );
+    draw_rect( &r4, c, true, camera_offset );
   }
 }
 
 void
-draw_line( float x1, float y1, float x2, float y2, uint8_t r, uint8_t g, uint8_t b, uint8_t a ) {
-  SDL_SetRenderDrawColor( app.renderer, r, g, b, a );
+draw_line( float x1, float y1, float x2, float y2, SDL_Color *c ) {
+  SDL_SetRenderDrawColor( app.renderer, c->r, c->g, c->b, c->a );
   SDL_RenderDrawLine( app.renderer, ( int32_t ) x1, ( int32_t ) y1, ( int32_t ) x2,
                       ( int32_t ) y2 );
 }
 
 void
-draw_circle( int32_t center_x, int32_t center_y, uint32_t radius, uint8_t r, uint8_t g, uint8_t b,
-             uint8_t a ) {
+draw_circle( int32_t center_x, int32_t center_y, uint32_t radius, SDL_Color *c ) {
   const int32_t diameter = ( radius * 2 );
 
   int32_t x     = ( radius - 1 );
@@ -174,7 +181,7 @@ draw_circle( int32_t center_x, int32_t center_y, uint32_t radius, uint8_t r, uin
   int32_t ty    = 1;
   int32_t error = ( tx - diameter );
 
-  SDL_SetRenderDrawColor( app.renderer, r, g, b, a );
+  SDL_SetRenderDrawColor( app.renderer, c->r, c->g, c->b, c->a );
   while ( x >= y ) {
     //  Each of the following renders an octant of the circle
     SDL_RenderDrawPoint( app.renderer, center_x + x, center_y - y );
@@ -201,7 +208,7 @@ draw_circle( int32_t center_x, int32_t center_y, uint32_t radius, uint8_t r, uin
 }
 
 void
-fill_circle( int32_t x, int32_t y, uint32_t radius, uint8_t r, uint8_t g, uint8_t b, uint8_t a ) {
+fill_circle( int32_t x, int32_t y, uint32_t radius, SDL_Color *c ) {
   int offsetx, offsety, d;
   int status;
 
@@ -209,7 +216,7 @@ fill_circle( int32_t x, int32_t y, uint32_t radius, uint8_t r, uint8_t g, uint8_
   offsety = radius;
   d       = radius - 1;
   status  = 0;
-  SDL_SetRenderDrawColor( app.renderer, r, g, b, a );
+  SDL_SetRenderDrawColor( app.renderer, c->r, c->g, c->b, c->a );
 
   while ( offsety >= offsetx ) {
     status +=

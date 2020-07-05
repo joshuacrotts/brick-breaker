@@ -1,6 +1,8 @@
 #include "../include/transition.h"
 
-#define MUSIC_FADE 3000
+#define MUSIC_FADE           3000
+#define TRANSITION_LIFE_MULT 10
+#define MAX_ALPHA            255
 
 static int16_t life;
 static int16_t alpha;
@@ -15,14 +17,14 @@ activate_transition( bool restart ) {
   if ( app.game_state != TRANSITION ) {
     Mix_FadeOutMusic( MUSIC_FADE );
     app.game_state = TRANSITION;
-    life           = FPS * 10;
+    life           = FPS * TRANSITION_LIFE_MULT;
     alpha          = 0;
   }
 }
 
 void
 transition_update( void ) {
-  if ( alpha < 255 ) {
+  if ( alpha < MAX_ALPHA ) {
     alpha++;
   } else {
     remove_balls();
@@ -40,5 +42,8 @@ transition_update( void ) {
 
 void
 transition_draw( void ) {
-  draw_rect( &r, 0, 0, 0, alpha, true );
+  SDL_Color c;
+  c.r = c.g = c.b = 0;
+  c.a             = alpha;
+  draw_rect( &r, &c, true, false );
 }
