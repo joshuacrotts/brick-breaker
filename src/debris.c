@@ -37,7 +37,7 @@ debris_update( debris_t *d ) {
 
   d->dy += 0.5f;
 
-  if ( d->y > SCREEN_HEIGHT ) {
+  if ( d->y > app.SCREEN_HEIGHT ) {
     d->flags |= DEATH_MASK;
     return;
   }

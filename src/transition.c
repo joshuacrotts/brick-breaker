@@ -8,11 +8,14 @@ static int16_t life;
 static int16_t alpha;
 static bool    is_restart;
 
-static SDL_Rect r = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+static SDL_Rect r;
 
 void
 activate_transition( bool restart ) {
   is_restart = restart;
+  r.x = r.y = 0;
+  r.w       = app.SCREEN_WIDTH;
+  r.h       = app.SCREEN_HEIGHT;
 
   if ( app.game_state != TRANSITION ) {
     Mix_FadeOutMusic( MUSIC_FADE );

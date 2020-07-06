@@ -6,6 +6,11 @@
 
 #include "../include/main.h"
 
+#define S_WIDTH  590
+#define S_HEIGHT 960
+#define L_WIDTH  0
+#define L_HEIGHT 0
+
 static void init_scene( void );
 static void draw( void );
 static void tick( void );
@@ -30,7 +35,7 @@ static void draw_trails( void );
 // necessary to run a window.
 int
 main( int argc, char *argv[] ) {
-  init_game( "Brick Breaker in C", SCREEN_WIDTH, SCREEN_HEIGHT );
+  init_game( "Brick Breaker in C", S_WIDTH, S_HEIGHT, L_WIDTH, L_HEIGHT );
   init_app_structures();
   init_scene();
   init_menu();
@@ -335,8 +340,9 @@ check_pregame( void ) {
   // and no ball or powerups.
   if ( app.keyboard[SDL_SCANCODE_SPACE] && app.game_state == PREGAME ) {
     app.keyboard[SDL_SCANCODE_SPACE] = 0;
-    entity_t *b = add_ball( random_float( SCREEN_WIDTH / 3, SCREEN_WIDTH / 2 + SCREEN_WIDTH / 4 ),
-                            SCREEN_HEIGHT / 2, 0 );
+    entity_t *b =
+        add_ball( random_float( app.SCREEN_WIDTH / 3, app.SCREEN_WIDTH / 2 + app.SCREEN_WIDTH / 4 ),
+                  app.SCREEN_HEIGHT / 2, 0 );
     currentLevel->ball_tail->next = b;
     currentLevel->ball_tail       = b;
     app.game_state                = RUNNING;

@@ -15,8 +15,8 @@ init_paddle( void ) {
   paddle->texture[0] = load_texture( "res/img/paddle.png" );
   SDL_QueryTexture( paddle->texture[0], NULL, NULL, &paddle->w, &paddle->h );
 
-  paddle->x       = SCREEN_WIDTH / 2 - paddle->w / 2;
-  paddle->y       = SCREEN_HEIGHT - 40;
+  paddle->x       = app.SCREEN_WIDTH / 2 - paddle->w / 2;
+  paddle->y       = app.SCREEN_HEIGHT - 40;
   paddle->scale_x = 1.0f;
   paddle->scale_y = 1.0f;
   paddle->id_flags |= ID_PLAYER_MASK;
@@ -46,12 +46,12 @@ static void
 check_bounds( void ) {
   if ( paddle->x < 0 ) {
     paddle->x = 0;
-  } else if ( paddle->x + paddle->w > SCREEN_WIDTH ) {
-    paddle->x = SCREEN_WIDTH - paddle->w;
+  } else if ( paddle->x + paddle->w > app.SCREEN_WIDTH ) {
+    paddle->x = app.SCREEN_WIDTH - paddle->w;
   } else if ( paddle->y < 0 ) {
     paddle->y = 0;
-  } else if ( paddle->y + paddle->h > SCREEN_HEIGHT ) {
-    paddle->y = SCREEN_HEIGHT - paddle->h;
+  } else if ( paddle->y + paddle->h > app.SCREEN_HEIGHT ) {
+    paddle->y = app.SCREEN_HEIGHT - paddle->h;
   }
 }
 

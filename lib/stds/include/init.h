@@ -10,12 +10,14 @@ app_t app;
  * sets up the game loop structure.
  *
  * @param const char *window title.
- * @param uint16_t window width.
- * @param uint16_t window height.
+ * @param uint32_t window width.
+ * @param uint32_t window height.
+ * @param uint32_t level or width that the camera cannot exceed.
+ * @param uint32_t level or height that the camera cannot exceed.
  *
  * @return void.
  */
-extern void init_game( const char *, uint16_t, uint16_t );
+extern void init_game( const char *, uint32_t, uint32_t, uint32_t, uint32_t );
 
 /**
  * Initializes the SDL sound context.

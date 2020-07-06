@@ -128,7 +128,7 @@ add_font( char *font_file, uint16_t size ) {
   f->font = TTF_OpenFont( font_file, size );
 
   if ( f->font == NULL ) {
-    SDL_LogInfo( SDL_LOG_CATEGORY_APPLICATION, "Could not load font %s, %d.", font_file, size );
+    SDL_LogInfo( SDL_LOG_CATEGORY_APPLICATION, "Could not load font_t %s, %d. Is the path correct?", font_file, size );
   }
 
   strcpy( f->name, font_file );

@@ -1,5 +1,7 @@
 #include "../include/score_item.h"
 
+#define BRICK_SCORE 100
+
 void
 add_score_item( float x, float y, uint32_t score ) {
   score_item_t *s;
@@ -10,7 +12,7 @@ add_score_item( float x, float y, uint32_t score ) {
   s->y    = y;
   s->life = 100;
 
-  s->score = score == 0 ? 100 : score;
+  s->score = score == 0 ? BRICK_SCORE : score;
 
   if ( currentLevel->last_break_timer && score == 0 ) {
     s->score *= currentLevel->last_break_timer;

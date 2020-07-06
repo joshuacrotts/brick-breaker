@@ -107,11 +107,11 @@ struct Animation {
  *
  */
 struct Background {
-  float    x;
-  float    y;
-  float    scroll_x;
-  float    scroll_y;
-  
+  float x;
+  float y;
+  float scroll_x;
+  float scroll_y;
+
   uint32_t w;
   uint32_t h;
 
@@ -165,7 +165,12 @@ struct Mouse {
  *
  */
 struct App {
-  uint16_t    keyboard[MAX_KEYBOARD_KEYS];
+  uint16_t keyboard[MAX_KEYBOARD_KEYS];
+
+  uint32_t    SCREEN_WIDTH;
+  uint32_t    SCREEN_HEIGHT;
+  uint32_t    LEVEL_WIDTH;
+  uint32_t    LEVEL_HEIGHT;
   const char *original_title;
 
   SDL_Renderer *renderer;

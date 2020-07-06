@@ -7,7 +7,7 @@ check_aabb_collision( entity_t *a, entity_t *b ) {
   float dx = ( b->x + b->w / 2.0f ) - ( a->x + a->w / 2.0f );
   float dy = ( b->y + b->h / 2.0f ) - ( a->y + a->h / 2.0f );
 
-  if ( abs( ( int ) dx ) < w && abs( ( int ) dy ) < h ) {
+  if ( fabs( dx ) < w && fabs( dy ) < h ) {
     float wy = w * dy;
     float hx = h * dx;
 

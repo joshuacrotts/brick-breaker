@@ -1,6 +1,11 @@
 #include "../include/main.h"
 #include "../include/player.h"
 
+#define S_WIDTH  700
+#define S_HEIGHT 700
+#define L_WIDTH  3000
+#define L_HEIGHT S_HEIGHT
+
 static background_t *bg;
 
 static void init_scene( void );
@@ -20,11 +25,16 @@ static void draw_parallax_backgrounds( void );
 static fade_color_t f;
 static SDL_Rect     screen_edge;
 
-// Barebones game. This is the minimum amount of code
-// necessary to run a window.
+/*
+ * Barebones game. This is the minimum amount of code
+ * necessary to run a window. To redefine the level/screen
+ * dimensions, just #undef SCREEN_WIDTH/HEIGHT or LEVEL_WIDTH/HEIGHT
+ * and redefine them immediately below it.
+ */
 int
 main( int argc, char *argv[] ) {
-  init_game( "Trail, Parallax Test, and Button Test", SCREEN_WIDTH, SCREEN_HEIGHT );
+
+  init_game( "Trail, Parallax Test, and Button Test", S_WIDTH, S_HEIGHT, L_WIDTH, L_HEIGHT );
   init_app_structures();
   init_scene();
   loop();
@@ -51,16 +61,17 @@ init_scene( void ) {
 
   for ( int i = 0, x = 0; i < 30; i++, x += 48 ) {
     entity_t *e;
-    e = add_enemy( x, 680 );
+    e = add_enemy( x, app.LEVEL_HEIGHT - 20 );
 
     stage.enemy_tail->next = e;
     stage.enemy_tail       = e;
   }
 
-  uint8_t parallax_frames = 1;
+  uint8_t parallax_frames = 11;
 
-  float parallax_scroll[1] = {0.10f};//, 0.15f, 0.20f, 0.25f, 0.30f, 0.35f, 0.40f, 0.45f, 0.50f, 0.55f, 0.60f};
-  init_parallax_background( "tests/res/img/background_5/layer_", parallax_frames, 1.0f,
+  float parallax_scroll[11] = {0.10f, 0.15f, 0.20f, 0.25f, 0.30f, 0.35f,
+                               0.40f, 0.45f, 0.50f, 0.55f, 0.60f};
+  init_parallax_background( "tests/res/img/background_4/layer_0", parallax_frames, 1.0f,
                             parallax_scroll, false );
   // bg = init_background( "tests/res/img/background_0.png" );
 
@@ -156,7 +167,7 @@ static void
 draw( void ) {
   draw_parallax_backgrounds();
   SDL_Color c = combine_fade_color( &f );
-  draw_rect_stroke( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 8, &c, 0xff );
+  draw_rect_stroke( 0, 0, app.SCREEN_WIDTH, app.SCREEN_HEIGHT, 8, &c, 0xff );
   draw_trails();
   draw_enemies();
   player_draw();

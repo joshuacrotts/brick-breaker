@@ -65,7 +65,7 @@ powerup_update( entity_t *p ) {
 
   p->y += POWERUP_DESCENT;
 
-  if ( p->y > SCREEN_HEIGHT ) {
+  if ( p->y > app.SCREEN_HEIGHT ) {
     p->flags |= DEATH_MASK;
   }
 }
@@ -107,8 +107,8 @@ void
 powerup_multi_activate( entity_t *p ) {
   entity_t *b1;
   entity_t *b2;
-  b1 = add_ball( random_float( 300, 600 ), SCREEN_HEIGHT / 2, 0 );
-  b2 = add_ball( random_float( 300, 600 ), SCREEN_HEIGHT / 2, 0 );
+  b1 = add_ball( random_float( 300, 600 ), app.SCREEN_HEIGHT / 2, 0 );
+  b2 = add_ball( random_float( 300, 600 ), app.SCREEN_HEIGHT / 2, 0 );
 
   currentLevel->ball_tail->next = b1;
   currentLevel->ball_tail       = b1;

@@ -28,8 +28,8 @@ init_player() {
 
   memset( player, 0, sizeof( entity_t ) );
 
-  player->x     = SCREEN_WIDTH / 2.0f;
-  player->y     = SCREEN_HEIGHT / 2.0f;
+  player->x     = app.SCREEN_WIDTH / 2.0f;
+  player->y     = app.SCREEN_HEIGHT / 2.0f;
   player->angle = 0;
 
   idle_animation   = add_animation( "tests/res/img/player/8bitidle/idle_", 2, 0.33f );
@@ -121,15 +121,15 @@ check_bounds( void ) {
     player->x = 0;
   }
 
-  if ( player->x + player->w > LEVEL_WIDTH ) {
-    player->x = LEVEL_WIDTH - player->w;
+  if ( player->x + player->w > app.LEVEL_WIDTH ) {
+    player->x = app.LEVEL_WIDTH - player->w;
   }
 
   if ( player->y < 0 ) {
     player->y = 0;
   }
 
-  if ( player->y + player->h > LEVEL_HEIGHT ) {
-    player->y = LEVEL_HEIGHT - player->h;
+  if ( player->y + player->h > app.LEVEL_HEIGHT ) {
+    player->y = app.LEVEL_HEIGHT - player->h;
   }
 }

@@ -62,7 +62,7 @@ struct Debris {
   uint32_t     flags;
   SDL_Texture *texture;
   SDL_Rect     rect;
-  debris_t    *next;
+  debris_t *   next;
 };
 
 struct Stage {

@@ -57,13 +57,13 @@ check_bounds( entity_t *b ) {
   if ( b->x < 0 ) {
     b->x  = 0;
     b->dx = -b->dx;
-  } else if ( b->x + b->w > SCREEN_WIDTH ) {
+  } else if ( b->x + b->w > app.SCREEN_WIDTH ) {
     b->x -= b->w;
     b->dx = -b->dx;
   } else if ( b->y < 0 ) {
     b->y  = 0;
     b->dy = -b->dy;
-  } else if ( b->y + b->h > SCREEN_HEIGHT ) {
+  } else if ( b->y + b->h > app.SCREEN_HEIGHT ) {
     currentLevel->ball_count--;
     spawn_ball_particles( b );
     b->flags |= DEATH_MASK;

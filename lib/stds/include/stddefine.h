@@ -1,10 +1,6 @@
 #ifndef DEFS_H
 #define DEFS_H
 
-#define LEVEL_WIDTH             3000
-#define LEVEL_HEIGHT            700
-#define SCREEN_WIDTH            590
-#define SCREEN_HEIGHT           960
 #define EXIT_ERROR              1
 #define EXIT_SUCCESS            0
 #define MAX_KEYBOARD_KEYS       350

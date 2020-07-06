@@ -2,13 +2,14 @@
 
 static bool debug_mode = false;
 
-static void init_SDL( const char *, uint16_t, uint16_t );
+static void init_SDL( const char *, uint32_t, uint32_t, uint32_t, uint32_t );
 static void init_audio_context( void );
 static void cleanup( void );
 
 void
-init_game( const char *window_name, uint16_t window_width, uint16_t window_height ) {
-  init_SDL( window_name, window_width, window_height );
+init_game( const char *window_name, uint32_t window_width, uint32_t window_height,
+           uint32_t level_width, uint32_t level_height ) {
+  init_SDL( window_name, window_width, window_height, level_width, level_height );
   init_sounds();
   init_fonts();
 
@@ -31,7 +32,8 @@ toggle_debug_mode( bool db ) {
  * @return none.
  */
 static void
-init_SDL( const char *window_name, uint16_t window_width, uint16_t window_height ) {
+init_SDL( const char *window_name, uint32_t window_width, uint32_t window_height,
+          uint32_t level_width, uint32_t level_height ) {
   int8_t renderer_flags;
   int8_t window_flags;
 
@@ -43,6 +45,10 @@ init_SDL( const char *window_name, uint16_t window_width, uint16_t window_height
   }
 
   memset( &app, 0, sizeof( app_t ) );
+  app.SCREEN_WIDTH  = window_width;
+  app.SCREEN_HEIGHT = window_height;
+  app.LEVEL_WIDTH   = level_width;
+  app.LEVEL_HEIGHT  = level_height;
 
   // Initialize SDL and exit if we fail.
   if ( SDL_Init( SDL_INIT_EVERYTHING ) < 0 ) {
