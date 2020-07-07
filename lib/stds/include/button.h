@@ -28,33 +28,33 @@ extern void draw_buttons( void );
  * @param uint32_t w width of button.
  * @param uint32_t h height of button.
  * @param bool true if the button should be filled with color, false otherwise.
- * @param char* string to font path used for the text.
+ * @param const char* string to font path used for the text.
  * @param uint16_t size of font.
  * @param SDL_Color* color to draw font.
- * @param char* text to draw.
+ * @param const char* text to draw.
  *
  * @return button_t pointer.
  */
 extern button_t *add_button( float x, float y, uint32_t w, uint32_t h, bool filled,
-                             char *font_directory, uint16_t font_size, SDL_Color *font_color,
-                             char *text );
+                             const char *font_directory, uint16_t font_size, SDL_Color *font_color,
+                             const char *text );
 
 /**
  * Adds a button with a texture.
  *
  * @param float x top-left x pos of button.
  * @param float y top-left y pos of button.
- * @param char* string to texture for button.
- * @param char* string to font path used for the text.
+ * @param const char* string to texture for button.
+ * @param const char* string to font path used for the text.
  * @param uint16_t size of font.
  * @param SDL_Color* color to draw font.
- * @param char* text to draw.
+ * @param const char* text to draw.
  *
  * @return button_t pointer.
  */
-extern button_t *add_button_texture( float x, float y, char *texture_directory,
-                                     char *font_directory, uint16_t font_size, SDL_Color *color,
-                                     char *text );
+extern button_t *add_button_texture( float x, float y, const char *texture_directory,
+                                     const char *font_directory, uint16_t font_size,
+                                     SDL_Color *color, const char *text );
 
 /**
  * Updates the logic for the button parameter.

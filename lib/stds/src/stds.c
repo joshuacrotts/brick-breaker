@@ -1,5 +1,6 @@
 #include "../include/stds.h"
 
+static char number_buffer[MAX_INT_DIGITS];
 static char text_buffer[MAX_LINE_LENGTH];
 static bool seed = false;
 
@@ -90,7 +91,7 @@ to_degrees( float radians ) {
 }
 
 char *
-str_substring( char *str, int first, int last ) {
+str_substring( const char *str, int first, int last ) {
   uint32_t s_len = strlen( str );
   assert( s_len > 0 && first < last && first >= 0 && last <= s_len );
 
@@ -100,7 +101,7 @@ str_substring( char *str, int first, int last ) {
 }
 
 int32_t
-str_index_of( char *s, const char *search_str ) {
+str_index_of( const char *s, const char *search_str ) {
   uint32_t s_len          = strlen( s );
   uint32_t search_str_len = strlen( search_str );
 
@@ -116,15 +117,11 @@ str_index_of( char *s, const char *search_str ) {
   return -1;
 }
 
-void
-strcat_int( char **s, int32_t n ) {
-  // Create a char buffer with the number of digits with an
-  // extra character for null terminator.
-  int32_t digits = ( int32_t ) ceil( log10( n ) ) + 1;
-  char *  buffer = malloc( ( sizeof( char ) * strlen( *s ) ) + digits );
-  strncpy( buffer, *s, digits + strlen( *s ) );
-  char num_buf[MAX_INT_DIGITS];
-  sprintf( num_buf, "%d", n );
-  strncat( buffer, num_buf, digits );
-  *s = buffer;
+char *
+strcat_int( const char *s, int32_t n ) {
+  memset(text_buffer, '\0', sizeof(text_buffer));
+  strncat(text_buffer, s, strlen(s));
+  int32_t digits = sprintf(number_buffer, "%d", n);
+  strncat(text_buffer, number_buffer, digits);
+  return text_buffer;
 }

@@ -15,7 +15,7 @@ extern app_t app;
  * images all have a common suffix numbering scheme as well,
  * starting at 0.
  *
- * @param char* string to directory of parallax background images.
+ * @param const char* string to directory of parallax background images.
  * @param size_t number of parallax frames.
  * @param float default scroll speed shared across all frames.
  * @param float[] array of modified scroll speeds. These values alter
@@ -26,8 +26,9 @@ extern app_t app;
  *        the image are rendered side-by-side to provide the illusion
  *        of an infinite background.
  */
-extern void init_parallax_background( char *bg_directory, size_t n, float default_scroll_speed,
-                                      float modified_scroll_speeds[], bool is_infinite );
+extern void init_parallax_background( const char *bg_directory, size_t n,
+                                      float default_scroll_speed, float modified_scroll_speeds[],
+                                      bool is_infinite );
 
 /**
  * Updates the position of the parallax background element.
@@ -56,11 +57,11 @@ extern void parallax_background_draw( parallax_background_t *parallax );
  * Initializes the background image specified by char*.
  * It is drawn at (0, 0), or the top-left of the window.
  *
- * @param char *file location of background image.
+ * @param const char *file location of background image.
  *
  * @return void.
  */
-extern background_t *init_background( char *bg_directory );
+extern background_t *init_background( const char *bg_directory );
 
 /**
  * Continuously updates the position of the background depending

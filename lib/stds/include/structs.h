@@ -20,10 +20,10 @@ typedef struct Button             button_t;
  *
  */
 struct Button {
-  char *  text;
-  char *  font_path;
-  bool    is_filled;
-  uint8_t texture_id;
+  const char *text;
+  const char *font_path;
+  bool        is_filled;
+  uint8_t     texture_id;
 
   int32_t  text_x;
   int32_t  text_y;

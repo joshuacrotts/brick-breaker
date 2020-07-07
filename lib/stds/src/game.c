@@ -87,7 +87,7 @@ update_window_title( uint32_t interval, void *args ) {
   strcat( window_buffer, " | FPS: " );
 
   // Concatenate number to title variable.
-  strcat_int( &window_buffer, fps );
+  window_buffer = strcat_int( window_buffer, fps );
 
   SDL_SetWindowTitle( app.window, window_buffer );
 

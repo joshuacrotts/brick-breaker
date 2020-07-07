@@ -18,8 +18,8 @@ draw_buttons( void ) {
 }
 
 button_t *
-add_button( float x, float y, uint32_t w, uint32_t h, bool is_filled, char *font_path,
-            uint16_t size, SDL_Color *fc, char *text ) {
+add_button( float x, float y, uint32_t w, uint32_t h, bool is_filled, const char *font_path,
+            uint16_t size, SDL_Color *fc, const char *text ) {
   button_t *button;
 
   button = malloc( sizeof( button_t ) );
@@ -52,8 +52,8 @@ add_button( float x, float y, uint32_t w, uint32_t h, bool is_filled, char *font
 }
 
 button_t *
-add_button_texture( float x, float y, char *file_path, char *font_path, uint16_t size,
-                    SDL_Color *fc, char *text ) {
+add_button_texture( float x, float y, const char *file_path, const char *font_path, uint16_t size,
+                    SDL_Color *fc, const char *text ) {
   button_t *button;
 
   button = malloc( sizeof( button_t ) );

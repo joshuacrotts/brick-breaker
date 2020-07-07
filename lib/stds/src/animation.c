@@ -3,7 +3,7 @@
 static char input_buffer[MAX_BUFFER_SIZE];
 
 animation_t *
-add_spritesheet( char *directory, uint8_t no_of_frames, float frame_delay, uint16_t x,
+add_spritesheet( const char *directory, uint8_t no_of_frames, float frame_delay, uint16_t x,
                  uint16_t y ) {
   animation_t *a;
   a = malloc( sizeof( animation_t ) );
@@ -35,7 +35,7 @@ add_spritesheet( char *directory, uint8_t no_of_frames, float frame_delay, uint1
 }
 
 animation_t *
-add_animation( char *directory, uint8_t no_of_frames, float frame_delay ) {
+add_animation( const char *directory, uint8_t no_of_frames, float frame_delay ) {
   animation_t *a;
   a = malloc( sizeof( animation_t ) );
 
@@ -112,7 +112,7 @@ animation_update( animation_t *a ) {
       // continue and quit.
       if ( a->cycle_once ) {
         a->flags ^= ANIMATION_ACTIVE_MASK;
-        a->cycle_once = false;
+        a->cycle_once       = false;
         a->current_frame_id = 0;
         return;
       }
@@ -124,7 +124,8 @@ void
 animation_draw( animation_t *a ) {
   if ( a->flags & ANIMATION_ACTIVE_MASK ) {
     if ( a->id_flags & STD_ANIMATION_MASK ) {
-      blit_texture_rotated( a->frames[a->current_frame_id], a->pos_x, a->pos_y, a->angle, a->flip, true);
+      blit_texture_rotated( a->frames[a->current_frame_id], a->pos_x, a->pos_y, a->angle, a->flip,
+                            true );
     } else if ( a->id_flags & SPRITE_SHEET_MASK ) {
       // Yes, the math IS correct; don't second-guess yourself!
       // The offset is due to the RECTANGLE!

@@ -142,34 +142,34 @@ extern bool is_mouse_over_rect( float x, float y, SDL_Rect rect );
  *               first < length of str and last < length of
  *               str.
  *
- * @param char * string with substring to find.
+ * @param const char * string with substring to find.
  * @param int first index of substring.
  * @param int index to stop the search (not inclusive!).
  *
  * @return char* substring.
  */
-extern char *str_substring( char *str, int first, int last );
+extern char *str_substring( const char *str, int first, int last );
 
 /**
  * Returns the index of the first occurrence of search_str
  * inside s.
  *
- * @param char* string to search in.
- * @param char* string to search for.
+ * @param const char* string to search in.
+ * @param const char* string to search for.
  *
  * @return int32_t >= 0 for index, -1 if not in string.
  */
-extern int32_t str_index_of( char *s, const char *search_str );
+extern int32_t str_index_of( const char *s, const char *search_str );
 
 /**
  * Concatenates a signed 32-bit integer to the end of
- * a string. Pass in the address of the char* (&c).
+ * a string. 
  *
- * @param char** address to string to concatenate onto.
+ * @param const char* string to concatenate onto.
  * @param int32_t integer to concatenate.
  *
  * @return void.
  */
-extern void strcat_int( char **s, int32_t n );
+extern char * strcat_int( const char *s, int32_t n );
 
 #endif // STDS_H

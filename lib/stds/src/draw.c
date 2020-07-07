@@ -1,7 +1,7 @@
 #include "../include/draw.h"
 
-static SDL_Texture *get_texture( char * );
-static void         cache_texture( char *, SDL_Texture * );
+static SDL_Texture *get_texture( const char * );
+static void         cache_texture( const char *, SDL_Texture * );
 
 void
 prepare_scene() {
@@ -48,8 +48,8 @@ blit_rect( SDL_Texture *texture, SDL_Rect *src, float x, float y, bool camera_of
 }
 
 void
-blit_texture_rotated( SDL_Texture *texture, float x, float y, uint16_t angle,
-                      SDL_RendererFlip flip, bool camera_offset ) {
+blit_texture_rotated( SDL_Texture *texture, float x, float y, uint16_t angle, SDL_RendererFlip flip,
+                      bool camera_offset ) {
   SDL_FRect dest;
   dest.x = camera_offset ? x - app.camera.x : x;
   dest.y = camera_offset ? y - app.camera.y : y;
@@ -147,7 +147,7 @@ draw_rect_stroke( int32_t x, int32_t y, uint32_t w, uint32_t h, uint32_t stroke,
 
     // BL to BR
     r3.x = x;
-    
+
     r3.y = camera_offset ? h - stroke + app.camera.y : h - stroke;
     r3.w = w;
     r3.h = stroke;
@@ -278,7 +278,7 @@ combine_fade_color( fade_color_t *f ) {
 }
 
 SDL_Texture *
-load_texture( char *fileName ) {
+load_texture( const char *fileName ) {
   SDL_Texture *texture;
 
   texture = get_texture( fileName );
@@ -305,7 +305,7 @@ load_texture( char *fileName ) {
  * @return SDL_Texture pointer - either NULL or object.
  */
 static SDL_Texture *
-get_texture( char *file_name ) {
+get_texture( const char *file_name ) {
   texture_t *t;
 
   for ( t = app.texture_head.next; t != NULL; t = t->next ) {
@@ -325,7 +325,7 @@ get_texture( char *file_name ) {
  * @return void.
  */
 static void
-cache_texture( char *file_name, SDL_Texture *sdl_texture ) {
+cache_texture( const char *file_name, SDL_Texture *sdl_texture ) {
   texture_t *texture;
 
   texture = malloc( sizeof( texture_t ) );

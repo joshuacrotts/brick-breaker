@@ -163,7 +163,7 @@ extern void draw_line( float x1, float y1, float x2, float y2, SDL_Color *c );
  * displayed if the file cannot be found or is not
  * loadable.
  */
-extern SDL_Texture *load_texture( char *directory );
+extern SDL_Texture *load_texture( const char *directory );
 
 /*
  * Completes one iteration of the color-merge procedure.

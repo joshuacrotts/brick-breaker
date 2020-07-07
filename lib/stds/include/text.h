@@ -29,7 +29,7 @@ extern void free_fonts( void );
  * @param uint8_t red color value (0-255).
  * @param uint8_t green color value (0-255).
  * @param uint8_t blue color value (0-255).
- * @param char *font name (use the file name itself with the extension).
+ * @param const char *font name (use the file name itself with the extension).
  * @param uint16_t font size.
  * @param const char *string to draw.
  * @param ... formatting args.
@@ -39,23 +39,23 @@ extern void free_fonts( void );
  *
  * @return void.
  */
-extern void draw_text( float x, float y, uint8_t r, uint8_t g, uint8_t b, char *font_directory,
-                       uint16_t font_size, char *str, ... );
+extern void draw_text( float x, float y, uint8_t r, uint8_t g, uint8_t b,
+                       const char *font_directory, uint16_t font_size, const char *str, ... );
 
 /**
  * Computes the size of the string with the default font were it to be drawn
  * to the screen in pixels. This is useful for positioning the string in the middle
  * of the screen if need-be.
  *
- * @param char *string.
- * @param char *font name.
+ * @param const char *string.
+ * @param const char *font name.
  * @param uint16_t font size.
  * @param pointer to integer (int) where the width of the string is stored.
  * @param pointer to integer (int) where the height of the string is stored.
  *
  * @return void.
  */
-extern void get_string_size( char *str, char *font_name, uint16_t font_size, int *stored_width,
-                             int *stored_height );
+extern void get_string_size( const char *str, const char *font_name, uint16_t font_size,
+                             int *stored_width, int *stored_height );
 
 #endif

@@ -3,7 +3,7 @@
 static char input_buffer[MAX_BUFFER_SIZE];
 
 void
-init_parallax_background( char *directory, size_t count, float normal_scroll_speed,
+init_parallax_background( const char *directory, size_t count, float normal_scroll_speed,
                           float scroll_speeds[], bool infinite_scroll ) {
 
   parallax_background_t *layer;
@@ -60,7 +60,7 @@ parallax_background_draw( parallax_background_t *p ) {
 }
 
 background_t *
-init_background( char *file ) {
+init_background( const char *file ) {
   background_t *background;
 
   background = malloc( sizeof( background_t ) );
