@@ -75,24 +75,16 @@ init_scene( void ) {
                                0.40f, 0.45f, 0.50f, 0.55f, 0.60f};
   init_parallax_background( "tests/res/img/background_4/layer_0", parallax_frames, 1.0f,
                             parallax_scroll, false );
-  // bg = init_background( "tests/res/img/background_0.png" );
 
-  SDL_Color c1;
-  c1.r = 0xff;
-  c1.g = 0xff;
-  c1.b = 0;
-
-  SDL_Color c2;
-  c1.r = 0;
-  c1.g = 0;
-  c1.b = 0xff;
+  SDL_Color c1 = {0xff, 0xff, 0, 0xff};
+  SDL_Color c2 = {0, 0, 0xff, 0xff};
 
   f.c1    = c1;
   f.c2    = c2;
   f.time  = 0.0f;
   f.alpha = 0.01f;
 
-  ps = create_particle_system( 5000 );
+  ps = create_particle_system( 512 );
 }
 
 /*
@@ -104,12 +96,12 @@ tick( void ) {
     add_particles( app.mouse.x, app.mouse.y, 32 );
   }
 
+  update_camera( player );
   particle_system_update( ps );
-  // update_camera( player );
-  // update_parallax_backgrounds();
-  // update_trails();
-  // update_enemies();
-  // player_update();
+  update_parallax_backgrounds();
+  update_trails();
+  update_enemies();
+  player_update();
 }
 
 /*
@@ -174,13 +166,13 @@ update_enemies( void ) {
  */
 static void
 draw( void ) {
+  draw_parallax_backgrounds();
   particle_system_draw( ps );
-  // draw_parallax_backgrounds();
-  // SDL_Color c = combine_fade_color( &f );
-  // draw_rect_stroke( 0, 0, app.SCREEN_WIDTH, app.SCREEN_HEIGHT, 8, &c, 0xff );
-  // draw_trails();
-  // draw_enemies();
-  // player_draw();
+  SDL_Color c = combine_fade_color( &f );
+  draw_rect_stroke( 0, 0, app.SCREEN_WIDTH, app.SCREEN_HEIGHT, 8, &c, 0xff );
+  draw_trails();
+  draw_enemies();
+  player_draw();
 }
 
 /**
@@ -241,8 +233,12 @@ add_particles( int32_t x, int32_t y, size_t n ) {
     p.dy              = random_float( -5, 5 );
     p.w               = random_int( 1, 5 );
     p.h               = p.w;
-    p.particle_update = particle_update;
-    p.particle_draw   = particle_draw;
-    add_particle( ps, &p );
+    p.particle_update = red_particle_update;
+    p.particle_draw   = red_particle_draw;
+    p.color.r         = 0xff;
+    p.color.a         = 0xff;
+    p.color.g         = 0;
+    p.color.b         = 0;
+    insert_particle( ps, &p );
   }
 }

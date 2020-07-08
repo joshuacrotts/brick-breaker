@@ -59,10 +59,10 @@ struct Particle {
   uint32_t id_flags;
   uint32_t flags;
 
-  animation_t *animation;
-
   SDL_Color    color;
   SDL_Texture *current_texture;
+
+  animation_t *animation;
 
   void ( *particle_update )( particle_t * );
   void ( *particle_draw )( particle_t * );
@@ -72,9 +72,10 @@ struct Particle {
  *
  */
 struct ParticleSystem {
-  int32_t     alive_count;
-  int32_t     dead_index;
-  int32_t     max_particles;
+  int32_t alive_count;
+  int32_t dead_index;
+  int32_t max_particles;
+
   particle_t *particles;
 };
 

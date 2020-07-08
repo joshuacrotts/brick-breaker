@@ -116,6 +116,25 @@ draw_rect( SDL_Rect *rect, SDL_Color *c, bool is_filled, bool camera_offset ) {
 }
 
 void
+draw_frect( SDL_FRect *frect, SDL_Color *c, bool is_filled, bool camera_offset ) {
+  SDL_SetRenderDrawBlendMode( app.renderer, SDL_BLENDMODE_BLEND );
+  SDL_SetRenderDrawColor( app.renderer, c->r, c->g, c->b, c->a );
+
+  if ( camera_offset ) {
+    frect->x -= app.camera.x;
+    frect->y -= app.camera.y;
+  }
+
+  if ( is_filled ) {
+    SDL_RenderFillRectF( app.renderer, frect );
+  } else {
+    SDL_RenderDrawRectF( app.renderer, frect );
+  }
+  
+  SDL_SetRenderDrawBlendMode( app.renderer, SDL_BLENDMODE_NONE );
+}
+
+void
 draw_rect_stroke( int32_t x, int32_t y, uint32_t w, uint32_t h, uint32_t stroke, SDL_Color *c,
                   bool camera_offset ) {
   if ( stroke <= 0 ) {

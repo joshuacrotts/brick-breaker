@@ -15,16 +15,12 @@ add_particle( float x, float y, float dx, float dy, float decX, float decY, uint
   en->h             = h;
   en->dx            = dx;
   en->dy            = dy;
-  en->life          = FPS * 5;
+  en->life          = FPS * 3;
   en->delta_accel_x = decX;
   en->delta_accel_y = decY;
   en->animation     = NULL;
 
-  SDL_Color color;
-  color.r = r;
-  color.g = g;
-  color.b = b;
-  color.a = a;
+  SDL_Color color = {r, g, b, a};
 
   en->color       = color;
   en->delta_alpha = delta_alpha;
@@ -34,7 +30,6 @@ add_particle( float x, float y, float dx, float dy, float decX, float decY, uint
 
   en->particle_update = particle_update;
   en->particle_draw   = particle_draw;
-
   return en;
 }
 
@@ -60,7 +55,7 @@ add_animated_particle( float x, float y, float dx, float dy, float decX, float d
   en->dx = dx;
   en->dy = dy;
 
-  en->life          = FPS * 5;
+  en->life          = FPS * 3;
   en->delta_accel_x = decX;
   en->delta_accel_y = decY;
 
@@ -75,10 +70,7 @@ add_animated_particle( float x, float y, float dx, float dy, float decX, float d
 
 void
 particle_update( particle_t *e ) {
-  e->life--;
-  if ( e->life <= 0 ) {
-      print("IT DED");
-
+  if ( --e->life <= 0 ) {
     e->flags |= DEATH_MASK;
     return;
   }
@@ -111,17 +103,13 @@ void
 particle_draw( particle_t *e ) {
 
   if ( e->animation == NULL ) {
-    SDL_Rect rect;
-    rect.x = ( int32_t )( e->x );
-    rect.y = ( int32_t )( e->y );
-    rect.w = e->w;
-    rect.h = e->h;
+    SDL_FRect frect = {e->x, e->y, e->w, e->h};
 
     if ( e->id_flags & ID_P_SQUARE_MASK ) {
-      draw_rect( &rect, &e->color, true, false );
+      draw_frect( &frect, &e->color, true, false );
     } else if ( e->id_flags & ID_P_CIRCLE_MASK ) {
-      uint32_t r = rect.w >> 1;
-      fill_circle( rect.x, rect.y, r, &e->color );
+      uint32_t r = ( uint32_t )( frect.w / 2 );
+      fill_circle( ( int32_t ) frect.x, ( int32_t ) frect.y, r, &e->color );
     }
   } else {
     animation_draw( e->animation );

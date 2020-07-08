@@ -13,6 +13,7 @@
 
 #include "../include/game_structs.h"
 #include "../include/enemy.h"
+#include "../include/red_particle.h"
 
 stage_t stage;
 app_t   app;

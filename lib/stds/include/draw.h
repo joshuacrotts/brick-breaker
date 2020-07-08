@@ -110,6 +110,20 @@ extern void blit_texture_scaled( SDL_Texture *texture, float x, float y, float s
 extern void draw_rect( SDL_Rect *rect, SDL_Color *c, bool is_filled, bool camera_offset );
 
 /**
+ * Draws a floating-point rectangle with the supplied color. The
+ * rectangle's properties should be filled (i.e x, y, w, and h).
+ * If the last parameter is true, the shape will be filled.
+ *
+ * @param SDL_FRect*
+ * @param SDL_Color color to fill.
+ * @param bool is the rect filled or not.
+ * @param bool applies the camera offset or not.
+ *
+ * @return void.
+ */
+extern void draw_frect( SDL_FRect *frect, SDL_Color *c, bool is_filled, bool camera_offset );
+
+/**
  * Draws a rectangle with the specified stroke (pixel width) and color.
  * First four parameters are the x, y, width, and height of rectangle.
  * The next specifies how "thick" it should be. The last four values

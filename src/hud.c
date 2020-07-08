@@ -280,7 +280,7 @@ spawn_star_particles( float x, float y, uint32_t n, uint32_t flags ) {
     uint8_t  r = 0xff;
     uint8_t  g = 0xff;
     uint8_t  b = 0xff;
-    uint8_t  a = random_int( 5, 5 );
+    uint8_t  a = random_int( 5, 15 );
 
     p = add_particle( x, y, dx, dy, 0, 0, w, h, 0, r, g, b, a, 0, flags | ID_P_SQUARE_MASK );
     insert_particle( ps, p );
