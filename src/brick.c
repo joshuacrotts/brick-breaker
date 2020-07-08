@@ -6,6 +6,7 @@ static char *get_string_enum( enum Brick );
 entity_t *
 add_brick( float x, float y, uint32_t flags, int8_t identifier ) {
   entity_t *b;
+
   b = malloc( sizeof( entity_t ) );
   memset( b, 0, sizeof( entity_t ) );
 

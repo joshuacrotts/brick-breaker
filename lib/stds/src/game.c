@@ -23,7 +23,7 @@ loop() {
   then      = SDL_GetTicks();
   remainder = 0;
 
-  SDL_AddTimer( WINDOW_UPDATE_TIMER, update_window_title, &current_fps );
+  //SDL_AddTimer( WINDOW_UPDATE_TIMER, update_window_title, &current_fps );
 
   // Main game loop.
   while ( true ) {
@@ -78,6 +78,7 @@ static uint32_t
 update_window_title( uint32_t interval, void *args ) {
   uint16_t fps = *( uint16_t * ) args;
   // Create text window buffer.
+  
   char *window_buffer = malloc( sizeof( char ) * SMALL_TEXT_BUFFER );
 
   if ( window_buffer == NULL ) {

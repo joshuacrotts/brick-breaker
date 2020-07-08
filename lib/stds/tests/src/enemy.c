@@ -3,7 +3,7 @@
 entity_t *
 add_enemy( float x, float y ) {
   entity_t *e;
-
+  
   e = malloc( sizeof( entity_t ) );
   memset( e, 0, sizeof( entity_t ) );
 

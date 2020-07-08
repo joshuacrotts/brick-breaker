@@ -1,35 +1,33 @@
 #include "../include/particle.h"
 
-particle_t *
+particle_t
 add_particle( float x, float y, float dx, float dy, float decX, float decY, uint16_t w, uint16_t h,
               uint16_t angle, uint8_t r, uint8_t g, uint8_t b, uint8_t a, float delta_alpha,
               uint32_t id_flags ) {
-  particle_t *en;
+  particle_t en;
 
-  en = malloc( sizeof( particle_t ) );
-  memset( en, 0, sizeof( particle_t ) );
-
-  en->x             = x;
-  en->y             = y;
-  en->w             = w;
-  en->h             = h;
-  en->dx            = dx;
-  en->dy            = dy;
-  en->life          = FPS * 3;
-  en->delta_accel_x = decX;
-  en->delta_accel_y = decY;
-  en->animation     = NULL;
+  en.x             = x;
+  en.y             = y;
+  en.w             = w;
+  en.h             = h;
+  en.dx            = dx;
+  en.dy            = dy;
+  en.life          = FPS * 3;
+  en.delta_accel_x = decX;
+  en.delta_accel_y = decY;
+  en.animation     = NULL;
 
   SDL_Color color = {r, g, b, a};
 
-  en->color       = color;
-  en->delta_alpha = delta_alpha;
-  en->angle       = angle;
-  en->id_flags |= id_flags | ID_PARTICLE_MASK;
-  en->flags |= ID_PARTICLE_MASK;
+  en.color       = color;
+  en.delta_alpha = delta_alpha;
+  en.angle       = angle;
+  en.id_flags |= id_flags | ID_PARTICLE_MASK;
+  en.flags |= ID_PARTICLE_MASK;
 
-  en->particle_update = particle_update;
-  en->particle_draw   = particle_draw;
+  en.particle_update = particle_update;
+  en.particle_draw   = particle_draw;
+  
   return en;
 }
 
@@ -37,7 +35,6 @@ particle_t *
 add_animated_particle( float x, float y, float dx, float dy, float decX, float decY, uint16_t angle,
                        uint32_t id_flags, animation_t *animation ) {
   particle_t *en;
-
   en = malloc( sizeof( particle_t ) );
   memset( en, 0, sizeof( particle_t ) );
 

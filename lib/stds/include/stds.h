@@ -19,12 +19,16 @@
 #include "stddefine.h"
 #include "structs.h"
 
+#define DEBUG          1
 #define MAX_INT_DIGITS 11
 
 #define MAX( a, b )     ( ( a ) > ( b ) ? ( a ) : ( b ) )
 #define MIN( a, b )     ( ( a ) < ( b ) ? ( a ) : ( b ) )
 #define MAX3( a, b, c ) ( MAX( MAX( a, b ), c ) )
 #define MIN3( a, b, c ) ( MIN( MIN( a, b ), c ) )
+
+#define DEBUG_PRINT(fmt, ...) \
+            do { if (DEBUG) fprintf(stderr, fmt, __VA_ARGS__); } while (0) \
 
 /**
  * Returns a random integer variable between

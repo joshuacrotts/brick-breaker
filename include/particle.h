@@ -7,7 +7,7 @@
 
 extern app_t app;
 
-extern particle_t *add_particle( float, float, float, float, float, float, uint16_t, uint16_t,
+extern particle_t  add_particle( float, float, float, float, float, float, uint16_t, uint16_t,
                                  uint16_t, uint8_t, uint8_t, uint8_t, uint8_t, float, uint32_t );
 extern particle_t *add_animated_particle( float, float, float, float, float, float, uint16_t,
                                           uint32_t, animation_t * );

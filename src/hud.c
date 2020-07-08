@@ -270,7 +270,7 @@ draw_level_number() {
 static void
 spawn_star_particles( float x, float y, uint32_t n, uint32_t flags ) {
   for ( int i = 0; i < n; i++ ) {
-    particle_t *p;
+    particle_t p;
 
     float dx = -10;
     float dy = -10;
@@ -283,6 +283,6 @@ spawn_star_particles( float x, float y, uint32_t n, uint32_t flags ) {
     uint8_t  a = random_int( 5, 15 );
 
     p = add_particle( x, y, dx, dy, 0, 0, w, h, 0, r, g, b, a, 0, flags | ID_P_SQUARE_MASK );
-    insert_particle( ps, p );
+    insert_particle( ps, &p );
   }
 }
