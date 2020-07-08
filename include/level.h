@@ -2,6 +2,7 @@
 #define LEVEL_H
 
 #include "../lib/stds/include/draw.h"
+#include "../lib/stds/include/particle_system.h"
 #include "../lib/stds/include/sound.h"
 #include "ball.h"
 #include "brick.h"
@@ -12,9 +13,10 @@
 #include "score_item.h"
 #include "transition.h"
 
-level_t *        currentLevel;
-extern entity_t *paddle;
-extern stage_t   stage;
+level_t *                 currentLevel;
+extern entity_t *         paddle;
+extern particle_system_t *ps;
+extern stage_t            stage;
 
 /*
  *

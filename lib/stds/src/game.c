@@ -49,7 +49,7 @@ static void
 cap_framerate( long *then, float *remainder ) {
   long wait, frame_time;
 
-  wait = ( int32_t )( 16 + *remainder );
+  wait = ( int32_t )( FPS_TIME + *remainder );
   *remainder -= ( int ) *remainder;
   frame_time = SDL_GetTicks() - *then;
   wait -= frame_time;
@@ -78,7 +78,13 @@ static uint32_t
 update_window_title( uint32_t interval, void *args ) {
   uint16_t fps = *( uint16_t * ) args;
   // Create text window buffer.
-  char *window_buffer = malloc(sizeof(char) * SMALL_TEXT_BUFFER);
+  char *window_buffer = malloc( sizeof( char ) * SMALL_TEXT_BUFFER );
+
+  if ( window_buffer == NULL ) {
+    SDL_LogInfo( SDL_LOG_CATEGORY_APPLICATION,
+                 "Error: could not allocate memory for the window buffer.\n", SDL_GetError() );
+    exit( EXIT_FAILURE );
+  }
 
   // Copy the title to the buffer.
   strcpy( window_buffer, app.original_title );
@@ -91,7 +97,7 @@ update_window_title( uint32_t interval, void *args ) {
 
   SDL_SetWindowTitle( app.window, window_buffer );
 
-  free(window_buffer);
+  free( window_buffer );
 
   return interval;
 }

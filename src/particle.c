@@ -1,13 +1,13 @@
 #include "../include/particle.h"
 
-entity_t *
+particle_t *
 add_particle( float x, float y, float dx, float dy, float decX, float decY, uint16_t w, uint16_t h,
               uint16_t angle, uint8_t r, uint8_t g, uint8_t b, uint8_t a, float delta_alpha,
               uint32_t id_flags ) {
-  entity_t *en;
+  particle_t *en;
 
-  en = malloc( sizeof( entity_t ) );
-  memset( en, 0, sizeof( entity_t ) );
+  en = malloc( sizeof( particle_t ) );
+  memset( en, 0, sizeof( particle_t ) );
 
   en->x             = x;
   en->y             = y;
@@ -32,16 +32,19 @@ add_particle( float x, float y, float dx, float dy, float decX, float decY, uint
   en->id_flags |= id_flags | ID_PARTICLE_MASK;
   en->flags |= ID_PARTICLE_MASK;
 
+  en->particle_update = particle_update;
+  en->particle_draw   = particle_draw;
+
   return en;
 }
 
-entity_t *
+particle_t *
 add_animated_particle( float x, float y, float dx, float dy, float decX, float decY, uint16_t angle,
                        uint32_t id_flags, animation_t *animation ) {
-  entity_t *en;
+  particle_t *en;
 
-  en = malloc( sizeof( entity_t ) );
-  memset( en, 0, sizeof( entity_t ) );
+  en = malloc( sizeof( particle_t ) );
+  memset( en, 0, sizeof( particle_t ) );
 
   en->x         = x;
   en->y         = y;
@@ -64,21 +67,20 @@ add_animated_particle( float x, float y, float dx, float dy, float decX, float d
   en->angle = angle;
   en->id_flags |= id_flags | ID_PARTICLE_MASK;
 
+  en->particle_update = particle_update;
+  en->particle_draw   = particle_draw;
+
   return en;
 }
 
 void
-particle_update( entity_t *e ) {
+particle_update( particle_t *e ) {
   e->life--;
   if ( e->life <= 0 ) {
+      print("IT DED");
+
     e->flags |= DEATH_MASK;
     return;
-  }
-
-  if ( e->animation != NULL ) {
-    e->animation->pos_x = e->x;
-    e->animation->pos_y = e->y;
-    animation_update( e->animation );
   }
 
   if ( floor( e->delta_accel_x ) != 0 ) {
@@ -89,16 +91,13 @@ particle_update( entity_t *e ) {
     e->dy *= e->delta_accel_y;
   }
 
-  if ( e->id_flags & ID_SCATTER_PARTICLE_MASK ) {
-    e->dy += 0.5f;
-  } else if ( e->id_flags & ID_P_STAR_MASK ) {
-    if ( e->y < -100 ) {
+  if ( e->id_flags & ID_P_STAR_MASK ) {
+    if ( e->y < -100.0f ) {
       e->flags |= DEATH_MASK;
     }
   }
 
   int16_t tmp_alpha = ( int16_t )( e->color.a + e->delta_alpha );
-
   if ( tmp_alpha < 0 ) {
     tmp_alpha = 0;
   }
@@ -109,13 +108,15 @@ particle_update( entity_t *e ) {
 }
 
 void
-particle_draw( entity_t *e ) {
+particle_draw( particle_t *e ) {
+
   if ( e->animation == NULL ) {
     SDL_Rect rect;
     rect.x = ( int32_t )( e->x );
     rect.y = ( int32_t )( e->y );
     rect.w = e->w;
     rect.h = e->h;
+
     if ( e->id_flags & ID_P_SQUARE_MASK ) {
       draw_rect( &rect, &e->color, true, false );
     } else if ( e->id_flags & ID_P_CIRCLE_MASK ) {
@@ -125,9 +126,4 @@ particle_draw( entity_t *e ) {
   } else {
     animation_draw( e->animation );
   }
-}
-
-void
-particle_die( entity_t *e ) {
-  free( e );
 }

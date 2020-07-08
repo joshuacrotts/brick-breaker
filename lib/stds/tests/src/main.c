@@ -13,6 +13,7 @@ static void cleanup_stage( void );
 static void draw( void );
 static void tick( void );
 static void check_enemy_collision( void );
+static void add_particles( int32_t, int32_t, size_t );
 
 static void update_trails( void );
 static void update_enemies( void );
@@ -22,8 +23,9 @@ static void draw_trails( void );
 static void draw_enemies( void );
 static void draw_parallax_backgrounds( void );
 
-static fade_color_t f;
-static SDL_Rect     screen_edge;
+static fade_color_t       f;
+static SDL_Rect           screen_edge;
+static particle_system_t *ps;
 
 /*
  * Barebones game. This is the minimum amount of code
@@ -89,6 +91,8 @@ init_scene( void ) {
   f.c2    = c2;
   f.time  = 0.0f;
   f.alpha = 0.01f;
+
+  ps = create_particle_system( 5000 );
 }
 
 /*
@@ -96,11 +100,16 @@ init_scene( void ) {
  */
 static void
 tick( void ) {
-  update_camera( player );
-  update_parallax_backgrounds();
-  update_trails();
-  update_enemies();
-  player_update();
+  if ( app.mouse.button[SDL_BUTTON_LEFT] ) {
+    add_particles( app.mouse.x, app.mouse.y, 32 );
+  }
+
+  particle_system_update( ps );
+  // update_camera( player );
+  // update_parallax_backgrounds();
+  // update_trails();
+  // update_enemies();
+  // player_update();
 }
 
 /*
@@ -165,15 +174,16 @@ update_enemies( void ) {
  */
 static void
 draw( void ) {
-  draw_parallax_backgrounds();
-  SDL_Color c = combine_fade_color( &f );
-  draw_rect_stroke( 0, 0, app.SCREEN_WIDTH, app.SCREEN_HEIGHT, 8, &c, 0xff );
-  draw_trails();
-  draw_enemies();
-  player_draw();
+  particle_system_draw( ps );
+  // draw_parallax_backgrounds();
+  // SDL_Color c = combine_fade_color( &f );
+  // draw_rect_stroke( 0, 0, app.SCREEN_WIDTH, app.SCREEN_HEIGHT, 8, &c, 0xff );
+  // draw_trails();
+  // draw_enemies();
+  // player_draw();
 }
 
-/*
+/**
  *
  */
 static void
@@ -185,7 +195,7 @@ draw_trails( void ) {
   }
 }
 
-/*
+/**
  *
  */
 static void
@@ -197,7 +207,7 @@ draw_parallax_backgrounds( void ) {
   }
 }
 
-/*
+/**
  *
  */
 static void
@@ -209,10 +219,30 @@ draw_enemies( void ) {
   }
 }
 
-/*
+/**
  *
  */
 static void
 cleanup_stage( void ) {
   free( player );
+}
+
+/**
+ *
+ */
+static void
+add_particles( int32_t x, int32_t y, size_t n ) {
+  for ( int i = 0; i < n; i++ ) {
+    particle_t p;
+    p.x               = x;
+    p.y               = y;
+    p.life            = random_int( 100, 300 );
+    p.dx              = random_float( -5, 5 );
+    p.dy              = random_float( -5, 5 );
+    p.w               = random_int( 1, 5 );
+    p.h               = p.w;
+    p.particle_update = particle_update;
+    p.particle_draw   = particle_draw;
+    add_particle( ps, &p );
+  }
 }

@@ -20,13 +20,10 @@ static void check_transition( void );
 static void cleanup_stage( void );
 static void start_game( void );
 
-static void create_emitter( int32_t, int32_t, uint32_t, uint32_t );
-static void update_emitters( void );
 static void update_entities( void );
 static void update_debris( void );
 static void update_trails( void );
 
-static void draw_emitters( void );
 static void draw_entities( void );
 static void draw_debris( void );
 static void draw_trails( void );
@@ -73,6 +70,8 @@ init_scene( void ) {
 
   init_paddle();
   init_HUD();
+
+  ps = create_particle_system( 51222 );
 }
 
 /*
@@ -93,7 +92,7 @@ tick( void ) {
   update_HUD();
 
   if ( stage.state == GAME ) {
-    update_emitters();
+    particle_system_update( ps );
     update_entities();
     update_trails();
     update_debris();
@@ -112,7 +111,7 @@ static void
 draw( void ) {
   background_draw( background );
   if ( stage.state == GAME ) {
-    draw_emitters();
+    particle_system_draw( ps );
     draw_entities();
     draw_trails();
     draw_debris();
@@ -135,41 +134,13 @@ draw( void ) {
  *
  */
 static void
-update_emitters( void ) {
-  emitter_t *em;
-  emitter_t *prev;
-
-  prev = &currentLevel->emitter_head;
-
-  for ( em = currentLevel->emitter_head.next; em != NULL; em = em->next ) {
-    emitter_update( em );
-
-    if ( em->flags & DEATH_MASK ) {
-      if ( em == currentLevel->emitter_tail ) {
-        currentLevel->emitter_tail = prev;
-      }
-
-      prev->next = em->next;
-      free( em );
-      em = prev;
-    }
-    prev = em;
-  }
-}
-
-/*
- *
- */
-static void
 update_entities( void ) {
   entity_t *e;
   entity_t *prev;
   prev = &currentLevel->entity_head;
 
   for ( e = currentLevel->entity_head.next; e != NULL; e = e->next ) {
-    if ( e->id_flags & ID_PARTICLE_MASK ) {
-      particle_update( e );
-    } else if ( e->tick ) {
+    if ( e->tick ) {
       e->tick( e );
     }
 
@@ -242,25 +213,11 @@ update_trails( void ) {
  *
  */
 static void
-draw_emitters( void ) {
-  emitter_t *em;
-
-  for ( em = currentLevel->emitter_head.next; em != NULL; em = em->next ) {
-    emitter_draw( em );
-  }
-}
-
-/*
- *
- */
-static void
 draw_entities( void ) {
   entity_t *e;
 
   for ( e = currentLevel->entity_head.next; e != NULL; e = e->next ) {
-    if ( e->id_flags & ID_PARTICLE_MASK ) {
-      particle_draw( e );
-    } else if ( e->draw ) {
+    if ( e->draw ) {
       e->draw( e );
     }
   }
@@ -288,19 +245,6 @@ draw_trails( void ) {
   for ( t = app.trail_head.next; t != NULL; t = t->next ) {
     trail_draw( t );
   }
-}
-
-/*
- *
- */
-static void
-create_emitter( int32_t x, int32_t y, uint32_t maxParticles, uint32_t flags ) {
-  emitter_t *em;
-
-  em = add_emitter( x, y, maxParticles, flags );
-
-  currentLevel->emitter_tail->next = em;
-  currentLevel->emitter_tail       = em;
 }
 
 /*
@@ -356,7 +300,6 @@ static void
 cleanup_stage( void ) {
   level_t *    l;
   animation_t *a;
-  emitter_t *  em;
   entity_t *   en;
   entity_t *   ball;
   entity_t *   brick;
@@ -374,12 +317,6 @@ cleanup_stage( void ) {
       brick              = l->brick_head.next;
       l->brick_head.next = brick->next;
       free( brick );
-    }
-
-    while ( l->emitter_head.next ) {
-      em                   = l->emitter_head.next;
-      l->emitter_head.next = em->next;
-      free( em );
     }
 
     while ( l->entity_head.next ) {

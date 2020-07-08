@@ -78,11 +78,17 @@ spawn_ball_particles( entity_t *b ) {
   entity_t *p;
 
   for ( int i = 0; i < BALL_DEATH_PARTICLES; i++ ) {
-
-    p = add_particle( b->x + b->w / 2, b->y + b->h / 2, random_float( -5, 5 ),
-                      random_float( -7, -5 ), 0, 0, 3, 3, 0, 0xff, 0, 0, 0xff, -3,
-                      ID_P_SQUARE_MASK );
-    currentLevel->entity_tail->next = p;
-    currentLevel->entity_tail       = p;
+    particle_t p;
+    p.x             = b->x + b->w / 2;
+    p.y             = b->y + b->h / 2;
+    p.dx            = random_float( -5, 5 );
+    p.dy            = random_float( -7, 5 );
+    p.delta_accel_x = p.delta_accel_y = 0;
+    p.w = p.h = 3;
+    p.color.r = 0xff;
+    p.color.g = p.color.b = 0;
+    p.color.a = 0xff;
+    p.delta_alpha = -3.0f;
+    p.id_flags |= ID_P_SQUARE_MASK;
   }
 }

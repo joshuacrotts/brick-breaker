@@ -5,12 +5,12 @@
 #include "../lib/stds/include/draw.h"
 #include "../lib/stds/include/text.h"
 #include "commons.h"
-#include "emitter.h"
 #include "main.h"
 
-extern app_t     app;
-extern stage_t   stage;
-extern entity_t *paddle;
+extern particle_system_t *ps;
+extern app_t              app;
+extern stage_t            stage;
+extern entity_t *         paddle;
 
 /*
  *

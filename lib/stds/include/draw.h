@@ -102,12 +102,12 @@ extern void blit_texture_scaled( SDL_Texture *texture, float x, float y, float s
  *
  * @param SDL_Rect*
  * @param SDL_Color color to fill.
- * @param bool
+ * @param bool is the rect filled or not.
  * @param bool applies the camera offset or not.
  *
  * @return void.
  */
-extern void draw_rect( SDL_Rect *rect, SDL_Color *c, bool is_center, bool camera_offset );
+extern void draw_rect( SDL_Rect *rect, SDL_Color *c, bool is_filled, bool camera_offset );
 
 /**
  * Draws a rectangle with the specified stroke (pixel width) and color.

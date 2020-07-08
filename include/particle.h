@@ -7,12 +7,12 @@
 
 extern app_t app;
 
-extern entity_t *   add_particle( float, float, float, float, float, float, uint16_t, uint16_t,
-                                  uint16_t, uint8_t, uint8_t, uint8_t, uint8_t, float, uint32_t );
-extern entity_t *   add_animated_particle( float, float, float, float, float, float, uint16_t,
-                                           uint32_t, animation_t * );
-extern void         particle_update( entity_t * );
-extern void         particle_draw( entity_t * );
-extern void         particle_die( entity_t * );
+extern particle_t *add_particle( float, float, float, float, float, float, uint16_t, uint16_t,
+                                 uint16_t, uint8_t, uint8_t, uint8_t, uint8_t, float, uint32_t );
+extern particle_t *add_animated_particle( float, float, float, float, float, float, uint16_t,
+                                          uint32_t, animation_t * );
+extern void        particle_update( particle_t * );
+extern void        particle_draw( particle_t * );
+extern void        particle_die( particle_t * );
 
 #endif

@@ -6,9 +6,10 @@
 #include "commons.h"
 #include "particle.h"
 
-extern app_t    app;
-extern stage_t  stage;
-extern level_t *currentLevel;
+extern particle_system_t *ps;
+extern app_t              app;
+extern stage_t            stage;
+extern level_t *          currentLevel;
 
 /*
  *

@@ -53,7 +53,6 @@ add_level( uint16_t level_id ) {
   memset( level, 0, sizeof( level_t ) );
 
   level->ball_tail       = &level->ball_head;
-  level->emitter_tail    = &level->emitter_head;
   level->entity_tail     = &level->entity_head;
   level->ball_tail       = &level->ball_head;
   level->brick_tail      = &level->brick_head;

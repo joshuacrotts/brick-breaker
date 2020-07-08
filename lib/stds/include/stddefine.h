@@ -5,6 +5,7 @@
 #define EXIT_SUCCESS            0
 #define MAX_KEYBOARD_KEYS       350
 #define FPS                     60
+#define FPS_TIME                (1000 / FPS)               
 #define MAX_SND_CHANNELS        16
 #define MAX_LINE_LENGTH         1024
 #define SMALL_TEXT_BUFFER       64
