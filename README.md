@@ -29,6 +29,7 @@ If you want to run the game, just download the runtime binaries at the provided 
 2. <code>brew install SDL2_image</code>
 3. <code>brew install SDL2_ttf</code>
 4. <code>brew install SDL2_mixer</code>
+
 Then, compile via <code>make</code>.
 
 **Linux (Ubuntu/Debian)**: The process is similar to the former, with the exception of having to install SDL files to your system in Linux. Run the following commands (or their distro-equivalent) in your terminal:
