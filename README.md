@@ -20,7 +20,14 @@ If you want to run the game, just download the runtime binaries at the provided 
 
 ## Rebuilding Brick Breaker
 
-To rebuild the code, clone the repository to your computer. This project is compiled with MinGW and a makefile. The SDL .dll files are not included and will need to be downloaded separately to build from source without modifications to the makefile.
+**Windows**: To rebuild the code, clone the repository to your computer. This project is compiled with MinGW and a makefile. The SDL .dll files are not included and will need to be downloaded separately to build from source without modifications to the makefile. Compile the code via <code>mingw32-make</code>.
+
+**Linux (Ubuntu/Debian)**: The process is similar to the former, with the exception of having to install SDL files to your system in Linux. Run the following commands (or their distro-equivalent) in your terminal:
+<code>sudo apt-get install libsdl2-dev</code>
+<code>sudo apt-get install libsdl2-image-dev</code>
+<code>sudo apt-get install libsdl2-ttf-dev</code>
+<code>sudo apt-get install libsdl2-mixer-dev</code>
+Then, compile via <code>make</code>.
 
 ## Reporting Bugs
 
