@@ -46,7 +46,6 @@ add_animation( const char *directory, uint8_t no_of_frames, float frame_delay ) 
   }
 
   memset( a, 0, sizeof( animation_t ) );
-
   a->frames = malloc( sizeof( SDL_Texture * ) * no_of_frames );
 
   if ( a->frames == NULL ) {
@@ -64,10 +63,11 @@ add_animation( const char *directory, uint8_t no_of_frames, float frame_delay ) 
   a->id_flags |= STD_ANIMATION_MASK;
   a->flags |= ANIMATION_ACTIVE_MASK;
 
-  char  number_buffer[3];
-  char *file_extsn = ".png";
+  const uint8_t NUM_DIGITS = 3;
+  char          number_buffer[NUM_DIGITS];
+  char *        file_extsn = ".png";
   for ( int i = 0; i < a->number_of_frames; i++ ) {
-    itoa( i, number_buffer, 10 );
+    sprintf( number_buffer, "%d", i );
     strcpy( input_buffer, directory );
     char *file_name     = strcat( input_buffer, number_buffer );
     char *file_name_ext = strcat( input_buffer, file_extsn );
@@ -149,6 +149,7 @@ animation_die( animation_t *a ) {
   }
 
   SDL_DestroyTexture( a->current_texture );
+  printf("Freeing arraylist.\n");
   free( a->frames );
   free( a );
 }
