@@ -48,6 +48,8 @@ draw_text( float x, float y, uint8_t r, uint8_t g, uint8_t b, const char *font_s
 
   message_texture = SDL_CreateTextureFromSurface( app.renderer, message_surface );
   SDL_RenderCopy( app.renderer, message_texture, NULL, &message_rect );
+  SDL_DestroyTexture( message_texture );
+  SDL_FreeSurface( message_surface );
 }
 
 void
@@ -61,6 +63,7 @@ free_fonts() {
   while ( f != NULL ) {
     f                  = app.font_head.next;
     app.font_head.next = f->next;
+    printf("Freeing font.\n");
     free( f );
   }
 

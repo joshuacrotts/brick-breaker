@@ -7,7 +7,7 @@ create_particle_system( int32_t max_particles ) {
 
   if ( ps == NULL ) {
     SDL_LogInfo( SDL_LOG_CATEGORY_APPLICATION,
-                 "Error: could not allocate memory for particle_system_t struct.\n",
+                 "Error: could not allocate memory for particle_system_t struct: %s.\n",
                  SDL_GetError() );
     exit( EXIT_FAILURE );
   }

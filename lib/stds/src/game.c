@@ -82,7 +82,7 @@ update_window_title( uint32_t interval, void *args ) {
 
   if ( window_buffer == NULL ) {
     SDL_LogInfo( SDL_LOG_CATEGORY_APPLICATION,
-                 "Error: could not allocate memory for the window buffer.\n", SDL_GetError() );
+                 "Error: could not allocate memory for the window buffer: %s.\n", SDL_GetError() );
     exit( EXIT_FAILURE );
   }
 
@@ -96,8 +96,6 @@ update_window_title( uint32_t interval, void *args ) {
   window_buffer = strcat_int( window_buffer, fps );
 
   SDL_SetWindowTitle( app.window, window_buffer );
-
-  free( window_buffer );
 
   return interval;
 }

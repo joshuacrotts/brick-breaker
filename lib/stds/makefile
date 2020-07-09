@@ -9,10 +9,16 @@ OBJS = src/*.c include/*.h tests/src/*.c tests/include/*.h lib/structures/src/*.
 CC = gcc
 
 #INCLUDE_PATHS specifies the additional include paths we'll need
-INCLUDE_PATHS = -IC:\MinGW\include\SDL2
 
 #LIBRARY_PATHS specifies the additional library paths we'll need
-LIBRARY_PATHS = -LC:\MinGW\lib
+
+ifeq ($(OS), Windows_NT)
+	INCLUDE_PATHS = -IC:\MinGW\include\SDL2
+endif 
+
+ifeq ($(OS), Windows_NT)
+	LIBRARY_PATHS = -LC:\MinGW\lib
+endif
 
 #COMPILER_FLAGS specifies the additional compilation options we're using
 # -w suppresszzes all warnings
@@ -20,7 +26,13 @@ LIBRARY_PATHS = -LC:\MinGW\lib
 COMPILER_FLAGS = -Werror -Wfloat-conversion
 
 #LINKER_FLAGS specifies the libraries we're linking against
-LINKER_FLAGS = -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf
+LINKER_FLAGS = 0
+
+ifeq ($(OS), Windows_NT)
+	LINKER_FLAGS = -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf
+else
+	LINKER_FLAGS = -lSDL2main -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lm
+endif
 
 #OBJ_NAME specifies the name of our exectuable
 OBJ_NAME = Game

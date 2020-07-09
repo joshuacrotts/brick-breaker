@@ -7,8 +7,10 @@ init_parallax_background( const char *directory, size_t count, float normal_scro
                           float scroll_speeds[], bool infinite_scroll ) {
 
   parallax_background_t *layer;
-  char                   number_buffer[3];
-  char *                 file_extsn = ".png";
+
+  const uint8_t NUM_DIGITS = 3;
+  char          number_buffer[NUM_DIGITS];
+  char *        file_extsn = ".png";
 
   for ( int i = 0; i < count; i++ ) {
     layer = malloc( sizeof( parallax_background_t ) );
@@ -21,7 +23,7 @@ init_parallax_background( const char *directory, size_t count, float normal_scro
 
     memset( layer, 0, sizeof( parallax_background_t ) );
 
-    itoa( i, number_buffer, 10 );
+    sprintf( number_buffer, "%d", i );
     strcpy( input_buffer, directory );
     char *file_name              = strcat( input_buffer, number_buffer );
     char *file_name_ext          = strcat( input_buffer, file_extsn );
@@ -62,7 +64,6 @@ parallax_background_draw( parallax_background_t *p ) {
 background_t *
 init_background( const char *file ) {
   background_t *background;
-
   background = malloc( sizeof( background_t ) );
 
   if ( background == NULL ) {

@@ -346,7 +346,6 @@ get_texture( const char *file_name ) {
 static void
 cache_texture( const char *file_name, SDL_Texture *sdl_texture ) {
   texture_t *texture;
-
   texture = malloc( sizeof( texture_t ) );
 
   if ( texture == NULL ) {

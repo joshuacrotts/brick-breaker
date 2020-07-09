@@ -20,6 +20,7 @@
 #include "structs.h"
 
 #define MAX_INT_DIGITS 11
+#define DEBUG          1
 
 #define MAX( a, b )     ( ( a ) > ( b ) ? ( a ) : ( b ) )
 #define MIN( a, b )     ( ( a ) < ( b ) ? ( a ) : ( b ) )

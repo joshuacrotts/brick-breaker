@@ -72,7 +72,7 @@ print( const char *str, ... ) {
   vsprintf( text_buffer, str, args );
   va_end( args );
 
-  SDL_LogInfo( SDL_LOG_CATEGORY_APPLICATION, text_buffer );
+  SDL_LogInfo( SDL_LOG_CATEGORY_APPLICATION, "%s", text_buffer );
 }
 
 bool
