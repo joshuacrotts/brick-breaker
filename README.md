@@ -23,7 +23,7 @@ If you want to run the game, just download the runtime binaries at the provided 
 
 **Windows**: To rebuild the code, clone the repository to your computer. This project is compiled with MinGW and a makefile. The SDL .dll files are not included and will need to be downloaded separately to build from source without modifications to the makefile. Compile the code via <code>mingw32-make</code>.
 
-**MacOS** For MacOS, run the following commands in your terminal to get the appropriate development files for SDL:
+**MacOS**: For MacOS, run the following commands in your terminal to get the appropriate development files for SDL:
 
 1. <code>brew install SDL2</code>
 2. <code>brew install SDL2_image</code>
