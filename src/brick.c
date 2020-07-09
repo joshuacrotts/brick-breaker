@@ -59,7 +59,6 @@ add_brick( float x, float y, uint32_t flags, int8_t identifier ) {
   }
 
   SDL_QueryTexture( b->texture[0], NULL, NULL, &b->w, &b->h );
-  free( buffer );
 
   return b;
 }
