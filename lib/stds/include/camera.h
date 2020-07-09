@@ -5,18 +5,6 @@
 
 extern app_t app;
 
-/**
- * Applies an offset from the supplied entity, and stores
- * the coordinates in the App struct. Typically, in an overhead
- * style game, this supplied entity will be a reference to the
- * player. All offsets are pre-applied to the draw functions.
- * To keep something from being updated, just re-add the values
- * x + app.camera.x, y + app.camera.y.
- *
- * @param entity_t* pointer to parent entity.
- *
- * @return void.
- */
 extern void update_camera( entity_t *parent );
 
 #endif // CAMERA_H

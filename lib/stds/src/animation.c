@@ -1,7 +1,59 @@
+//=============================================================================================//
+// FILENAME :       animation.c
+//
+// DESCRIPTION :
+//        This file defines the animation functions associated with the animation_t
+//        struct. A note about this is to make sure to define the position, angle, and
+//        flip variables accordingly per the entity using the animation. If not, the
+//        animation will not move, rotate, etc.
+//
+// PUBLIC FUNCTIONS :
+//        extern animation_t *add_spritesheet( const char *file_directory, uint8_t n, float frame_time,
+//                                     uint16_t start_x, uint16_t start_y );
+//        extern animation_t *add_animation( const char *files_directory, uint8_t n, float frame_time );
+//        extern void animation_update( animation_t *animation );
+//        extern void animation_draw( animation_t *animation );
+//        extern void animation_die( animation_t *animation );
+//
+// NOTES :
+//        Permission is hereby granted, free of charge, to any person obtaining a copy
+//        of this software and associated documentation files (the "Software"), to deal
+//        in the Software without restriction, including without limitation the rights
+//        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//        copies of the Software, and to permit persons to whom the Software is
+//        furnished to do so, subject to the following conditions:
+//
+//        The above copyright notice and this permission notice shall be included in all
+//        copies or substantial portions of the Software.
+//
+//        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//        SOFTWARE.
+//
+// AUTHOR :   Joshua Crotts        START DATE :    18 Jun 2020
+//
+//=============================================================================================//
+
 #include "../include/animation.h"
 
 static char input_buffer[MAX_BUFFER_SIZE];
 
+/**
+ * Defines a sprite sheet object, where each sprite is beside each
+ * other, horizontally.
+ *
+ * @param const char* file directory of sprite sheet.
+ * @param uint8_t number of frames.
+ * @param float time spent on an individual frame per second.
+ * @param uint16_t = starting top-left x pos of the sprite sheet.
+ * @param uint16_t = starting top-left y pos of the sprite sheet.
+ *
+ * @return animation_t* struct.
+ */
 animation_t *
 add_spritesheet( const char *directory, uint8_t no_of_frames, float frame_delay, uint16_t x,
                  uint16_t y ) {
@@ -32,8 +84,24 @@ add_spritesheet( const char *directory, uint8_t no_of_frames, float frame_delay,
   a->current_frame_id = 0;
   a->id_flags |= SPRITE_SHEET_MASK;
   a->flags |= ANIMATION_ACTIVE_MASK;
+
+  return a;
 }
 
+/**
+ * The other way to use animations is to specify the
+ * directory of the animation files and the program
+ * will load them in. All sprites must have the same
+ * leading prefix, with a number at the end indicating
+ * their index in the sequence (ex. spr_0, spr_1, spr_2,
+ *, etc.).
+ *
+ * @param const char* directory to files with file prefix.
+ * @param uint8_t number of frames.
+ * @param float time to spend on a individual frame per second.
+ *
+ * @return animation_t* struct.
+ */
 animation_t *
 add_animation( const char *directory, uint8_t no_of_frames, float frame_delay ) {
   animation_t *a;
@@ -76,8 +144,22 @@ add_animation( const char *directory, uint8_t no_of_frames, float frame_delay ) 
   }
   a->current_texture = a->frames[0];
   a->default_texture = a->frames[0];
+
+  return a;
 }
 
+/**
+ * Updates the animation type. If it is a sprite sheet, it
+ * advances the coordinate used to keep track of the current
+ * sprite in the sheet (i.e. the x coordinate defining the top
+ * left). Oppositely, if it is a series of images, we just advance
+ * the pointer keeping track of each image. Once the cycle ends,
+ * the pointer or coordinate is reset back to 0.
+ *
+ * @param animation_t* animation to update.
+ *
+ * @return void.
+ */
 void
 animation_update( animation_t *a ) {
   if ( a->flags & ANIMATION_ACTIVE_MASK )
@@ -120,6 +202,13 @@ animation_update( animation_t *a ) {
   }
 }
 
+/**
+ * Draws the animation.
+ *
+ * @param animation_t* animation to draw.
+ *
+ * @return void.
+ */
 void
 animation_draw( animation_t *a ) {
   if ( a->flags & ANIMATION_ACTIVE_MASK ) {
@@ -127,21 +216,21 @@ animation_draw( animation_t *a ) {
       blit_texture_rotated( a->frames[a->current_frame_id], a->pos_x, a->pos_y, a->angle, a->flip,
                             true );
     } else if ( a->id_flags & SPRITE_SHEET_MASK ) {
-      // Yes, the math IS correct; don't second-guess yourself!
-      // The offset is due to the RECTANGLE!
-      //
       // This rectangle splices the correct frame
       // from the sprite sheet.
-      SDL_Rect curr_rect;
-      curr_rect.x = ( int32_t ) a->splice_x;
-      curr_rect.y = ( int32_t ) a->splice_y;
-      curr_rect.w = a->w;
-      curr_rect.h = a->h;
+      SDL_Rect curr_rect = {( int32_t ) a->splice_x, ( int32_t ) a->splice_y, a->w, a->h};
       blit_rect( a->current_texture, &curr_rect, a->pos_x, a->pos_y, true );
     }
   }
 }
 
+/**
+ * Destroys and frees the animation passed by the entity.
+ *
+ * @param animation_t* animation to free from memory.
+ *
+ * @return void.
+ */
 void
 animation_die( animation_t *a ) {
   for ( int i = 0; i < a->number_of_frames; i++ ) {
@@ -149,7 +238,6 @@ animation_die( animation_t *a ) {
   }
 
   SDL_DestroyTexture( a->current_texture );
-  printf("Freeing arraylist.\n");
   free( a->frames );
   free( a );
 }

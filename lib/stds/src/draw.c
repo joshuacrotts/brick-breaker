@@ -3,17 +3,46 @@
 static SDL_Texture *get_texture( const char * );
 static void         cache_texture( const char *, SDL_Texture * );
 
+/**
+ * Clears the screen with a black color.
+ *
+ * @param void.
+ *
+ * @return void.
+ */
 void
 prepare_scene() {
   SDL_SetRenderDrawColor( app.renderer, 0, 0, 0, 0 );
   SDL_RenderClear( app.renderer );
 }
 
+/**
+ * Presents the current scene from the application.
+ *
+ * @param void.
+ *
+ * @return void.
+ */
 void
 present_scene() {
   SDL_RenderPresent( app.renderer );
 }
 
+/**
+ * Copies the graphics from the texture to a different
+ * rectangle. You can specify what portion of the src
+ * SDL_Texture* to render by the size attributes of the
+ * SDL_Rect* pointer.
+ *
+ * @param
+ * @param
+ * @param
+ * @param
+ * @param
+ * @param
+ *
+ * @return void.
+ */
 void
 blit_texture( SDL_Texture *texture, float x, float y, bool is_center, bool camera_offset ) {
   SDL_FRect dest;
@@ -36,6 +65,19 @@ blit_texture( SDL_Texture *texture, float x, float y, bool is_center, bool camer
   SDL_RenderCopyF( app.renderer, texture, NULL, &dest );
 }
 
+/**
+ * Renders a texture, specified by src, at
+ * coordinates (x, y). You may pass in both integers or
+ * floating-point numbers to this function.
+ *
+ * @param SDL_Texture*
+ * @param float x
+ * @param float y
+ * @param bool if the texture should be centered or not.
+ * @param bool applies the camera offset or not.
+ *
+ * @return void.
+ */
 void
 blit_rect( SDL_Texture *texture, SDL_Rect *src, float x, float y, bool camera_offset ) {
   SDL_FRect dest;
@@ -47,6 +89,19 @@ blit_rect( SDL_Texture *texture, SDL_Rect *src, float x, float y, bool camera_of
   SDL_RenderCopyF( app.renderer, texture, src, &dest );
 }
 
+/**
+ * Draws a rotated SDL_Texture pointer at an x, y coordinate. The
+ * rotation is applied about the center of the texture.
+ *
+ * @param SDL_Texture* pointer to texture object.
+ * @param float x coordinate.
+ * @param float y coordinate.
+ * @param uint16_t angle of rotation in degrees (0 to 360).
+ * @param SDL_RendererFlip flip status (SDL_FLIP_HORIZONTAL/VERTICAL).
+ * @param bool applies the camera offset or not.
+ *
+ * @return void.
+ */
 void
 blit_texture_rotated( SDL_Texture *texture, float x, float y, uint16_t angle, SDL_RendererFlip flip,
                       bool camera_offset ) {
@@ -63,12 +118,28 @@ blit_texture_rotated( SDL_Texture *texture, float x, float y, uint16_t angle, SD
   SDL_RenderCopyExF( app.renderer, texture, NULL, &dest, angle, NULL, flip );
 }
 
+/**
+ * Blits a rotated SDL texture at an x and y coordinate with a given
+ * scale. A color is also provided to alter the color of the texture.
+ *
+ * @param SDL_Texture* pointer to texture object.
+ * @param float x coordinate.
+ * @param float y coordinate.
+ * @param scale_x scale factor on x-axis.
+ * @param scale_y scale factor on y-axis.
+ * @param uint16_t angle of rotation (0 to 360).
+ * @param SDL_RendererFlip flip status (SDL_FLIP_HORIZONTAL/VERTICAL)
+ * @param SDL_Color* color to apply.
+ * @param bool applies camera offset or not.
+ *
+ * @return void.
+ */
 void
 blit_texture_color_scaled( SDL_Texture *texture, float x, float y, float scale_x, float scale_y,
                            uint16_t angle, SDL_RendererFlip flip, SDL_Color *c,
                            bool camera_offset ) {
-  uint32_t texture_width  = 0;
-  uint32_t texture_height = 0;
+  int32_t texture_width  = 0;
+  int32_t texture_height = 0;
 
   SDL_QueryTexture( texture, NULL, NULL, &texture_width, &texture_height );
 
@@ -89,6 +160,22 @@ blit_texture_color_scaled( SDL_Texture *texture, float x, float y, float scale_x
   SDL_RenderCopyExF( app.renderer, texture, NULL, &dest_rect, angle, NULL, flip );
 }
 
+/**
+ * Blits a rotated SDL texture at an x and y coordinate with a given
+ * scale. Note that you will have to account for the scaling routine
+ * yourself in your game (i.e. handling collisions if applicable).
+ *
+ * @param SDL_Texture*
+ * @param float x
+ * @param float y
+ * @param float scale_x
+ * @param float scale_y
+ * @param uint16_t angle
+ * @param SDL_RendererFlip flip status (SDL_FLIP_HORIZONTAL/VERTICAL)
+ * @param bool applies the camera offset or not.
+ *
+ * @return void.
+ */
 void
 blit_texture_scaled( SDL_Texture *texture, float x, float y, float scale_x, float scale_y,
                      uint16_t angle, SDL_RendererFlip flip, bool camera_offset ) {
@@ -97,6 +184,18 @@ blit_texture_scaled( SDL_Texture *texture, float x, float y, float scale_x, floa
   blit_texture_color_scaled( texture, x, y, scale_x, scale_y, angle, flip, NULL, camera_offset );
 }
 
+/**
+ * Draws a rectangle with the supplied color to the screen. The
+ * rectangle's properties should be filled (i.e x, y, w, and h).
+ * If the last parameter is true, the shape will be filled.
+ *
+ * @param SDL_Rect*
+ * @param SDL_Color color to fill.
+ * @param bool is the rect filled or not.
+ * @param bool applies the camera offset or not.
+ *
+ * @return void.
+ */
 void
 draw_rect( SDL_Rect *rect, SDL_Color *c, bool is_filled, bool camera_offset ) {
   SDL_SetRenderDrawBlendMode( app.renderer, SDL_BLENDMODE_BLEND );
@@ -115,6 +214,18 @@ draw_rect( SDL_Rect *rect, SDL_Color *c, bool is_filled, bool camera_offset ) {
   SDL_SetRenderDrawBlendMode( app.renderer, SDL_BLENDMODE_NONE );
 }
 
+/**
+ * Draws a floating-point rectangle with the supplied color. The
+ * rectangle's properties should be filled (i.e x, y, w, and h).
+ * If the last parameter is true, the shape will be filled.
+ *
+ * @param SDL_FRect*
+ * @param SDL_Color color to fill.
+ * @param bool is the rect filled or not.
+ * @param bool applies the camera offset or not.
+ *
+ * @return void.
+ */
 void
 draw_frect( SDL_FRect *frect, SDL_Color *c, bool is_filled, bool camera_offset ) {
   SDL_SetRenderDrawBlendMode( app.renderer, SDL_BLENDMODE_BLEND );
@@ -130,10 +241,26 @@ draw_frect( SDL_FRect *frect, SDL_Color *c, bool is_filled, bool camera_offset )
   } else {
     SDL_RenderDrawRectF( app.renderer, frect );
   }
-  
+
   SDL_SetRenderDrawBlendMode( app.renderer, SDL_BLENDMODE_NONE );
 }
 
+/**
+ * Draws a rectangle with the specified stroke (pixel width) and color.
+ * First four parameters are the x, y, width, and height of rectangle.
+ * The next specifies how "thick" it should be. The last four values
+ * specify the RGBA values.
+ *
+ * @param int32_t x
+ * @param int32_t y
+ * @param uint32_t w
+ * @param uint32_t h
+ * @param uint32_t stroke thickness
+ * @param SDL_Color *c color.
+ * @param bool applies the camera offset or not.
+ *
+ * @return void.
+ */
 void
 draw_rect_stroke( int32_t x, int32_t y, uint32_t w, uint32_t h, uint32_t stroke, SDL_Color *c,
                   bool camera_offset ) {
@@ -147,34 +274,17 @@ draw_rect_stroke( int32_t x, int32_t y, uint32_t w, uint32_t h, uint32_t stroke,
       y += app.camera.y;
     }
 
-    SDL_Rect r1;
-    SDL_Rect r2;
-    SDL_Rect r3;
-    SDL_Rect r4;
-
     // Top-left to TR
-    r1.x = x;
-    r1.y = y;
-    r1.w = w;
-    r1.h = stroke;
+    SDL_Rect r1 = {x, y, w, stroke};
 
     // TL to BL
-    r2.x = x;
-    r2.y = y;
-    r2.w = stroke;
-    r2.h = h;
+    SDL_Rect r2 = {x, y, stroke, h};
 
     // BL to BR
-    r3.x = x;
+    SDL_Rect r3 = {x, camera_offset ? h - stroke + app.camera.y : h - stroke, w, stroke};
 
-    r3.y = camera_offset ? h - stroke + app.camera.y : h - stroke;
-    r3.w = w;
-    r3.h = stroke;
-
-    r4.x = camera_offset ? w - stroke + app.camera.x : w - stroke;
-    r4.y = y;
-    r4.w = stroke;
-    r4.h = h;
+    // TR to BR.
+    SDL_Rect r4 = {camera_offset ? w - stroke + app.camera.x : w - stroke, y, stroke, h};
 
     draw_rect( &r1, c, true, camera_offset );
     draw_rect( &r2, c, true, camera_offset );
@@ -183,6 +293,17 @@ draw_rect_stroke( int32_t x, int32_t y, uint32_t w, uint32_t h, uint32_t stroke,
   }
 }
 
+/*
+ * Draws a line with the specified color to the screen.
+ *
+ * @param
+ * @param
+ * @param
+ * @param
+ * @param
+ *
+ * @return void.
+ */
 void
 draw_line( float x1, float y1, float x2, float y2, SDL_Color *c ) {
   SDL_SetRenderDrawColor( app.renderer, c->r, c->g, c->b, c->a );
@@ -190,6 +311,17 @@ draw_line( float x1, float y1, float x2, float y2, SDL_Color *c ) {
                       ( int32_t ) y2 );
 }
 
+/**
+ * Draws a circle. Simple as that. Takes in the circle's center coordinates,
+ * the radius, and RGBA.
+ *
+ * @param int32_t x-center of circle.
+ * @param int32_t y-center of circle.
+ * @param uint32_t radius of circle.
+ * @param SDL_Color *c color to draw.
+ *
+ * @return void.
+ */
 void
 draw_circle( int32_t center_x, int32_t center_y, uint32_t radius, SDL_Color *c ) {
   const int32_t diameter = ( radius * 2 );
@@ -226,6 +358,16 @@ draw_circle( int32_t center_x, int32_t center_y, uint32_t radius, SDL_Color *c )
   }
 }
 
+/**
+ * Fills a circle. Simple as that.
+ *
+ * @param int32_t x-center of circle.
+ * @param int32_t y-center of circle.
+ * @param uint32_t radius of circle.
+ * @param SDL_Color *c color to fill.
+ *
+ * @return void.
+ */
 void
 fill_circle( int32_t x, int32_t y, uint32_t radius, SDL_Color *c ) {
   int offsetx, offsety, d;
@@ -266,6 +408,14 @@ fill_circle( int32_t x, int32_t y, uint32_t radius, SDL_Color *c ) {
   }
 }
 
+/*
+ * Completes one iteration of the color-merge procedure.
+ * The speed is dependent on the fade_color_t struct passed.
+ * 
+ * @param 
+ * 
+ * @return SDL_Color copy of the new color struct.
+ */
 SDL_Color
 combine_fade_color( fade_color_t *f ) {
   if ( f->time <= 1.0f && f->is_first_color ) {
@@ -296,6 +446,15 @@ combine_fade_color( fade_color_t *f ) {
   return c;
 }
 
+/*
+ * Loads an image from the specified path. An error is
+ * displayed if the file cannot be found or is not
+ * loadable.
+ *
+ * @param
+ *
+ * @return SDL_Texture * pointer to the texture loaded from the buffer.
+ */
 SDL_Texture *
 load_texture( const char *fileName ) {
   SDL_Texture *texture;
@@ -332,6 +491,8 @@ get_texture( const char *file_name ) {
       return t->texture;
     }
   }
+
+  return NULL;
 }
 
 /*

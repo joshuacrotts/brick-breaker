@@ -1,5 +1,13 @@
 #include "../include/particle_system.h"
 
+/**
+ * Initializes a particle system with a size of max particles.
+ *
+ * @param int32_t max number of particles that can be spawned in the system at
+ *        any given time.
+ *
+ * @return particle_system_t * pointer to emitter.
+ */
 particle_system_t *
 create_particle_system( int32_t max_particles ) {
   particle_system_t *ps;
@@ -22,16 +30,38 @@ create_particle_system( int32_t max_particles ) {
   return ps;
 }
 
+/**
+ * Adds a particle to the particle system. Returns 0 if a successful insertion
+ * occurred, and 1 otherwise (generally meaning the emitter is full). 
+ * 
+ * @param
+ * @param
+ * 
+ * @return void.
+ */
 int32_t
 insert_particle( particle_system_t *ps, particle_t *p ) {
   if ( ps->alive_count == ps->max_particles - 1 ) {
-    return 1;
+    return PS_FULL;
+  }
+
+  /* Checks to ensure the function pointers are defined as they are 
+     used in the update procedures. */
+  if (!p->particle_update || !p->particle_draw) {
+    return PS_INVALID_FP;
   }
 
   ps->particles[( ps->alive_count )++] = *p;
-  return 0;
+  return PS_SUCCESS;
 }
 
+/**
+ * 
+ * 
+ * @param
+ * 
+ * @return void.
+ */
 void
 particle_system_update( particle_system_t *ps ) {
   for ( int i = 0; i < ps->alive_count; i++ ) {
@@ -54,6 +84,13 @@ particle_system_update( particle_system_t *ps ) {
   }
 }
 
+/**
+ * 
+ * 
+ * @param
+ * 
+ * @return void.
+ */
 void
 particle_system_draw( particle_system_t *ps ) {
   for ( int i = 0; i < ps->alive_count; i++ ) {

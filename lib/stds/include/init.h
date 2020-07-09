@@ -1,51 +1,13 @@
 #ifndef INIT_H
 #define INIT_H
 
+#include "sound.h"
 #include "stds.h"
+#include "text.h"
 
 app_t app;
 
-/**
- * Calls the remainder of the initialization functions, and
- * sets up the game loop structure.
- *
- * @param const char *window title.
- * @param uint32_t window width.
- * @param uint32_t window height.
- * @param uint32_t level or width that the camera cannot exceed.
- * @param uint32_t level or height that the camera cannot exceed.
- *
- * @return void.
- */
-extern void init_game( const char *, uint32_t, uint32_t, uint32_t, uint32_t );
-
-/**
- * Initializes the SDL sound context.
- *
- * @return void.
- */
-extern void init_sounds( void );
-
-/**
- * Initializes the SDL ttf_font context.
- *
- * @return void.
- */
-extern void init_fonts( void );
-
-/**
- * Toggles debug mode either on or off. When on, debug messages
- * are printed to the console.
- *
- * @param bool true for debug mode on, false otherwise.
- *
- * @return void.
- */
+extern void init_game( const char *title, uint32_t w, uint32_t h, uint32_t lw, uint32_t lh );
 extern void toggle_debug_mode( bool is_debugging );
-
-/**
- * Releases all fonts and the font context from memory.
- */
-extern void free_fonts( void );
 
 #endif // INIT_H

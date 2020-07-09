@@ -3,7 +3,12 @@
 #and may not be redistributed without written permission.
 
 #OBJS specifies which files to compile as part of the project
-OBJS = lib/stds/src/*.c lib/stds/include/*.h src/*.c include/*.h
+ifeq ($(shell uname), Darwin)
+	OBJS = lib/stds/src/*.c src/*.c
+else
+	OBJS = lib/stds/src/*.c lib/stds/include/*.h src/*.c include/*.h
+endif
+
 
 #CC specifies which compiler we're using
 CC = gcc

@@ -1,5 +1,56 @@
+//=============================================================================================//
+// FILENAME :       button.c
+//
+// DESCRIPTION :
+//        Defines the functions associated with buttons, and detecting
+//        button events like clicking and movement.
+//
+// PUBLIC FUNCTIONS :
+//        extern void      update_buttons( void );
+//        extern void      draw_buttons( void );
+//        extern button_t *add_button( float x, float y, uint32_t w, uint32_t h, bool filled,
+//                                     const char *font_directory, uint16_t font_size, SDL_Color *font_color,
+//                                     const char *text );
+//        extern button_t *add_button_texture( float x, float y, const char *texture_directory,
+//                                             const char *font_directory, uint16_t font_size,
+//                                             SDL_Color *color, const char *text );
+//        extern void     button_update( button_t *button );
+//        extern void     button_draw( button_t *button );
+//        extern bool     is_mouse_over_button( button_t *button );
+//        extern bool     is_button_clicked( button_t *button, int32_t mouse_code );
+//
+// NOTES :
+//        Permission is hereby granted, free of charge, to any person obtaining a copy
+//        of this software and associated documentation files (the "Software"), to deal
+//        in the Software without restriction, including without limitation the rights
+//        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//        copies of the Software, and to permit persons to whom the Software is
+//        furnished to do so, subject to the following conditions:
+//
+//        The above copyright notice and this permission notice shall be included in all
+//        copies or substantial portions of the Software.
+//
+//        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//        SOFTWARE.
+//
+// AUTHOR :   Joshua Crotts        START DATE :    22 Jun 2020
+//
+//=============================================================================================//
+
 #include "../include/button.h"
 
+/**
+ * Updates all buttons in the app struct.
+ *
+ * @param void.
+ *
+ * @return void.
+ */
 void
 update_buttons( void ) {
   button_t *b;
@@ -8,6 +59,13 @@ update_buttons( void ) {
   }
 }
 
+/**
+ * Draws all buttons in the app struct.
+ *
+ * @param void.
+ *
+ * @return void.
+ */
 void
 draw_buttons( void ) {
   button_t *b;
@@ -17,6 +75,22 @@ draw_buttons( void ) {
   }
 }
 
+/**
+ * Adds a button with no texture. This is useful for buttons that have to change colors overtime, or
+ * just don't have an accompanying texture. Make sure to change the color with button->color = ...
+ *
+ * @param float x top-left x pos of button.
+ * @param float y top-left y pos of button.
+ * @param uint32_t w width of button.
+ * @param uint32_t h height of button.
+ * @param bool true if the button should be filled with color, false otherwise.
+ * @param const char* string to font path used for the text.
+ * @param uint16_t size of font.
+ * @param SDL_Color* color to draw font.
+ * @param const char* text to draw.
+ *
+ * @return button_t pointer.
+ */
 button_t *
 add_button( float x, float y, uint32_t w, uint32_t h, bool is_filled, const char *font_path,
             uint16_t size, SDL_Color *fc, const char *text ) {
@@ -50,6 +124,19 @@ add_button( float x, float y, uint32_t w, uint32_t h, bool is_filled, const char
   return button;
 }
 
+/**
+ * Adds a button with a texture.
+ *
+ * @param float x top-left x pos of button.
+ * @param float y top-left y pos of button.
+ * @param const char* string to texture for button.
+ * @param const char* string to font path used for the text.
+ * @param uint16_t size of font.
+ * @param SDL_Color* color to draw font.
+ * @param const char* text to draw.
+ *
+ * @return button_t pointer.
+ */
 button_t *
 add_button_texture( float x, float y, const char *file_path, const char *font_path, uint16_t size,
                     SDL_Color *fc, const char *text ) {
@@ -88,14 +175,28 @@ add_button_texture( float x, float y, const char *file_path, const char *font_pa
   return button;
 }
 
+/**
+ * Updates the logic for the button parameter.
+ *
+ * @param button_t* pointer to button struct.
+ *
+ * @return void.
+ */
 void
 button_update( button_t *b ) {}
 
+/**
+ * Draws the button.
+ *
+ * @param button_t* pointer to button struct.
+ *
+ * @return void.
+ */
 void
 button_draw( button_t *b ) {
   if ( b->texture[b->texture_id] != NULL ) {
-    blit_texture_scaled( b->texture[b->texture_id], b->rect.x, b->rect.y, b->scale_x, b->scale_y,
-                         0, SDL_FLIP_NONE, true );
+    blit_texture_scaled( b->texture[b->texture_id], b->rect.x, b->rect.y, b->scale_x, b->scale_y, 0,
+                         SDL_FLIP_NONE, true );
   } else {
     draw_rect( &b->rect, &b->color, b->is_filled, true );
   }
@@ -103,6 +204,14 @@ button_draw( button_t *b ) {
              b->font_size, b->text );
 }
 
+/**
+ * Determines if the mouse cursor is over the rectangle
+ * box associated with the button_t struct.
+ *
+ * @param button_t* pointer to button struct.
+ *
+ * @return bool true if mouse is over, false otherwise.
+ */
 bool
 is_mouse_over_button( button_t *b ) {
   int32_t mx = app.mouse.x;
@@ -115,6 +224,15 @@ is_mouse_over_button( button_t *b ) {
   return ( ( mx > x ) && ( mx < x + w ) ) && ( ( my > y ) && ( my < y + h ) );
 }
 
+/**
+ * Determines if the button was clicked on by the provided mouse-code.
+ * This should most often be SDL_BUTTON_LEFT for the left mouse button.
+ *
+ * @param button_t* pointer to button struct.
+ * @param int32_t mouse code to test if clicked.
+ *
+ * @return true if mouse code was used to click, false otherwise.
+ */
 bool
 is_button_clicked( button_t *b, int32_t mouse_code ) {
   assert( mouse_code == SDL_BUTTON_LEFT || mouse_code == SDL_BUTTON_RIGHT );

@@ -52,8 +52,8 @@ struct Particle {
   float    delta_accel_x;
   float    delta_accel_y;
   float    delta_alpha;
-  uint32_t w;
-  uint32_t h;
+  int32_t w;
+  int32_t h;
   uint32_t angle;
   int32_t  life;
   uint32_t id_flags;
@@ -117,13 +117,13 @@ struct Animation {
 
   uint32_t splice_x;
   uint32_t splice_y;
-  uint32_t w;
-  uint32_t h;
+  int32_t  w;
+  int32_t  h;
   uint16_t angle;
   uint16_t start_x;
   uint16_t start_y;
-  uint32_t sprite_sheet_width;
-  uint32_t sprite_sheet_height;
+  int32_t  sprite_sheet_width;
+  int32_t  sprite_sheet_height;
   bool     cycle_once;
 
   uint32_t id_flags;
@@ -152,8 +152,8 @@ struct Background {
   float scroll_x;
   float scroll_y;
 
-  uint32_t w;
-  uint32_t h;
+  int32_t w;
+  int32_t h;
 
   float scale_x;
   float scale_y;
@@ -271,8 +271,8 @@ struct Entity {
   // should either be set manually, or defined by a call
   // to SDL_QueryTexture(...), where you pass the addresses
   // of these variables.
-  uint32_t w;
-  uint32_t h;
+  int32_t  w;
+  int32_t  h;
   uint32_t flags;
   uint32_t id_flags;
   uint32_t reload;

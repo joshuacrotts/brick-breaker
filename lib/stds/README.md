@@ -4,7 +4,8 @@
   <img width="200" height="200" src="standards.PNG">
 </p>
 
-[![CodeFactor](https://www.codefactor.io/repository/github/joshuacrotts/c-standards/badge)](https://www.codefactor.io/repository/github/joshuacrotts/c-standards) ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/JoshuaCrotts/C-Standards) ![GitHub repo size](https://img.shields.io/github/repo-size/JoshuaCrotts/C-Standards) ![GitHub contributors](https://img.shields.io/github/contributors/JoshuaCrotts/C-Standards)
+[![CodeFactor](https://www.codefactor.io/repository/github/joshuacrotts/C-Standards/badge)](https://www.codefactor.io/repository/github/joshuacrotts/C-Standards) ![GitHub contributors](https://img.shields.io/github/contributors/JoshuaCrotts/C-Standards) ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/JoshuaCrotts/C-Standards) ![GitHub repo size](https://img.shields.io/github/repo-size/JoshuaCrotts/C-Standards)  ![](https://tokei.rs/b1/github/JoshuaCrotts/C-Standards) ![](https://tokei.rs/b1/github/JoshuaCrotts/C-Standards?category=files) [![GitHub issues open](https://img.shields.io/github/issues/JoshuaCrotts/C-Standards)]() 
+[![GitHub issues closed](https://img.shields.io/github/issues-closed-raw/JoshuaCrotts/C-Standards)]()
 
 C - Standards is the continuation of the Standards game library, originally written in Java. While not all features are implemented such as handlers, the basic necessities for creating a game are completely here. All data structures for entity-handling/updating/drawing should be drawn by the programmer, but these structures should come at a future date. SDL is the back-end graphical library for this engine.
 
@@ -19,11 +20,20 @@ The only dependencies for this library are SDL components.
 
 ## Rebuilding C - Standards
 
-To rebuild the code, clone the repository to your computer. This project is compiled with MinGW and a makefile. Depending on how you want to compile the project, you will need to alter the makefile to fit your needs and make sure you have SDL and its extensions installed correctly.
+**Windows**: To rebuild the code, clone the repository to your computer. This project is compiled with MinGW and a makefile. Depending on how you want to compile the project, you will need to alter the makefile to fit your needs and make sure you have SDL and its extensions installed correctly. Compile the code via <code>mingw32-make</code>.
+
+**Linux (Ubuntu/Debian)**: The process is similar to the former, with the exception of having to install SDL files to your system in Linux. Run the following commands (or their distro-equivalent) in your terminal:
+
+1. <code>sudo apt-get install libsdl2-dev</code>
+2. <code>sudo apt-get install libsdl2-image-dev</code>
+3. <code>sudo apt-get install libsdl2-ttf-dev</code>
+4. <code>sudo apt-get install libsdl2-mixer-dev</code>
+
+Then, compile via <code>make</code>.
 
 ## Reporting Bugs
 
 See the Issues Tab.
 
 ## Version History
-The **master** branch encompasses all changes. A development branch is in the works.
+The **master** branch encompasses all changes. The **development** branch has in-progress additions and updates that are not yet ready for the master branch.

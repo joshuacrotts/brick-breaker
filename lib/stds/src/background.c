@@ -1,7 +1,67 @@
+//=============================================================================================//
+// FILENAME :       background.c
+//
+// DESCRIPTION :
+//        This file defines the background fuctionality, both regular and parallax.
+//
+// PUBLIC FUNCTIONS :
+//        extern void init_parallax_background( const char *bg_directory, size_t n,
+//                                    float default_scroll_speed, float modified_scroll_speeds[],
+//                                    bool is_infinite );
+//        extern void parallax_background_update( parallax_background_t *parallax );
+//        extern void parallax_background_draw( parallax_background_t *parallax );
+//        extern background_t *init_background( const char *bg_directory );
+//        extern void background_update( background_t *bg );
+//        extern void background_draw( background_t *bg );
+//        extern void background_die( background_t *bg );
+//
+// NOTES :
+//        Permission is hereby granted, free of charge, to any person obtaining a copy
+//        of this software and associated documentation files (the "Software"), to deal
+//        in the Software without restriction, including without limitation the rights
+//        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//        copies of the Software, and to permit persons to whom the Software is
+//        furnished to do so, subject to the following conditions:
+//
+//        The above copyright notice and this permission notice shall be included in all
+//        copies or substantial portions of the Software.
+//
+//        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//        SOFTWARE.
+//
+// AUTHOR :   Joshua Crotts        START DATE :    18 Jun 2020
+//
+//=============================================================================================//
+
 #include "../include/background.h"
 
 static char input_buffer[MAX_BUFFER_SIZE];
 
+/**
+ * Loads in the parallax images specified by the directory.
+ * These images should be labeled in back-to-front order.
+ * For instance, if we have three layers L0, L1, and L2,
+ * L0 should be the layer drawn farthest from the viewport,
+ * whereas L2 should be the closest. Make sure that your
+ * images all have a common suffix numbering scheme as well,
+ * starting at 0.
+ *
+ * @param const char* string to directory of parallax background images.
+ * @param size_t number of parallax frames.
+ * @param float default scroll speed shared across all frames.
+ * @param float[] array of modified scroll speeds. These values alter
+ *        the default scroll speed of each frame. These values
+ *        f1 <= f2 <= ... < fn, as implied, should be listed in
+ *        back-to-front speed.
+ * @param bool infinite_scroll, determining whether two copies of
+ *        the image are rendered side-by-side to provide the illusion
+ *        of an infinite background.
+ */
 void
 init_parallax_background( const char *directory, size_t count, float normal_scroll_speed,
                           float scroll_speeds[], bool infinite_scroll ) {
@@ -38,11 +98,23 @@ init_parallax_background( const char *directory, size_t count, float normal_scro
   }
 }
 
+/**
+ * Updates the position of the parallax background element.
+ * The offset is applied by multiplying the default scroll speed
+ * multiplied by the scroll offset to give the illusion of
+ * different scroll rates.
+ *
+ * @param parallax_backgorund_t pointer to struct.
+ *
+ * @return void.
+ */
 void
 parallax_background_update( parallax_background_t *p ) {
   if ( !p->infinite_scroll ) {
     p->background->x =
         ( ( 0 - app.camera.x ) * ( p->normal_scroll_speed * p->parallax_scroll_speed ) );
+
+    /* Repositions the background according to where it is relative to the camera. */
     p->background->x = ( float ) fmod( p->background->x, p->background->w );
   } else {
     p->background->x -= ( p->normal_scroll_speed * p->parallax_scroll_speed );
@@ -52,8 +124,18 @@ parallax_background_update( parallax_background_t *p ) {
   }
 }
 
+/**
+ * Draws the parallax background frame. Two copies of the image
+ * are drawn to provide the illusion of infinite scrolling if
+ * specified by the boolean in the struct.
+ *
+ * @param parallax_background_t pointer to struct.
+ *
+ * @return void.
+ */
 void
 parallax_background_draw( parallax_background_t *p ) {
+  /* Two copies of the image are drawn to give the illusion of depth and parallax. */
   blit_texture_scaled( p->background->background_texture, p->background->x, p->background->y,
                        p->background->scale_x, p->background->scale_y, 0, SDL_FLIP_NONE, false );
   blit_texture_scaled( p->background->background_texture, p->background->x + p->background->w,
@@ -61,6 +143,14 @@ parallax_background_draw( parallax_background_t *p ) {
                        SDL_FLIP_NONE, false );
 }
 
+/**
+ * Initializes the background image specified by char*.
+ * It is drawn at (0, 0), or the top-left of the window.
+ *
+ * @param const char *file location of background image.
+ *
+ * @return void.
+ */
 background_t *
 init_background( const char *file ) {
   background_t *background;
@@ -77,8 +167,8 @@ init_background( const char *file ) {
   background->x = 0;
   background->y = 0;
 
-  uint32_t w;
-  uint32_t h;
+  int32_t w;
+  int32_t h;
 
   background->background_texture = load_texture( file );
   SDL_QueryTexture( background->background_texture, NULL, NULL, &w, &h );
@@ -91,15 +181,39 @@ init_background( const char *file ) {
   return background;
 }
 
+/**
+ * Continuously updates the position of the background depending
+ * on the camera's location. If no camera is used, its offset is
+ * 0, thus not moving the background.
+ *
+ * @param background_t pointer to update.
+ *
+ * @return void.
+ */
 void
 background_update( background_t *background ) {}
 
+/**
+ * Draws the background at its appropriate location specified by the
+ * update function.
+ *
+ * @param background_t pointer to draw.
+ *
+ * @return void.
+ */
 void
 background_draw( background_t *background ) {
   blit_texture_scaled( background->background_texture, background->x, background->y,
                        background->scale_x, background->scale_y, 0, SDL_FLIP_NONE, false );
 }
 
+/**
+ * Frees the context of the background struct and image.
+ *
+ * @param background_t pointer to free.
+ *
+ * @return void.
+ */
 void
 background_die( background_t *background ) {
   SDL_DestroyTexture( background->background_texture );

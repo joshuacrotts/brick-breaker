@@ -5,9 +5,6 @@
 
 extern app_t app;
 
-/*
- * Starts the SDL event loop.
- */
 extern void process_input( void );
 
 #endif // INPUT_H

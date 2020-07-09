@@ -7,6 +7,13 @@ static void key_released( SDL_KeyboardEvent * );
 static void mouse_pressed( SDL_MouseButtonEvent * );
 static void mouse_released( SDL_MouseButtonEvent * );
 
+/*
+ * Starts the SDL event loop.
+ * 
+ * @param void.
+ * 
+ * @return void.
+ */
 void
 process_input( void ) {
   SDL_Event event;

@@ -11,6 +11,13 @@ static TTF_Font *get_font( const char *, uint16_t );
 static void      load_fonts();
 static void      add_font( const char *, uint16_t );
 
+/**
+ * Initializes the TTF font library for use.
+ * 
+ * @param void.
+ * 
+ * @return void.
+ */
 void
 init_fonts( void ) {
   app.font_tail = &app.font_head;
@@ -23,6 +30,25 @@ init_fonts( void ) {
   load_fonts();
 }
 
+/**
+ * Draws a string of text specified by the const char *parameter, supplemented
+ * by whatever formatting arguments are necessary.
+ *
+ * @param float x coordinate (top-left) of string.
+ * @param float y coordinate (top-left) of string.
+ * @param uint8_t red color value (0-255).
+ * @param uint8_t green color value (0-255).
+ * @param uint8_t blue color value (0-255).
+ * @param const char *font name (use the file name itself with the extension).
+ * @param uint16_t font size.
+ * @param const char *string to draw.
+ * @param ... formatting args.
+ *
+ * To center a string, call get_string_size() or get_string_sizeFont (if using a non
+ * standard font), and draw the string at SCREEN_WIDTH / 2 - fontWidth / 2.
+ *
+ * @return void.
+ */
 void
 draw_text( float x, float y, uint8_t r, uint8_t g, uint8_t b, const char *font_string,
            uint16_t font_size, const char *text, ... ) {
@@ -52,6 +78,13 @@ draw_text( float x, float y, uint8_t r, uint8_t g, uint8_t b, const char *font_s
   SDL_FreeSurface( message_surface );
 }
 
+/**
+ * Frees the fonts that are in use by the standards library.
+ * 
+ * @param void.
+ * 
+ * @return void.
+ */
 void
 free_fonts() {
   SDL_DestroyTexture( message_texture );
@@ -70,6 +103,19 @@ free_fonts() {
   TTF_Quit();
 }
 
+/**
+ * Computes the size of the string with the default font were it to be drawn
+ * to the screen in pixels. This is useful for positioning the string in the middle
+ * of the screen if need-be.
+ *
+ * @param const char *string.
+ * @param const char *font name.
+ * @param uint16_t font size.
+ * @param pointer to integer (int) where the width of the string is stored.
+ * @param pointer to integer (int) where the height of the string is stored.
+ *
+ * @return void.
+ */
 void
 get_string_size( const char *s, const char *font, uint16_t size, int *w, int *h ) {
   TTF_Font *f;
@@ -82,8 +128,13 @@ get_string_size( const char *s, const char *font, uint16_t size, int *w, int *h 
   }
 }
 
-/*
+/**
  *
+ * 
+ * @param
+ * @param
+ * 
+ * @return void.
  */
 static TTF_Font *
 get_font( const char *font_str, uint16_t font_size ) {
@@ -102,18 +153,27 @@ get_font( const char *font_str, uint16_t font_size ) {
   return NULL;
 }
 
-/*
+/**
  *
+ * 
+ * @param void.
+ * 
+ * @return void.
  */
 static void
-load_fonts() {
+load_fonts( void ) {
   add_font( "res/fonts/nes.ttf", 12 );
   add_font( "res/fonts/nes.ttf", 18 );
   add_font( "res/fonts/nes.ttf", 24 );
 }
 
-/*
+/**
+ * 
+ * 
+ * @param 
+ * @param
  *
+ * @return void.
  */
 static void
 add_font( const char *font_file, uint16_t size ) {
