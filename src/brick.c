@@ -41,17 +41,17 @@ add_brick( float x, float y, uint32_t flags, int8_t identifier ) {
   b->texture[0] = load_texture( buffer );
 
   memset( buffer, 0, MAX_BUFFER_SIZE );
-
+  const int8_t MAX_DIGIT = 3;
   // Next, load in the three files for the damage image.
   for ( int i = 1; i <= MAX_DEBRIS_IMGS; i++ ) {
-    char intBuffer[3];
-    itoa( i, intBuffer, 10 );
+    char int_buffer[MAX_DIGIT];
+    sprintf(int_buffer, "%d", i);
     strcat( buffer, "res/img/brick/" );
     strcat( buffer, str_identifier );
     strcat( buffer, "/" );
     strcat( buffer, str_identifier );
     strcat( buffer, "_" );
-    strcat( buffer, intBuffer );
+    strcat( buffer, int_buffer );
     strcat( buffer, "_damaged.png" );
     b->texture[i] = load_texture( buffer );
 

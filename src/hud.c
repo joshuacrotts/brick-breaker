@@ -251,12 +251,13 @@ draw_score( SDL_Color *c ) {
  */
 static void
 draw_level_number() {
-  int fw, fh;
+  int          fw, fh;
+  const int8_t MAX_DIGITS = 3;
 
   char level_data[MAX_BUFFER_SIZE];
-  char number_buffer[3];
+  char number_buffer[MAX_DIGITS];
 
-  itoa( stage.level_id, number_buffer, 10 );
+  sprintf( number_buffer, "%d", stage.level_id );
   strcpy( level_data, "< LEVEL " );
   char *level_string = strcat( level_data, number_buffer );
   strcat( level_data, " >" );

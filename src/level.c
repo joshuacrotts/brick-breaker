@@ -25,14 +25,15 @@ static void powerup_hit_paddle( entity_t * );
 
 level_t *
 add_level( uint16_t level_id ) {
-  level_t *level;
-  FILE *   fptr;
+  level_t *    level;
+  FILE *       fptr;
+  const int8_t MAX_DIGITS = 3;
 
   char  level_data[MAX_BUFFER_SIZE];
-  char  number_buffer[3];
+  char  number_buffer[MAX_DIGITS];
   char *file_extsn = ".txt";
 
-  itoa( level_id, number_buffer, 10 );
+  sprintf( number_buffer, "%d", level_id );
   strcpy( level_data, "res/level_data/level_" );
   char *file_name     = strcat( level_data, number_buffer );
   char *file_name_ext = strcat( level_data, file_extsn );
@@ -144,11 +145,13 @@ remove_balls( void ) {
 
 void
 load_level_music( uint16_t level ) {
+  const int8_t MAX_DIGITS = 3;
+
   char  level_data[MAX_BUFFER_SIZE];
-  char  number_buffer[3];
+  char  number_buffer[MAX_DIGITS];
   char *file_extsn = ".ogg";
 
-  itoa( level, number_buffer, 10 );
+  sprintf( number_buffer, "%d", level );
   strcpy( level_data, "res/sfx/music/level_" );
   char *file_name     = strcat( level_data, number_buffer );
   char *file_name_ext = strcat( level_data, file_extsn );
@@ -352,7 +355,7 @@ ball_hit_brick( entity_t *ball ) {
         currentLevel->last_break_timer++;
 
         play_sound( SND_BRICK_BREAK, CH_BRICK );
-        add_score_item( brick->x + brick->w / 4, brick->y + brick->h / 4, 0);
+        add_score_item( brick->x + brick->w / 4, brick->y + brick->h / 4, 0 );
 
         if ( currentLevel->brick_count == 0 ) {
           activate_transition( false );

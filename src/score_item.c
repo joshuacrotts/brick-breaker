@@ -5,6 +5,8 @@
 void
 add_score_item( float x, float y, uint32_t score ) {
   score_item_t *s;
+  const int8_t  MAX_DIGITS = 5;
+
   s = malloc( sizeof( score_item_t ) );
   memset( s, 0, sizeof( score_item_t ) );
 
@@ -19,9 +21,9 @@ add_score_item( float x, float y, uint32_t score ) {
   }
 
   stage.score += s->score;
-  char number_buffer[5];
+  char number_buffer[MAX_DIGITS];
   memset( number_buffer, '\0', sizeof( number_buffer ) );
-  itoa( s->score, number_buffer, 10 );
+  sprintf( number_buffer, "%d", s->score );
   strcat( s->text, number_buffer );
   currentLevel->score_item_tail->next = s;
   currentLevel->score_item_tail       = s;
