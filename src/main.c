@@ -322,7 +322,7 @@ check_pregame(void)
   {
     app.keyboard[SDL_SCANCODE_SPACE] = 0;
     entity_t *b =
-        add_ball(random_float(app.SCREEN_WIDTH / 3, app.SCREEN_WIDTH / 2 + app.SCREEN_WIDTH / 4),
+        add_ball(random_f32(app.SCREEN_WIDTH / 3, app.SCREEN_WIDTH / 2 + app.SCREEN_WIDTH / 4),
                  app.SCREEN_HEIGHT / 2, 0);
     currentLevel->ball_tail->next = b;
     currentLevel->ball_tail = b;

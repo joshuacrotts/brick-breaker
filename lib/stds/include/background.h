@@ -7,7 +7,7 @@
 extern app_t app;
 
 extern void init_parallax_background( const char *bg_directory, size_t n,
-                                      float default_scroll_speed, float modified_scroll_speeds[],
+                                      f32 default_scroll_speed, f32 modified_scroll_speeds[],
                                       bool is_infinite );
 
 extern void parallax_background_update( parallax_background_t *parallax );

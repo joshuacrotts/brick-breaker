@@ -8,12 +8,12 @@
 //        animation will not move, rotate, etc.
 //
 // PUBLIC FUNCTIONS :
-//        extern animation_t *add_spritesheet( const char *file_directory, uint8_t n, float frame_time,
+//        animation_t   *add_spritesheet( const char *file_directory, uint8_t n, f32 frame_time,
 //                                     uint16_t start_x, uint16_t start_y );
-//        extern animation_t *add_animation( const char *files_directory, uint8_t n, float frame_time );
-//        extern void animation_update( animation_t *animation );
-//        extern void animation_draw( animation_t *animation );
-//        extern void animation_die( animation_t *animation );
+//        animation_t   *add_animation( const char *files_directory, uint8_t n, f32 frame_time );
+//        void          animation_update( animation_t *animation );
+//        void          animation_draw( animation_t *animation );
+//        void          animation_die( animation_t *animation );
 //
 // NOTES :
 //        Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -48,14 +48,14 @@ static char input_buffer[MAX_BUFFER_SIZE];
  *
  * @param const char* file directory of sprite sheet.
  * @param uint8_t number of frames.
- * @param float time spent on an individual frame per second.
+ * @param f32 time spent on an individual frame per second.
  * @param uint16_t = starting top-left x pos of the sprite sheet.
  * @param uint16_t = starting top-left y pos of the sprite sheet.
  *
  * @return animation_t* struct.
  */
 animation_t *
-add_spritesheet( const char *directory, uint8_t no_of_frames, float frame_delay, uint16_t x,
+add_spritesheet( const char *directory, uint8_t no_of_frames, f32 frame_delay, uint16_t x,
                  uint16_t y ) {
   animation_t *a;
   a = malloc( sizeof( animation_t ) );
@@ -98,12 +98,12 @@ add_spritesheet( const char *directory, uint8_t no_of_frames, float frame_delay,
  *
  * @param const char* directory to files with file prefix.
  * @param uint8_t number of frames.
- * @param float time to spend on a individual frame per second.
+ * @param f32 time to spend on a individual frame per second.
  *
  * @return animation_t* struct.
  */
 animation_t *
-add_animation( const char *directory, uint8_t no_of_frames, float frame_delay ) {
+add_animation( const char *directory, uint8_t no_of_frames, f32 frame_delay ) {
   animation_t *a;
   a = malloc( sizeof( animation_t ) );
 

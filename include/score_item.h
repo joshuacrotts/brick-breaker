@@ -9,7 +9,7 @@
 extern level_t *currentLevel;
 extern stage_t  stage;
 
-extern void add_score_item( float, float, uint32_t );
+extern void add_score_item( f32, f32, uint32_t );
 
 extern void score_item_update( score_item_t * );
 

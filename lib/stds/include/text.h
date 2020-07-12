@@ -9,10 +9,10 @@ extern void init_fonts( void );
 
 extern void free_fonts( void );
 
-extern void draw_text( float x, float y, uint8_t r, uint8_t g, uint8_t b,
-                       const char *font_directory, uint16_t font_size, const char *str, ... );
+extern void draw_text( f32 x, f32 y, SDL_Color *c, const char *font_directory, 
+                       uint16_t font_size, const char *str, ... );
 
 extern void get_string_size( const char *str, const char *font_name, uint16_t font_size,
-                             int *stored_width, int *stored_height );
+                             int32_t *stored_width, int32_t *stored_height );
 
-#endif
+#endif // TEXT_H

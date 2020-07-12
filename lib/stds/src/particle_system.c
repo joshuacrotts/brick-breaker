@@ -1,3 +1,38 @@
+//=============================================================================================//
+// FILENAME :       particle_system.c
+//
+// DESCRIPTION :
+//        This file defines the particle system backed in static memory.
+//
+// PUBLIC FUNCTIONS :
+//        particle_system_t *create_particle_system( int32_t max_particles );
+//        int32_t           insert_particle( particle_system_t *ps, particle_t *p );
+//        void              particle_system_update( particle_system_t *ps );
+//        void              particle_system_draw( particle_system_t *ps );
+//
+// NOTES :
+//        Permission is hereby granted, free of charge, to any person obtaining a copy
+//        of this software and associated documentation files (the "Software"), to deal
+//        in the Software without restriction, including without limitation the rights
+//        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//        copies of the Software, and to permit persons to whom the Software is
+//        furnished to do so, subject to the following conditions:
+//
+//        The above copyright notice and this permission notice shall be included in all
+//        copies or substantial portions of the Software.
+//
+//        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//        SOFTWARE.
+//
+// AUTHOR :   Joshua Crotts        START DATE :    6 Jul 2020
+//
+//=============================================================================================//
+
 #include "../include/particle_system.h"
 
 /**
@@ -71,7 +106,6 @@ particle_system_update( particle_system_t *ps ) {
     }
 
     if ( p->flags & DEATH_MASK ) {
-
       //  Find the rear of the alive particles and grab it.
       ps->dead_index            = --( ps->alive_count );
       particle_t *back_particle = &ps->particles[ps->dead_index];

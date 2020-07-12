@@ -6,7 +6,7 @@
 #define MAX_LIVES       4
 
 entity_t *
-add_powerup( float x, float y, uint32_t flags, int8_t identifier ) {
+add_powerup( f32 x, f32 y, uint32_t flags, int8_t identifier ) {
   entity_t *p;
   p = malloc( sizeof( entity_t ) );
   memset( p, 0, sizeof( entity_t ) );
@@ -107,8 +107,8 @@ void
 powerup_multi_activate( entity_t *p ) {
   entity_t *b1;
   entity_t *b2;
-  b1 = add_ball( random_float( 300, 600 ), app.SCREEN_HEIGHT / 2, 0 );
-  b2 = add_ball( random_float( 300, 600 ), app.SCREEN_HEIGHT / 2, 0 );
+  b1 = add_ball( random_f32( 300, 600 ), app.SCREEN_HEIGHT / 2, 0 );
+  b2 = add_ball( random_f32( 300, 600 ), app.SCREEN_HEIGHT / 2, 0 );
 
   currentLevel->ball_tail->next = b1;
   currentLevel->ball_tail       = b1;

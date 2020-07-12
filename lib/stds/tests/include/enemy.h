@@ -10,7 +10,7 @@
  *
  */
 extern entity_t*
-add_enemy( float x, float y );
+add_enemy( f32 x, f32 y );
 
 
 /*

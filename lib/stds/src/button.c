@@ -6,18 +6,18 @@
 //        button events like clicking and movement.
 //
 // PUBLIC FUNCTIONS :
-//        extern void      update_buttons( void );
-//        extern void      draw_buttons( void );
-//        extern button_t *add_button( float x, float y, uint32_t w, uint32_t h, bool filled,
+//        void      update_buttons( void );
+//        void      draw_buttons( void );
+//        button_t *add_button( f32 x, f32 y, uint32_t w, uint32_t h, bool filled,
 //                                     const char *font_directory, uint16_t font_size, SDL_Color *font_color,
 //                                     const char *text );
-//        extern button_t *add_button_texture( float x, float y, const char *texture_directory,
+//        button_t *add_button_texture( f32 x, f32 y, const char *texture_directory,
 //                                             const char *font_directory, uint16_t font_size,
 //                                             SDL_Color *color, const char *text );
-//        extern void     button_update( button_t *button );
-//        extern void     button_draw( button_t *button );
-//        extern bool     is_mouse_over_button( button_t *button );
-//        extern bool     is_button_clicked( button_t *button, int32_t mouse_code );
+//        void     button_update( button_t *button );
+//        void     button_draw( button_t *button );
+//        bool     is_mouse_over_button( button_t *button );
+//        bool     is_button_clicked( button_t *button, int32_t mouse_code );
 //
 // NOTES :
 //        Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -79,8 +79,8 @@ draw_buttons( void ) {
  * Adds a button with no texture. This is useful for buttons that have to change colors overtime, or
  * just don't have an accompanying texture. Make sure to change the color with button->color = ...
  *
- * @param float x top-left x pos of button.
- * @param float y top-left y pos of button.
+ * @param f32 x top-left x pos of button.
+ * @param f32 y top-left y pos of button.
  * @param uint32_t w width of button.
  * @param uint32_t h height of button.
  * @param bool true if the button should be filled with color, false otherwise.
@@ -92,7 +92,7 @@ draw_buttons( void ) {
  * @return button_t pointer.
  */
 button_t *
-add_button( float x, float y, uint32_t w, uint32_t h, bool is_filled, const char *font_path,
+add_button( f32 x, f32 y, uint32_t w, uint32_t h, bool is_filled, const char *font_path,
             uint16_t size, SDL_Color *fc, const char *text ) {
   button_t *button;
   button = malloc( sizeof( button_t ) );
@@ -127,8 +127,8 @@ add_button( float x, float y, uint32_t w, uint32_t h, bool is_filled, const char
 /**
  * Adds a button with a texture.
  *
- * @param float x top-left x pos of button.
- * @param float y top-left y pos of button.
+ * @param f32 x top-left x pos of button.
+ * @param f32 y top-left y pos of button.
  * @param const char* string to texture for button.
  * @param const char* string to font path used for the text.
  * @param uint16_t size of font.
@@ -138,7 +138,7 @@ add_button( float x, float y, uint32_t w, uint32_t h, bool is_filled, const char
  * @return button_t pointer.
  */
 button_t *
-add_button_texture( float x, float y, const char *file_path, const char *font_path, uint16_t size,
+add_button_texture( f32 x, f32 y, const char *file_path, const char *font_path, uint16_t size,
                     SDL_Color *fc, const char *text ) {
   button_t *button;
   button = malloc( sizeof( button_t ) );
@@ -166,7 +166,7 @@ add_button_texture( float x, float y, const char *file_path, const char *font_pa
   SDL_QueryTexture( button->texture[button->texture_id], NULL, NULL, &button->rect.w,
                     &button->rect.h );
 
-  int fw, fh;
+  int32_t fw, fh;
   get_string_size( text, button->font_path, button->font_size, &fw, &fh );
 
   button->text_x = button->rect.x + ( ( button->rect.w - fw ) / 2 );
@@ -200,7 +200,7 @@ button_draw( button_t *b ) {
   } else {
     draw_rect( &b->rect, &b->color, b->is_filled, true );
   }
-  draw_text( b->text_x, b->text_y, b->text_color.r, b->text_color.g, b->text_color.b, b->font_path,
+  draw_text( b->text_x, b->text_y, &b->text_color, b->font_path,
              b->font_size, b->text );
 }
 

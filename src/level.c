@@ -384,8 +384,8 @@ ball_hit_paddle( entity_t *b ) {
     double   norm   = rel / ( paddle->w / 2 );
     double   bounce = norm * ( 5 * PI / 12 );
 
-    b->dx = ( float ) ( BALL_SPEED * -sin( bounce ) );
-    b->dy = ( float ) ( -BALL_SPEED * cos( bounce ) );
+    b->dx = ( f32 ) ( BALL_SPEED * -sin( bounce ) );
+    b->dy = ( f32 ) ( -BALL_SPEED * cos( bounce ) );
     return;
   }
 }
@@ -419,7 +419,7 @@ static entity_t *
 spawn_powerup( entity_t *parent ) {
   entity_t *p;
 
-  float prob = random_float( 1.0f, 1000.0f );
+  f32 prob = random_f32( 1.0f, 1000.0f );
 
   if ( prob < 50.0f ) {
     p = add_powerup( parent->x, parent->y, 0, EXTRA_LIFE );

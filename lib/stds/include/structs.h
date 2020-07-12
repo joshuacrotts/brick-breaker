@@ -3,6 +3,8 @@
 
 #include "stds.h"
 
+typedef        float              f32;
+
 typedef struct Delegate           delegate_t;
 typedef struct Entity             entity_t;
 typedef struct Mouse              mouse_t;
@@ -14,9 +16,19 @@ typedef struct Background         background_t;
 typedef struct ParallaxBackground parallax_background_t;
 typedef struct Font               font_t;
 typedef struct Trail              trail_t;
+typedef struct Circle             circle_t;
 typedef struct Button             button_t;
 typedef struct ParticleSystem     particle_system_t;
 typedef struct Particle           particle_t;
+
+/*
+ *
+ */
+struct Circle {
+    f32  center_x;
+    f32  center_y;
+    f32  radius;
+};
 
 /*
  *
@@ -30,8 +42,8 @@ struct Button {
   int32_t  text_x;
   int32_t  text_y;
   uint16_t font_size;
-  float    scale_x;
-  float    scale_y;
+  f32    scale_x;
+  f32    scale_y;
 
   SDL_Texture *texture[TEXTURE_BUFFER_SIZE];
   SDL_Color    color;
@@ -45,13 +57,13 @@ struct Button {
  *
  */
 struct Particle {
-  float    x;
-  float    y;
-  float    dx;
-  float    dy;
-  float    delta_accel_x;
-  float    delta_accel_y;
-  float    delta_alpha;
+  f32    x;
+  f32    y;
+  f32    dx;
+  f32    dy;
+  f32    delta_accel_x;
+  f32    delta_accel_y;
+  f32    delta_alpha;
   int32_t w;
   int32_t h;
   uint32_t angle;
@@ -83,8 +95,8 @@ struct ParticleSystem {
  *
  */
 struct ParallaxBackground {
-  float parallax_scroll_speed;
-  float normal_scroll_speed;
+  f32   parallax_scroll_speed;
+  f32   normal_scroll_speed;
   bool  infinite_scroll;
 
   background_t *         background;
@@ -95,15 +107,15 @@ struct ParallaxBackground {
  *
  */
 struct Trail {
-  float    x;
-  float    y;
+  f32      x;
+  f32      y;
   int16_t  alpha;
   int16_t  alpha_decay_rate;
   uint32_t flags;
   bool     is_texture;
 
   SDL_RendererFlip flip;
-  SDL_Texture *    texture;
+  SDL_Texture      *texture;
 
   trail_t *next;
 };
@@ -112,26 +124,25 @@ struct Trail {
  *
  */
 struct Animation {
-  float pos_x;
-  float pos_y;
-
+  f32      pos_x;
+  f32      pos_y;
+  f32      frame_delay;
+  f32      frame_timer;
   uint32_t splice_x;
   uint32_t splice_y;
-  int32_t  w;
-  int32_t  h;
+  uint32_t id_flags;
+  uint32_t flags;
   uint16_t angle;
   uint16_t start_x;
   uint16_t start_y;
+  int32_t  w;
+  int32_t  h;
   int32_t  sprite_sheet_width;
   int32_t  sprite_sheet_height;
-  bool     cycle_once;
-
-  uint32_t id_flags;
-  uint32_t flags;
   uint8_t  current_frame_id;
   size_t   number_of_frames;
-  float    frame_delay;
-  float    frame_timer;
+
+  bool     cycle_once;
 
   SDL_RendererFlip flip;
 
@@ -147,16 +158,15 @@ struct Animation {
  *
  */
 struct Background {
-  float x;
-  float y;
-  float scroll_x;
-  float scroll_y;
+  f32 x;
+  f32 y;
+  f32 scroll_x;
+  f32 scroll_y;
+  f32 scale_x;
+  f32 scale_y;
 
   int32_t w;
   int32_t h;
-
-  float scale_x;
-  float scale_y;
 
   SDL_Texture *background_texture;
 };
@@ -213,10 +223,10 @@ struct App {
   uint32_t    LEVEL_HEIGHT;
   const char *original_title;
 
-  SDL_Renderer *renderer;
-  SDL_Window *  window;
-  SDL_Rect      screen_bounds;
-  SDL_Rect      camera;
+  SDL_Renderer   *renderer;
+  SDL_Window     *window;
+  SDL_FRect      screen_bounds;
+  SDL_FRect      camera;
 
   mouse_t               mouse;
   delegate_t            delegate;
@@ -233,9 +243,9 @@ struct App {
  *
  */
 struct FadeColor {
-  bool  is_first_color;
-  float alpha;
-  float time;
+  bool is_first_color;
+  f32  alpha;
+  f32  time;
 
   SDL_Color c1;
   SDL_Color c2;
@@ -245,27 +255,27 @@ struct FadeColor {
  *
  */
 struct Entity {
-  float x;
-  float y;
+  f32 x;
+  f32 y;
 
   //  Miscellaneous positioning variable.
-  float variability;
+  f32 variability;
 
   // Scales the entity in either the x or y
   // direction. This should default to 1.
-  float scale_x;
-  float scale_y;
+  f32 scale_x;
+  f32 scale_y;
 
   //  Directional velocity (yes, I know it's redundant).
-  float dx;
-  float dy;
+  f32 dx;
+  f32 dy;
 
   //  Acceleration or deceleration factors.
-  float delta_accel_x;
-  float delta_accel_y;
+  f32 delta_accel_x;
+  f32 delta_accel_y;
 
   // Change rate of alpha value.
-  float delta_alpha;
+  f32 delta_alpha;
 
   // Size of entity if not defined by a rectangle. These
   // should either be set manually, or defined by a call
@@ -297,4 +307,4 @@ struct Entity {
   void ( *die )( entity_t * );
 };
 
-#endif
+#endif // STRUCTS_H

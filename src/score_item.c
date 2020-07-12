@@ -3,7 +3,7 @@
 #define BRICK_SCORE 100
 
 void
-add_score_item( float x, float y, uint32_t score ) {
+add_score_item( f32 x, f32 y, uint32_t score ) {
   score_item_t *s;
   const int8_t  MAX_DIGITS = 5;
 
@@ -40,5 +40,6 @@ score_item_update( score_item_t *s ) {
 
 void
 score_item_draw( score_item_t *s ) {
-  draw_text( s->x, s->y, 0xff, 0xff, 0xff, "res/fonts/nes.ttf", 18, s->text );
+  SDL_Color white = {0xff, 0xff, 0xff, 0xff};
+  draw_text( s->x, s->y, &white, "res/fonts/nes.ttf", 18, s->text );
 }

@@ -2,8 +2,13 @@
 #The files within this zip file are copyrighted by Lazy Foo' Productions (2004-2014)
 #and may not be redistributed without written permission.
 
-#OBJS specifies which files to compile as part of the project
-OBJS = src/*.c tests/src/*.c lib/structures/src/*.c
+ifeq ($(shell uname -s), Darwin)
+	#OBJS specifies which files to compile as part of the project
+	OBJS = src/*.c tests/src/*.c lib/structures/src/*.c
+else
+	#OBJS specifies which files to compile as part of the project
+	OBJS = src/*.c include/*.h tests/src/*.c tests/include/*.h lib/structures/src/*.c lib/structures/include/*.h
+endif
 
 #CC specifies which compiler we're using
 CC = gcc
@@ -38,5 +43,8 @@ endif
 OBJ_NAME = Game
 
 #This is the target that compiles our executable
+#
+# -g -O -c generates .o files.
+# -shared -o
 all : $(OBJS)
 	$(CC) $(OBJS) $(INCLUDE_PATHS) $(LIBRARY_PATHS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OBJ_NAME)

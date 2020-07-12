@@ -8,7 +8,7 @@
 /*
  *
  */
-extern entity_t *add_brick( float, float, uint32_t, int8_t );
+extern entity_t *add_brick( f32, f32, uint32_t, int8_t );
 
 /*
  *

@@ -1,8 +1,8 @@
 #include "../include/particle.h"
 
 particle_t
-add_particle( float x, float y, float dx, float dy, float decX, float decY, uint16_t w, uint16_t h,
-              uint16_t angle, uint8_t r, uint8_t g, uint8_t b, uint8_t a, float delta_alpha,
+add_particle( f32 x, f32 y, f32 dx, f32 dy, f32 decX, f32 decY, uint16_t w, uint16_t h,
+              uint16_t angle, uint8_t r, uint8_t g, uint8_t b, uint8_t a, f32 delta_alpha,
               uint32_t id_flags ) {
   particle_t en;
 
@@ -32,7 +32,7 @@ add_particle( float x, float y, float dx, float dy, float decX, float decY, uint
 }
 
 particle_t *
-add_animated_particle( float x, float y, float dx, float dy, float decX, float decY, uint16_t angle,
+add_animated_particle( f32 x, f32 y, f32 dx, f32 dy, f32 decX, f32 decY, uint16_t angle,
                        uint32_t id_flags, animation_t *animation ) {
   particle_t *en;
   en = malloc( sizeof( particle_t ) );
@@ -98,15 +98,13 @@ particle_update( particle_t *e ) {
 
 void
 particle_draw( particle_t *e ) {
-
   if ( e->animation == NULL ) {
-    SDL_FRect frect = {e->x, e->y, e->w, e->h};
-
     if ( e->id_flags & ID_P_SQUARE_MASK ) {
+      SDL_FRect frect = {e->x, e->y, e->w, e->h};
       draw_frect( &frect, &e->color, true, false );
     } else if ( e->id_flags & ID_P_CIRCLE_MASK ) {
-      uint32_t r = ( uint32_t )( frect.w / 2 );
-      fill_circle( ( int32_t ) frect.x, ( int32_t ) frect.y, r, &e->color );
+      circle_t c = {e->x, e->y, e->w / 2};
+      fill_circle( &c, &e->color );
     }
   } else {
     animation_draw( e->animation );
