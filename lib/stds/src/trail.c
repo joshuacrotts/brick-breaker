@@ -38,14 +38,14 @@
  * @param int16_t rate at which the alpha decreases (should be between 0
  *        and 255, the higher it is, the faster it goes).
  * @param int16_t starting alpha of the object.
- * @param bool blends the alpha a different way if it is a texture or not.
  * @param SDL_RendererFlip flip enum for if the trail should be flipped.
+ * @param bool is_transparent if your image has a PNG background, this should be true.
  *
  * @return void.
  */
 void
 Stds_AddTextureTrail( struct entity_t *parent, int16_t alpha_decay, int16_t initial_alpha,
-                      SDL_RendererFlip flip ) {
+                      SDL_RendererFlip flip, bool is_transparent ) {
   struct trail_t *t;
   t = malloc( sizeof( struct trail_t ) );
 
@@ -62,7 +62,7 @@ Stds_AddTextureTrail( struct entity_t *parent, int16_t alpha_decay, int16_t init
   t->w     = parent->w;
   t->h     = parent->h;
   t->flip  = flip;
-  t->flags = STDS_TRAIL_TEXTURE_MASK;
+  t->flags |= is_transparent ? STDS_TRAIL_TRANSPARENT_TEXTURE_MASK : STDS_TRAIL_TEXTURE_MASK;
 
   /* If we want the trail to be the texture of the parent entity,
      we either use its animation, or static texture. */
@@ -173,7 +173,7 @@ Stds_TrailUpdate( struct trail_t *t ) {
 void
 Stds_TrailDraw( struct trail_t *t ) {
   /* If texture. */
-  if ( ( t->flags & STDS_TRAIL_TEXTURE_MASK ) ) {
+  if ( !( t->flags & STDS_TRAIL_TRANSPARENT_TEXTURE_MASK ) ) {
     SDL_SetTextureBlendMode( t->texture, SDL_BLENDMODE_BLEND );
   }
 
@@ -189,7 +189,7 @@ Stds_TrailDraw( struct trail_t *t ) {
     Stds_DrawCircle( &circle, &t->color, true );
   }
 
-  if ( ( t->flags & STDS_TRAIL_TEXTURE_MASK ) ) {
+  if ( !( t->flags & STDS_TRAIL_TRANSPARENT_TEXTURE_MASK ) ) {
     SDL_SetTextureBlendMode( t->texture, SDL_BLENDMODE_NONE );
   }
 }

@@ -7,7 +7,7 @@
 extern struct app_t app;
 
 extern void Stds_AddTextureTrail( struct entity_t *parent_entity, int16_t alpha_decay_rate,
-                                  int16_t starting_alpha, SDL_RendererFlip flip );
+                                  int16_t starting_alpha, SDL_RendererFlip flip, bool is_transparent );
 
 extern void Stds_AddSquareTrail( float x, float y, int32_t w, int32_t h, int16_t alpha_decay,
                                  int16_t initial_alpha, SDL_Color *c );

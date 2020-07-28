@@ -35,7 +35,7 @@ void
 ball_update( struct entity_t *b ) {
   b->x += b->dx;
   b->y += b->dy;
-  Stds_AddTextureTrail( b, 4, 60, SDL_FLIP_NONE );
+  Stds_AddTextureTrail( b, 4, 60, SDL_FLIP_NONE, false );
   check_bounds( b );
 }
 
