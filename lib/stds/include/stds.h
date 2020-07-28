@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 #include <time.h>
 
 #include "SDL2/SDL.h"
@@ -29,23 +30,23 @@
 
 extern int32_t random_int( int32_t min, int32_t max );
 
-extern float random_float( float min, float max );
+extern f32 random_f32( f32 min, f32 max );
 
 extern void clamp( int32_t *n, int32_t min, int32_t max );
 
-extern void calc_slope( int32_t x1, int32_t y1, int32_t x2, int32_t y2, float *x_slope, float *y_slope );
+extern void calc_slope( int32_t x1, int32_t y1, int32_t x2, int32_t y2, f32 *x_slope, f32 *y_slope );
 
-extern float get_angle( int32_t x1, int32_t y1, int32_t x2, int32_t y2 );
+extern f32 get_angle( int32_t x1, int32_t y1, int32_t x2, int32_t y2 );
 
 extern int32_t get_distance( int32_t x1, int32_t y1, int32_t x2, int32_t y2 );
 
 extern void print( const char * s, ... );
 
-extern float to_radians( float degree_angle );
+extern f32 to_radians( f32 degree_angle );
 
-extern float to_degrees( float radian_angle );
+extern f32 to_degrees( f32 radian_angle );
 
-extern bool is_mouse_over_rect( float x, float y, SDL_Rect rect );
+extern bool is_mouse_over_rect( f32 x, f32 y, SDL_Rect rect );
 
 extern char *str_substring( const char *str, int first, int last );
 

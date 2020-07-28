@@ -22,6 +22,15 @@ The only dependencies for this library are SDL components.
 
 **Windows**: To rebuild the code, clone the repository to your computer. This project is compiled with MinGW and a makefile. Depending on how you want to compile the project, you will need to alter the makefile to fit your needs and make sure you have SDL and its extensions installed correctly. Compile the code via <code>mingw32-make</code>.
 
+**MacOS**: For MacOS, run the following commands in your terminal to get the appropriate development files for SDL:
+
+1. <code>brew install SDL2</code>
+2. <code>brew install SDL2_image</code>
+3. <code>brew install SDL2_ttf</code>
+4. <code>brew install SDL2_mixer</code>
+
+Then, compile via <code>make</code>.
+
 **Linux (Ubuntu/Debian)**: The process is similar to the former, with the exception of having to install SDL files to your system in Linux. Run the following commands (or their distro-equivalent) in your terminal:
 
 1. <code>sudo apt-get install libsdl2-dev</code>

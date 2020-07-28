@@ -9,11 +9,11 @@ extern void      update_buttons( void );
 
 extern void      draw_buttons( void );
 
-extern button_t *add_button( float x, float y, uint32_t w, uint32_t h, bool filled,
+extern button_t *add_button( f32 x, f32 y, uint32_t w, uint32_t h, bool filled,
                              const char *font_directory, uint16_t font_size, SDL_Color *font_color,
                              const char *text );
 
-extern button_t *add_button_texture( float x, float y, const char *texture_directory,
+extern button_t *add_button_texture( f32 x, f32 y, const char *texture_directory,
                                      const char *font_directory, uint16_t font_size,
                                      SDL_Color *color, const char *text );
 

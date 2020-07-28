@@ -15,8 +15,8 @@ typedef enum BrickBreakerState {
 } BrickBreakerState;
 
 struct ScoreItem {
-  float    x;
-  float    y;
+  f32    x;
+  f32    y;
   char     text[16];
   int32_t  score;
   int32_t  life;
@@ -42,10 +42,10 @@ struct Level {
 };
 
 struct Debris {
-  float        x;
-  float        y;
-  float        dx;
-  float        dy;
+  f32        x;
+  f32        y;
+  f32        dx;
+  f32        dy;
   uint32_t     flags;
   SDL_Texture *texture;
   SDL_Rect     rect;

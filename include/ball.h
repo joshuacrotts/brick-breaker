@@ -14,7 +14,7 @@ extern level_t *          currentLevel;
 /*
  *
  */
-entity_t *add_ball( float, float, uint32_t flags );
+entity_t *add_ball( f32, f32, uint32_t flags );
 
 /*
  *

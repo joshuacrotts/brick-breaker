@@ -15,7 +15,7 @@ extern level_t * currentLevel;
 /*
  *
  */
-extern entity_t *add_powerup( float, float, uint32_t, int8_t );
+extern entity_t *add_powerup( f32, f32, uint32_t, int8_t );
 
 /*
  *

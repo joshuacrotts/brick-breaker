@@ -248,8 +248,4 @@ cleanup( void ) {
 
   free_fonts();
   SDL_Quit();
-
-  if ( debug_mode ) {
-    SDL_LogInfo( SDL_LOG_CATEGORY_APPLICATION, "Program quit." );
-  }
 }

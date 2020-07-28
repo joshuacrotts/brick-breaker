@@ -1,3 +1,38 @@
+//=============================================================================================//
+// FILENAME :       collision.c
+//
+// DESCRIPTION :
+//        This file defines the primary collision detectin functions. As of 7/9/2020, we have
+//        an AABB collision-response function (returning an enum of the collision side), and a 
+//        primitive rectangle-overlap test.
+//
+// PUBLIC FUNCTIONS :
+//        enum CollisionSide check_aabb_collision( entity_t *, entity_t * );
+//        bool check_intersection( f32, f32, int32_t, int32_t, f32, f32, int32_t, int32_t )
+//
+// NOTES :
+//        Permission is hereby granted, free of charge, to any person obtaining a copy
+//        of this software and associated documentation files (the "Software"), to deal
+//        in the Software without restriction, including without limitation the rights
+//        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//        copies of the Software, and to permit persons to whom the Software is
+//        furnished to do so, subject to the following conditions:
+//
+//        The above copyright notice and this permission notice shall be included in all
+//        copies or substantial portions of the Software.
+//
+//        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//        SOFTWARE.
+//
+// AUTHOR :   Joshua Crotts        START DATE :    22 Jun 2020
+//
+//=============================================================================================//
+
 #include "../include/collision.h"
 
 /**
@@ -10,14 +45,14 @@
  */
 enum CollisionSide
 check_aabb_collision( entity_t *a, entity_t *b ) {
-  float w  = 0.5f * ( b->w + a->w );
-  float h  = 0.5f * ( b->h + a->h );
-  float dx = ( b->x + b->w / 2.0f ) - ( a->x + a->w / 2.0f );
-  float dy = ( b->y + b->h / 2.0f ) - ( a->y + a->h / 2.0f );
+  f32 w  = 0.5f * ( b->w + a->w );
+  f32 h  = 0.5f * ( b->h + a->h );
+  f32 dx = ( b->x + b->w / 2.0f ) - ( a->x + a->w / 2.0f );
+  f32 dy = ( b->y + b->h / 2.0f ) - ( a->y + a->h / 2.0f );
 
   if ( fabs( dx ) < w && fabs( dy ) < h ) {
-    float wy = w * dy;
-    float hx = h * dx;
+    f32 wy = w * dy;
+    f32 hx = h * dx;
 
     if ( wy >= hx ) {
       if ( wy > -hx ) { // top
@@ -56,7 +91,7 @@ check_aabb_collision( entity_t *a, entity_t *b ) {
  * @return true if overlap exists, false otherwise.
  */
 bool
-check_intersection( float x1, float y1, int32_t w1, int32_t h1, float x2, float y2, int32_t w2,
+check_intersection( f32 x1, f32 y1, int32_t w1, int32_t h1, f32 x2, f32 y2, int32_t w2,
                     int32_t h2 ) {
   return ( MAX( x1, x2 ) < MIN( x1 + w1, x2 + w2 ) ) && ( MAX( y1, y2 ) < MIN( y1 + h1, y2 + h2 ) );
 }

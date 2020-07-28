@@ -4,7 +4,7 @@ static void  update_brick_status( entity_t * );
 static char *get_string_enum( enum Brick );
 
 entity_t *
-add_brick( float x, float y, uint32_t flags, int8_t identifier ) {
+add_brick( f32 x, f32 y, uint32_t flags, int8_t identifier ) {
   entity_t *b;
 
   b = malloc( sizeof( entity_t ) );
@@ -29,7 +29,7 @@ add_brick( float x, float y, uint32_t flags, int8_t identifier ) {
   strcat( buffer, str_identifier );
   strcat( buffer, "_animated.png" );
 
-  b->animation = add_spritesheet( buffer, 7, random_float( 0.05f, 0.111f ), 0, 0 );
+  b->animation = add_spritesheet( buffer, 7, random_f32( 0.05f, 0.111f ), 0, 0 );
   memset( buffer, 0, MAX_BUFFER_SIZE );
 
   // Now, load in the default image file.

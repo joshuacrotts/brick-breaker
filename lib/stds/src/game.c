@@ -13,7 +13,7 @@
 //        void        init_app_structures( void );
 //
 // PRIVATE/STATIC FUNCTIONS :
-//        void        cap_frame_rate( long *, float * );
+//        void        cap_frame_rate( long *, f32 * );
 //        uint32_t    update_window_title( uint32_t, void * );
 //
 // NOTES :
@@ -43,7 +43,7 @@
 
 static uint16_t current_fps;
 
-static void     cap_framerate( long *, float * );
+static void     cap_framerate( long *, f32 * );
 static uint32_t update_window_title( uint32_t, void * );
 
 /**
@@ -60,6 +60,8 @@ init_app_structures( void ) {
   app.button_tail   = &app.button_head;
   app.trail_tail    = &app.trail_head;
   app.font_tail     = &app.font_head;
+
+  init_window_fps();
 }
 
 /**
@@ -90,7 +92,7 @@ void
 loop( void ) {
   long  timer;
   long  then;
-  float remainder;
+  f32 remainder;
 
   then      = SDL_GetTicks();
   
@@ -115,7 +117,7 @@ loop( void ) {
  * @return void.
  */
 static void
-cap_framerate( long *then, float *remainder ) {
+cap_framerate( long *then, f32 *remainder ) {
   long wait, frame_time;
 
   wait = ( int32_t )( FPS_TIME + *remainder );

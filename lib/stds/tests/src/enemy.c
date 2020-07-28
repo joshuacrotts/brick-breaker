@@ -1,7 +1,7 @@
 #include "../include/enemy.h"
 
 entity_t *
-add_enemy( float x, float y ) {
+add_enemy( f32 x, f32 y ) {
   entity_t *e;
 
   e = malloc( sizeof( entity_t ) );

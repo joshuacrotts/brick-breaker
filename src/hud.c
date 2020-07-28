@@ -17,7 +17,7 @@ static void draw_title( SDL_Color * );
 static void draw_pregame_text( SDL_Color * );
 static void draw_score( SDL_Color * );
 static void draw_level_number( void );
-static void spawn_star_particles( float, float, uint32_t, uint32_t );
+static void spawn_star_particles( f32, f32, uint32_t, uint32_t );
 
 void
 init_HUD( void ) {
@@ -82,7 +82,7 @@ update_HUD( void ) {
     menu_update();
     update_buttons();
   } else {
-    spawn_star_particles( random_float( 400.0f, 2000.0f ), random_float( 900.0f, 1100.0f ), 20,
+    spawn_star_particles( random_f32( 400.0f, 2000.0f ), random_f32( 900.0f, 1100.0f ), 20,
                           ID_P_STAR_MASK );
   }
 }
@@ -145,19 +145,19 @@ void
 menu_draw( SDL_Color *c ) {
   int fw, fh;
   get_string_size( title, "res/fonts/nes.ttf", 24, &fw, &fh );
-  draw_text( ( app.SCREEN_WIDTH >> 1 ) - ( fw >> 1 ), 200, c->r, c->g, c->b, "res/fonts/nes.ttf",
+  draw_text( ( app.SCREEN_WIDTH >> 1 ) - ( fw >> 1 ), 200, c, "res/fonts/nes.ttf",
              24, title );
 
   get_string_size( created_by, "res/fonts/nes.ttf", 12, &fw, &fh );
-  draw_text( ( app.SCREEN_WIDTH >> 1 ) - ( fw >> 1 ), app.SCREEN_HEIGHT - fh * 6, c->r, c->g, c->b,
+  draw_text( ( app.SCREEN_WIDTH >> 1 ) - ( fw >> 1 ), app.SCREEN_HEIGHT - fh * 6, c,
              "res/fonts/nes.ttf", 12, created_by );
 
   get_string_size( artwork_by, "res/fonts/nes.ttf", 12, &fw, &fh );
-  draw_text( ( app.SCREEN_WIDTH >> 1 ) - ( fw >> 1 ), app.SCREEN_HEIGHT - fh * 4, c->r, c->g, c->b,
+  draw_text( ( app.SCREEN_WIDTH >> 1 ) - ( fw >> 1 ), app.SCREEN_HEIGHT - fh * 4, c,
              "res/fonts/nes.ttf", 12, artwork_by );
 
   get_string_size( sfx_by, "res/fonts/nes.ttf", 12, &fw, &fh );
-  draw_text( ( app.SCREEN_WIDTH >> 1 ) - ( fw >> 1 ), app.SCREEN_HEIGHT - fh * 2, c->r, c->g, c->b,
+  draw_text( ( app.SCREEN_WIDTH >> 1 ) - ( fw >> 1 ), app.SCREEN_HEIGHT - fh * 2, c,
              "res/fonts/nes.ttf", 12, sfx_by );
 }
 
@@ -169,14 +169,13 @@ draw_paused( void ) {
   r.w = app.SCREEN_WIDTH;
   r.h = app.SCREEN_HEIGHT;
 
-  SDL_Color c;
-  c.r = c.g = c.b = 0;
-  c.a             = 128;
+  SDL_Color c = {0, 0, 0, 128};
+  SDL_Color white = {0xff, 0xff, 0xff, 0xff};
 
   draw_rect( &r, &c, true, false );
   int fw, fh;
   get_string_size( "PAUSED", "res/fonts/nes.ttf", 24, &fw, &fh );
-  draw_text( app.SCREEN_WIDTH / 2 - fw / 2, app.SCREEN_HEIGHT / 2, 0xff, 0xff, 0xff,
+  draw_text( app.SCREEN_WIDTH / 2 - fw / 2, app.SCREEN_HEIGHT / 2, &white,
              "res/fonts/nes.ttf", 24, "PAUSED" );
 }
 
@@ -192,7 +191,7 @@ draw_lives( SDL_Color *c ) {
   int initial_offset = 20;
   int offset         = 5;
 
-  draw_text( initial_offset, initial_offset, c->r, c->g, c->b, "res/fonts/nes.ttf", 12, "LIVES: " );
+  draw_text( initial_offset, initial_offset, c, "res/fonts/nes.ttf", 12, "LIVES: " );
 
   SDL_QueryTexture( heartTexture, NULL, NULL, &tw, &th );
   get_string_size( "LIVES: ", "res/fonts/nes.ttf", 12, &fw, &fh );
@@ -211,7 +210,7 @@ static void
 draw_title( SDL_Color *c ) {
   int fw, fh;
   get_string_size( title, "res/fonts/nes.ttf", 12, &fw, &fh );
-  draw_text( ( app.SCREEN_WIDTH >> 1 ) - ( fw >> 1 ), 20, c->r, c->g, c->b, "res/fonts/nes.ttf", 12,
+  draw_text( ( app.SCREEN_WIDTH >> 1 ) - ( fw >> 1 ), 20, c, "res/fonts/nes.ttf", 12,
              title );
 }
 
@@ -223,7 +222,7 @@ draw_pregame_text( SDL_Color *c ) {
   int fw, fh;
   get_string_size( pregame_text, "res/fonts/nes.ttf", 24, &fw, &fh );
   draw_text( ( app.SCREEN_WIDTH / 2 ) - ( fw / 2 ),
-             ( app.SCREEN_HEIGHT >> 1 ) + ( app.SCREEN_HEIGHT / 4 ), c->r, c->g, c->b,
+             ( app.SCREEN_HEIGHT >> 1 ) + ( app.SCREEN_HEIGHT / 4 ), c,
              "res/fonts/nes.ttf", 24, pregame_text );
 }
 
@@ -236,13 +235,13 @@ draw_score( SDL_Color *c ) {
   int offset = 20;
   get_string_size( "Score:", "res/fonts/nes.ttf", 12, &fw, &fh );
   int v_offset = offset + fh + 5;
-
+  SDL_Color white = {0xff, 0xff, 0xff, 0xff};
   // Draw score label.
-  draw_text( app.SCREEN_WIDTH - fw - offset, offset, c->r, c->g, c->b, "res/fonts/nes.ttf", 12,
+  draw_text( app.SCREEN_WIDTH - fw - offset, offset, c, "res/fonts/nes.ttf", 12,
              "Score:" );
 
   // Draw numeric score.
-  draw_text( app.SCREEN_WIDTH - fw - offset, v_offset, 0xff, 0xff, 0xff, "res/fonts/nes.ttf", 12,
+  draw_text( app.SCREEN_WIDTH - fw - offset, v_offset, &white, "res/fonts/nes.ttf", 12,
              "%d", stage.score );
 }
 
@@ -257,6 +256,8 @@ draw_level_number() {
   char level_data[MAX_BUFFER_SIZE];
   char number_buffer[MAX_DIGITS];
 
+  SDL_Color white = {0xff, 0xff, 0xff, 0xff};
+
   sprintf( number_buffer, "%d", stage.level_id );
   strcpy( level_data, "< LEVEL " );
   char *level_string = strcat( level_data, number_buffer );
@@ -264,17 +265,17 @@ draw_level_number() {
 
   get_string_size( level_data, "res/fonts/nes.ttf", 24, &fw, &fh );
   draw_text( ( app.SCREEN_WIDTH / 2 ) - ( fw / 2 ),
-             ( app.SCREEN_HEIGHT >> 1 ) + ( app.SCREEN_HEIGHT / 5 ), 0xff, 0xff, 0xff,
+             ( app.SCREEN_HEIGHT >> 1 ) + ( app.SCREEN_HEIGHT / 5 ), &white,
              "res/fonts/nes.ttf", 24, level_data );
 }
 
 static void
-spawn_star_particles( float x, float y, uint32_t n, uint32_t flags ) {
+spawn_star_particles( f32 x, f32 y, uint32_t n, uint32_t flags ) {
   for ( int i = 0; i < n; i++ ) {
     particle_t p;
 
-    float dx = -10;
-    float dy = -10;
+    f32 dx = -10;
+    f32 dy = -10;
 
     uint16_t w = random_int( 1, 3 );
     uint16_t h = w;

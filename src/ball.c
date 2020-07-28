@@ -6,7 +6,7 @@ static void check_bounds( entity_t * );
 static void spawn_ball_particles( entity_t * );
 
 entity_t *
-add_ball( float x, float y, uint32_t flags ) {
+add_ball( f32 x, f32 y, uint32_t flags ) {
   entity_t *b;
   b = malloc( sizeof( entity_t ) );
   memset( b, 0, sizeof( entity_t ) );
@@ -18,11 +18,11 @@ add_ball( float x, float y, uint32_t flags ) {
 
   // Continuously generate a speed that is reasonable.
   do {
-    b->dx = random_float( -10.0f, 10.0f );
+    b->dx = random_f32( -10.0f, 10.0f );
   } while ( b->dx < 7.0f && b->dx > -7.0f );
 
   do {
-    b->dy = random_float( -10.0f, 10.0f );
+    b->dy = random_f32( -10.0f, 10.0f );
   } while ( b->dy < 7.0f && b->dy > -7.0f );
 
   b->id_flags |= ID_BALL_MASK;
@@ -81,8 +81,8 @@ spawn_ball_particles( entity_t *b ) {
     particle_t p;
     p.x             = b->x + b->w / 2;
     p.y             = b->y + b->h / 2;
-    p.dx            = random_float( -5, 5 );
-    p.dy            = random_float( -7, 5 );
+    p.dx            = random_f32( -5, 5 );
+    p.dy            = random_f32( -7, 5 );
     p.delta_accel_x = p.delta_accel_y = 0;
     p.w = p.h = 3;
     p.color.r = 0xff;

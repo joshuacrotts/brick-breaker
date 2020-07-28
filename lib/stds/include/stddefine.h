@@ -52,4 +52,4 @@ enum SFX {
   SND_MAX
 };
 
-#endif
+#endif // DEFS_H

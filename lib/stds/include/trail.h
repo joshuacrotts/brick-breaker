@@ -13,4 +13,4 @@ extern void trail_update( trail_t *t );
 
 extern void trail_draw( trail_t *t );
 
-#endif
+#endif // TRAIL_H
