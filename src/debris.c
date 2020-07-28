@@ -45,7 +45,7 @@ debris_update( debris_t *d ) {
 
 void
 debris_draw( debris_t *d ) {
-  Stds_BlitTexture( d->texture, &d->rect, d->rect.x, d->rect.y, d->rect.w, d->rect.h, 0,
+  Stds_BlitTexture( d->texture, &d->rect, d->x, d->y, d->rect.w, d->rect.h, 0,
                     SDL_FLIP_NONE, NULL, false );
 }
 
