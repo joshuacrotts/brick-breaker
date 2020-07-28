@@ -3,16 +3,16 @@
 
 #include "stds.h"
 
-extern app_t app;
+extern struct app_t app;
 
-extern void init_fonts( void );
+extern void Stds_InitFonts( void );
 
-extern void free_fonts( void );
+extern void Stds_FreeFonts( void );
 
-extern void draw_text( f32 x, f32 y, SDL_Color *c, const char *font_directory, 
-                       uint16_t font_size, const char *str, ... );
+extern void Stds_DrawText( const float x, const float y, const char *font_directory,
+                           const uint16_t font_size, const SDL_Color *c, const char *str, ... );
 
-extern void get_string_size( const char *str, const char *font_name, uint16_t font_size,
-                             int32_t *stored_width, int32_t *stored_height );
+extern void Stds_GetStringSize( const char *str, const char *font_name, const uint16_t font_size,
+                                int32_t *stored_width, int32_t *stored_height );
 
 #endif // TEXT_H

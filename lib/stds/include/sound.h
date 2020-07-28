@@ -3,12 +3,12 @@
 
 #include "stds.h"
 
-extern void init_sounds( void );
+extern void Stds_InitSounds( void );
 
-extern void load_music( const char *music_path );
+extern void Stds_LoadMusic( const char *music_path );
 
-extern void play_music( bool is_playing );
+extern void Stds_PlayMusic( const bool is_playing );
 
-extern void play_sound( int16_t sound_effect_id, int16_t channel );
+extern void Stds_PlaySounds( const int16_t sound_effect_id, const int16_t channel );
 
 #endif // SOUND_H

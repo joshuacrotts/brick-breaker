@@ -3,12 +3,9 @@
 //
 // DESCRIPTION :
 //        This file defines the primary collision detectin functions. As of 7/9/2020, we have
-//        an AABB collision-response function (returning an enum of the collision side), and a 
-//        primitive rectangle-overlap test.
-//
-// PUBLIC FUNCTIONS :
-//        enum CollisionSide check_aabb_collision( entity_t *, entity_t * );
-//        bool check_intersection( f32, f32, int32_t, int32_t, f32, f32, int32_t, int32_t )
+//        an AABB collision-response function (returning an enum of the collision side), and a
+//        primitive rectangle-overlap test. As of 7/15/2020, circular collision is added along with
+//        a primitive response function.
 //
 // NOTES :
 //        Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -36,7 +33,8 @@
 #include "../include/collision.h"
 
 /**
- * Determines which side entity_t a collided onto entity_t b.
+ * Determines which side entity_t a collided onto entity_t b. This also resolves
+ * the collision, and returns the side of collision.
  *
  * @param entity_t* first entity.
  * @param entity_t* second entity.
@@ -44,15 +42,15 @@
  * @return enum side that a collided onto b with (the side of b).
  */
 enum CollisionSide
-check_aabb_collision( entity_t *a, entity_t *b ) {
-  f32 w  = 0.5f * ( b->w + a->w );
-  f32 h  = 0.5f * ( b->h + a->h );
-  f32 dx = ( b->x + b->w / 2.0f ) - ( a->x + a->w / 2.0f );
-  f32 dy = ( b->y + b->h / 2.0f ) - ( a->y + a->h / 2.0f );
+Stds_CheckAABBCollision( struct entity_t *a, struct entity_t *b ) {
+  float w  = 0.5f * ( b->w + a->w );
+  float h  = 0.5f * ( b->h + a->h );
+  float dx = ( b->x + b->w / 2.0f ) - ( a->x + a->w / 2.0f );
+  float dy = ( b->y + b->h / 2.0f ) - ( a->y + a->h / 2.0f );
 
   if ( fabs( dx ) < w && fabs( dy ) < h ) {
-    f32 wy = w * dy;
-    f32 hx = h * dx;
+    float wy = w * dy;
+    float hx = h * dx;
 
     if ( wy >= hx ) {
       if ( wy > -hx ) { // top
@@ -72,26 +70,72 @@ check_aabb_collision( entity_t *a, entity_t *b ) {
       }
     }
   }
-
   return SIDE_NONE;
+}
+
+/**
+ * Checks the center coordinates of both circles to see
+ * if a collision occurs. If the distance between the foci
+ * is smaller than the radii of both circles combined,
+ * a collision occurred.
+ *
+ * @param circle_t * pointer to first circle.
+ * @param circle_t * pointer to second circle.
+ *
+ * @return true if collision occurs, false otherwise.
+ */
+bool
+Stds_CheckCircularCollision( const struct circle_t *c1, const struct circle_t *c2 ) {
+  float distance_x = ( float ) fabs( c1->center_x - c2->center_x );
+  float distance_y = ( float ) fabs( c1->center_y - c2->center_y );
+
+  float radii_sum = c1->radius + c2->radius;
+  return ( distance_x * distance_x + distance_y * distance_y <= radii_sum * radii_sum );
+}
+
+/**
+ * Repositions the first circle to its correct spot if a collision occurs.
+ * This function is not required; rather it is just a sample.
+ *
+ * @param circle_t * pointer to first circle.
+ * @param circle_t * pointer to second circle.
+ *
+ * @return void.
+ */
+void
+Stds_ResolveCircularCollision( struct circle_t *c1, struct circle_t *c2 ) {
+  float distance_x = ( float ) c1->center_x - c2->center_x;
+  float distance_y = ( float ) c1->center_y - c2->center_y;
+
+  float radii_sum = c1->radius + c2->radius;
+  float length    = ( float ) sqrt( distance_x * distance_x + distance_y * distance_y );
+  float unit_x    = distance_x / length;
+  float unit_y    = distance_y / length;
+
+  float tmp_c1_x = c1->center_x;
+  float tmp_c2_y = c1->center_y;
+
+  c1->center_x = c2->center_x + ( radii_sum + 1 ) * unit_x;
+  c1->center_y = c2->center_y + ( radii_sum + 1 ) * unit_y;
 }
 
 /**
  * Determines if two rectangles are collided.
  *
- * @param
- * @param
- * @param
- * @param
- * @param
- * @param
- * @param
- * @param
- * 
+ * @param float x1
+ * @param float y1
+ * @param int32_t w1
+ * @param int32_t h1
+ * @param float x2
+ * @param float y2
+ * @param int32_t w2
+ * @param int32_t h2
+ *
  * @return true if overlap exists, false otherwise.
  */
-bool
-check_intersection( f32 x1, f32 y1, int32_t w1, int32_t h1, f32 x2, f32 y2, int32_t w2,
-                    int32_t h2 ) {
-  return ( MAX( x1, x2 ) < MIN( x1 + w1, x2 + w2 ) ) && ( MAX( y1, y2 ) < MIN( y1 + h1, y2 + h2 ) );
+inline bool
+Stds_CheckIntersection( const float x1, const float y1, const int32_t w1, const int32_t h1,
+                        const float x2, const float y2, const int32_t w2, const int32_t h2 ) {
+  return ( fmax( x1, x2 ) < fmin( x1 + w1, x2 + w2 ) ) &&
+         ( fmax( y1, y2 ) < fmin( y1 + h1, y2 + h2 ) );
 }

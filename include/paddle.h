@@ -4,8 +4,8 @@
 #include "../lib/stds/include/draw.h"
 #include "commons.h"
 
-extern entity_t *paddle;
-extern app_t     app;
+extern struct entity_t *paddle;
+extern struct app_t     app;
 extern stage_t   stage;
 
 /*

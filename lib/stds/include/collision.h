@@ -3,9 +3,14 @@
 
 #include "stds.h"
 
-extern enum CollisionSide check_aabb_collision( entity_t *a, entity_t *b );
+extern enum CollisionSide Stds_CheckAABBCollision( struct entity_t *a, struct entity_t *b );
 
-extern bool check_intersection( f32 x1, f32 y1, int32_t w1, int32_t h1, f32 x2, f32 y2,
-                                int32_t w2, int32_t h2 );
+extern bool Stds_CheckCircularCollision( const struct circle_t *c1, const struct circle_t *c2 );
+
+extern void Stds_ResolveCircularCollision( struct circle_t *c1, struct circle_t *c2 );
+
+extern bool Stds_CheckIntersection( const float x1, const float y1, const int32_t w1,
+                                    const int32_t h1, const float x2, const float y2,
+                                    const int32_t w2, const int32_t h2 );
 
 #endif // COLLISION_H

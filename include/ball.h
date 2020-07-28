@@ -6,29 +6,29 @@
 #include "commons.h"
 #include "particle.h"
 
-extern particle_system_t *ps;
-extern app_t              app;
+extern struct particle_system_t *ps;
+extern struct app_t              app;
 extern stage_t            stage;
 extern level_t *          currentLevel;
 
 /*
  *
  */
-entity_t *add_ball( f32, f32, uint32_t flags );
+struct entity_t *add_ball( float, float, uint32_t flags );
 
 /*
  *
  */
-void ball_update( entity_t * );
+void ball_update( struct entity_t * );
 
 /*
  *
  */
-void ball_draw( entity_t * );
+void ball_draw( struct entity_t * );
 
 /*
  *
  */
-void ball_die( entity_t * );
+void ball_die( struct entity_t * );
 
 #endif

@@ -8,21 +8,21 @@
 /*
  *
  */
-extern entity_t *add_brick( f32, f32, uint32_t, int8_t );
+extern struct entity_t *add_brick( float, float, uint32_t, int8_t );
 
 /*
  *
  */
-extern void brick_update( entity_t * );
+extern void brick_update( struct entity_t * );
 
 /*
  *
  */
-extern void brick_draw( entity_t * );
+extern void brick_draw( struct entity_t * );
 
 /*
  *
  */
-extern void brick_die( entity_t * );
+extern void brick_die( struct entity_t * );
 
 #endif

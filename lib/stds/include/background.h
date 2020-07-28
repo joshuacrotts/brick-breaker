@@ -4,22 +4,23 @@
 #include "../include/draw.h"
 #include "stds.h"
 
-extern app_t app;
+extern struct app_t app;
 
-extern void init_parallax_background( const char *bg_directory, size_t n,
-                                      f32 default_scroll_speed, f32 modified_scroll_speeds[],
-                                      bool is_infinite );
+extern void Stds_AddParallaxBackground( const char *bg_directory, const size_t n,
+                                        const float default_scroll_speed,
+                                        const float modified_scroll_speeds[],
+                                        const bool  is_infinite );
 
-extern void parallax_background_update( parallax_background_t *parallax );
+extern void Stds_ParallaxBackgroundUpdate( struct parallax_background_t *parallax );
 
-extern void parallax_background_draw( parallax_background_t *parallax );
+extern void Stds_ParallaxBackgroundDraw( const struct parallax_background_t *parallax );
 
-extern background_t *init_background( const char *bg_directory );
+extern struct background_t *Stds_AddBackground( const char *bg_directory );
 
-extern void background_update( background_t *bg );
+extern void Stds_BackgroundUpdate( struct background_t *bg );
 
-extern void background_draw( background_t *bg );
+extern void Stds_BackgroundDraw( const struct background_t *bg );
 
-extern void background_die( background_t *bg );
+extern void Stds_BackgroundDie( struct background_t *bg );
 
 #endif // BACKGROUND_H

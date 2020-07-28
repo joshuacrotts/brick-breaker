@@ -1,14 +1,5 @@
-#Copyright Notice:
-#The files within this zip file are copyrighted by Lazy Foo' Productions (2004-2014)
-#and may not be redistributed without written permission.
-
 #OBJS specifies which files to compile as part of the project
-ifeq ($(shell uname), Darwin)
-	OBJS = lib/stds/src/*.c src/*.c
-else
-	OBJS = lib/stds/src/*.c lib/stds/include/*.h src/*.c include/*.h
-endif
-
+OBJS = src/*.c lib/stds/src/*.c lib/stds/lib/structures/src/*.c
 
 #CC specifies which compiler we're using
 CC = gcc
@@ -19,16 +10,13 @@ CC = gcc
 
 ifeq ($(OS), Windows_NT)
 	INCLUDE_PATHS = -IC:\MinGW\include\SDL2
-endif 
-
-ifeq ($(OS), Windows_NT)
 	LIBRARY_PATHS = -LC:\MinGW\lib
-endif
+endif 
 
 #COMPILER_FLAGS specifies the additional compilation options we're using
 # -w suppresszzes all warnings
 # -Wl,-subsystem,windows gets rid of the console window
-COMPILER_FLAGS = -Werror -Wfloat-conversion
+COMPILER_FLAGS = -Werror -Wfloat-conversion -g
 
 #LINKER_FLAGS specifies the libraries we're linking against
 LINKER_FLAGS = 0
@@ -43,5 +31,8 @@ endif
 OBJ_NAME = Game
 
 #This is the target that compiles our executable
+#
+# -g -O -c generates .o files.
+# -shared -o
 all : $(OBJS)
 	$(CC) $(OBJS) $(INCLUDE_PATHS) $(LIBRARY_PATHS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OBJ_NAME)

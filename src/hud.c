@@ -1,29 +1,29 @@
 #include "../include/hud.h"
 
-static SDL_Texture *heartTexture;
-static fade_color_t fadeColor;
-static char *       title        = "BRICK BREAKER";
-static char *       pregame_text = "PRESS SPACE TO START!";
-static char *       created_by   = "Created by Joshua Crotts";
-static char *       artwork_by   = "Artwork by Viola Crotts";
-static char *       sfx_by       = "Sound and Music by Break It! Java Game";
+static SDL_Texture *       heartTexture;
+static struct fade_color_t fadeColor;
+static char *              title        = "BRICK BREAKER";
+static char *              pregame_text = "PRESS SPACE TO START!";
+static char *              created_by   = "Created by Joshua Crotts";
+static char *              artwork_by   = "Artwork by Viola Crotts";
+static char *              sfx_by       = "Sound and Music by Break It! Java Game";
 
-static button_t *play_button;
-static button_t *help_button;
-static button_t *exit_button;
+static struct button_t *play_button;
+static struct button_t *help_button;
+static struct button_t *exit_button;
 
 static void draw_lives( SDL_Color * );
 static void draw_title( SDL_Color * );
 static void draw_pregame_text( SDL_Color * );
 static void draw_score( SDL_Color * );
 static void draw_level_number( void );
-static void spawn_star_particles( f32, f32, uint32_t, uint32_t );
+static void spawn_star_particles( float, float, uint32_t, uint32_t );
 
 void
 init_HUD( void ) {
-  heartTexture = load_texture( "res/img/life.png" );
-  load_music( "res/sfx/music/titlesong.ogg" );
-  play_music( true );
+  heartTexture = Stds_LoadTexture( "res/img/life.png" );
+  Stds_LoadMusic( "res/sfx/music/titlesong.ogg" );
+  Stds_PlayMusic( true );
 
   SDL_Color c1;
   SDL_Color c2;
@@ -52,19 +52,19 @@ init_menu( void ) {
   play_button             = add_button_texture( app.SCREEN_WIDTH / 2 - 150, app.SCREEN_HEIGHT / 2,
                                     "res/img/ui/buttonStock1.png", "res/fonts/nes.ttf", 24,
                                     &play_color, "PLAY" );
-  play_button->texture[1] = load_texture( "res/img/ui/buttonStock1h.png" );
-
+  play_button->texture[1] = Stds_LoadTexture( "res/img/ui/buttonStock1h.png" );
+  
   // ===== HELP BUTTON ===== //
   help_button = add_button_texture( app.SCREEN_WIDTH / 2 - 150, app.SCREEN_HEIGHT / 2 + 100,
                                     "res/img/ui/buttonStock1.png", "res/fonts/nes.ttf", 24,
                                     &play_color, "HELP" );
-  help_button->texture[1] = load_texture( "res/img/ui/buttonStock1h.png" );
+  help_button->texture[1] = Stds_LoadTexture( "res/img/ui/buttonStock1h.png" );
 
   // ===== EXIT BUTTON ===== //
   exit_button = add_button_texture( app.SCREEN_WIDTH / 2 - 150, app.SCREEN_HEIGHT / 2 + 200,
                                     "res/img/ui/buttonStock1.png", "res/fonts/nes.ttf", 24,
                                     &play_color, "QUIT" );
-  exit_button->texture[1] = load_texture( "res/img/ui/buttonStock1h.png" );
+  exit_button->texture[1] = Stds_LoadTexture( "res/img/ui/buttonStock1h.png" );
 
   app.button_tail->next = play_button;
   app.button_tail       = play_button;
@@ -82,8 +82,8 @@ update_HUD( void ) {
     menu_update();
     update_buttons();
   } else {
-    spawn_star_particles( random_f32( 400.0f, 2000.0f ), random_f32( 900.0f, 1100.0f ), 20,
-                          ID_P_STAR_MASK );
+    spawn_star_particles( Stds_RandomFloat( 400.0f, 2000.0f ), Stds_RandomFloat( 900.0f, 1100.0f ),
+                          20, ID_P_STAR_MASK );
   }
 }
 
@@ -109,10 +109,10 @@ menu_update( void ) {
 
   if ( is_button_clicked( play_button, SDL_BUTTON_LEFT ) ) {
     stage.state = GAME;
-    play_music( false );
+    Stds_PlayMusic( false );
     load_level_music( stage.level_id );
   } else if ( is_button_clicked( help_button, SDL_BUTTON_LEFT ) ) {
-    print( "HELP!" );
+    Stds_Print( "HELP!" );
   } else if ( is_button_clicked( exit_button, SDL_BUTTON_LEFT ) ) {
     exit( EXIT_SUCCESS );
   }
@@ -120,9 +120,9 @@ menu_update( void ) {
 
 void
 draw_HUD( void ) {
-  SDL_Color c = combine_fade_color( &fadeColor );
+  SDL_Color c = Stds_CombineFadeColor( &fadeColor );
   c.a         = 0xff;
-  draw_rect_stroke( 0, 0, app.SCREEN_WIDTH, app.SCREEN_HEIGHT, INSETS, &c, false );
+  Stds_DrawRectStroke( 0, 0, app.SCREEN_WIDTH, app.SCREEN_HEIGHT, INSETS, &c, false );
 
   if ( stage.state == MENU ) {
     draw_buttons();
@@ -143,22 +143,22 @@ draw_HUD( void ) {
 
 void
 menu_draw( SDL_Color *c ) {
+  c->a = 0xff;
   int fw, fh;
-  get_string_size( title, "res/fonts/nes.ttf", 24, &fw, &fh );
-  draw_text( ( app.SCREEN_WIDTH >> 1 ) - ( fw >> 1 ), 200, c, "res/fonts/nes.ttf",
-             24, title );
+  Stds_GetStringSize( title, "res/fonts/nes.ttf", 24, &fw, &fh );
+  Stds_DrawText( ( app.SCREEN_WIDTH >> 1 ) - ( fw >> 1 ), 200, "res/fonts/nes.ttf", 24, c, title );
 
-  get_string_size( created_by, "res/fonts/nes.ttf", 12, &fw, &fh );
-  draw_text( ( app.SCREEN_WIDTH >> 1 ) - ( fw >> 1 ), app.SCREEN_HEIGHT - fh * 6, c,
-             "res/fonts/nes.ttf", 12, created_by );
+  Stds_GetStringSize( created_by, "res/fonts/nes.ttf", 12, &fw, &fh );
+  Stds_DrawText( ( app.SCREEN_WIDTH >> 1 ) - ( fw >> 1 ), app.SCREEN_HEIGHT - fh * 6,
+                 "res/fonts/nes.ttf", 12, c, created_by );
 
-  get_string_size( artwork_by, "res/fonts/nes.ttf", 12, &fw, &fh );
-  draw_text( ( app.SCREEN_WIDTH >> 1 ) - ( fw >> 1 ), app.SCREEN_HEIGHT - fh * 4, c,
-             "res/fonts/nes.ttf", 12, artwork_by );
+  Stds_GetStringSize( artwork_by, "res/fonts/nes.ttf", 12, &fw, &fh );
+  Stds_DrawText( ( app.SCREEN_WIDTH >> 1 ) - ( fw >> 1 ), app.SCREEN_HEIGHT - fh * 4,
+                 "res/fonts/nes.ttf", 12, c, artwork_by );
 
-  get_string_size( sfx_by, "res/fonts/nes.ttf", 12, &fw, &fh );
-  draw_text( ( app.SCREEN_WIDTH >> 1 ) - ( fw >> 1 ), app.SCREEN_HEIGHT - fh * 2, c,
-             "res/fonts/nes.ttf", 12, sfx_by );
+  Stds_GetStringSize( sfx_by, "res/fonts/nes.ttf", 12, &fw, &fh );
+  Stds_DrawText( ( app.SCREEN_WIDTH >> 1 ) - ( fw >> 1 ), app.SCREEN_HEIGHT - fh * 2,
+                 "res/fonts/nes.ttf", 12, c, sfx_by );
 }
 
 void
@@ -169,14 +169,14 @@ draw_paused( void ) {
   r.w = app.SCREEN_WIDTH;
   r.h = app.SCREEN_HEIGHT;
 
-  SDL_Color c = {0, 0, 0, 128};
+  SDL_Color c     = {0, 0, 0, 128};
   SDL_Color white = {0xff, 0xff, 0xff, 0xff};
 
-  draw_rect( &r, &c, true, false );
+  Stds_DrawRect( &r, &c, true, false );
   int fw, fh;
-  get_string_size( "PAUSED", "res/fonts/nes.ttf", 24, &fw, &fh );
-  draw_text( app.SCREEN_WIDTH / 2 - fw / 2, app.SCREEN_HEIGHT / 2, &white,
-             "res/fonts/nes.ttf", 24, "PAUSED" );
+  Stds_GetStringSize( "PAUSED", "res/fonts/nes.ttf", 24, &fw, &fh );
+  Stds_DrawText( app.SCREEN_WIDTH / 2 - fw / 2, app.SCREEN_HEIGHT / 2, "res/fonts/nes.ttf", 24,
+                 &white, "PAUSED" );
 }
 
 /*
@@ -191,15 +191,15 @@ draw_lives( SDL_Color *c ) {
   int initial_offset = 20;
   int offset         = 5;
 
-  draw_text( initial_offset, initial_offset, c, "res/fonts/nes.ttf", 12, "LIVES: " );
+  Stds_DrawText( initial_offset, initial_offset, "res/fonts/nes.ttf", 12, c, "LIVES: " );
 
   SDL_QueryTexture( heartTexture, NULL, NULL, &tw, &th );
-  get_string_size( "LIVES: ", "res/fonts/nes.ttf", 12, &fw, &fh );
+  Stds_GetStringSize( "LIVES: ", "res/fonts/nes.ttf", 12, &fw, &fh );
 
   int v_offset = initial_offset + fh + offset;
 
   for ( int i = 0, x = initial_offset; i < paddle->life; i++, x += ( tw + offset ) ) {
-    blit_texture( heartTexture, x, v_offset, false, false );
+    Stds_DrawTexture( heartTexture, x, v_offset, tw, th, 0, SDL_FLIP_NONE, NULL, false );
   }
 }
 
@@ -209,9 +209,8 @@ draw_lives( SDL_Color *c ) {
 static void
 draw_title( SDL_Color *c ) {
   int fw, fh;
-  get_string_size( title, "res/fonts/nes.ttf", 12, &fw, &fh );
-  draw_text( ( app.SCREEN_WIDTH >> 1 ) - ( fw >> 1 ), 20, c, "res/fonts/nes.ttf", 12,
-             title );
+  Stds_GetStringSize( title, "res/fonts/nes.ttf", 12, &fw, &fh );
+  Stds_DrawText( ( app.SCREEN_WIDTH >> 1 ) - ( fw >> 1 ), 20, "res/fonts/nes.ttf", 12, c, title );
 }
 
 /*
@@ -220,10 +219,10 @@ draw_title( SDL_Color *c ) {
 static void
 draw_pregame_text( SDL_Color *c ) {
   int fw, fh;
-  get_string_size( pregame_text, "res/fonts/nes.ttf", 24, &fw, &fh );
-  draw_text( ( app.SCREEN_WIDTH / 2 ) - ( fw / 2 ),
-             ( app.SCREEN_HEIGHT >> 1 ) + ( app.SCREEN_HEIGHT / 4 ), c,
-             "res/fonts/nes.ttf", 24, pregame_text );
+  Stds_GetStringSize( pregame_text, "res/fonts/nes.ttf", 24, &fw, &fh );
+  Stds_DrawText( ( app.SCREEN_WIDTH / 2 ) - ( fw / 2 ),
+                 ( app.SCREEN_HEIGHT >> 1 ) + ( app.SCREEN_HEIGHT / 4 ), "res/fonts/nes.ttf", 24,
+                 c, pregame_text );
 }
 
 /*
@@ -233,16 +232,15 @@ static void
 draw_score( SDL_Color *c ) {
   int fw, fh;
   int offset = 20;
-  get_string_size( "Score:", "res/fonts/nes.ttf", 12, &fw, &fh );
-  int v_offset = offset + fh + 5;
-  SDL_Color white = {0xff, 0xff, 0xff, 0xff};
+  Stds_GetStringSize( "Score:", "res/fonts/nes.ttf", 12, &fw, &fh );
+  int       v_offset = offset + fh + 5;
+  SDL_Color white    = {0xff, 0xff, 0xff, 0xff};
   // Draw score label.
-  draw_text( app.SCREEN_WIDTH - fw - offset, offset, c, "res/fonts/nes.ttf", 12,
-             "Score:" );
+  Stds_DrawText( app.SCREEN_WIDTH - fw - offset, offset, "res/fonts/nes.ttf", 12, c, "Score:" );
 
   // Draw numeric score.
-  draw_text( app.SCREEN_WIDTH - fw - offset, v_offset, &white, "res/fonts/nes.ttf", 12,
-             "%d", stage.score );
+  Stds_DrawText( app.SCREEN_WIDTH - fw - offset, v_offset, "res/fonts/nes.ttf", 12, &white, "%d",
+                 stage.score );
 }
 
 /*
@@ -263,28 +261,28 @@ draw_level_number() {
   char *level_string = strcat( level_data, number_buffer );
   strcat( level_data, " >" );
 
-  get_string_size( level_data, "res/fonts/nes.ttf", 24, &fw, &fh );
-  draw_text( ( app.SCREEN_WIDTH / 2 ) - ( fw / 2 ),
-             ( app.SCREEN_HEIGHT >> 1 ) + ( app.SCREEN_HEIGHT / 5 ), &white,
-             "res/fonts/nes.ttf", 24, level_data );
+  Stds_GetStringSize( level_data, "res/fonts/nes.ttf", 24, &fw, &fh );
+  Stds_DrawText( ( app.SCREEN_WIDTH / 2 ) - ( fw / 2 ),
+                 ( app.SCREEN_HEIGHT >> 1 ) + ( app.SCREEN_HEIGHT / 5 ), "res/fonts/nes.ttf", 24,
+                 &white, level_data );
 }
 
 static void
-spawn_star_particles( f32 x, f32 y, uint32_t n, uint32_t flags ) {
+spawn_star_particles( float x, float y, uint32_t n, uint32_t flags ) {
   for ( int i = 0; i < n; i++ ) {
-    particle_t p;
+    struct particle_t p;
 
-    f32 dx = -10;
-    f32 dy = -10;
+    float dx = -10;
+    float dy = -10;
 
-    uint16_t w = random_int( 1, 3 );
+    uint16_t w = Stds_RandomInt( 1, 3 );
     uint16_t h = w;
     uint8_t  r = 0xff;
     uint8_t  g = 0xff;
     uint8_t  b = 0xff;
-    uint8_t  a = random_int( 5, 15 );
+    uint8_t  a = Stds_RandomInt( 5, 15 );
 
     p = add_particle( x, y, dx, dy, 0, 0, w, h, 0, r, g, b, a, 0, flags | ID_P_SQUARE_MASK );
-    insert_particle( ps, &p );
+    Stds_InsertParticle( ps, &p );
   }
 }

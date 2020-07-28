@@ -3,11 +3,8 @@
 //
 // DESCRIPTION :
 //        This file defines the function for updating a camera around a parent entity. Generally,
-//        this should be the player. All offsets are pre-applied to the draw functions. To keep 
+//        this should be the player. All offsets are pre-applied to the draw functions. To keep
 //        something from being updated, just re-add the valuesx + app.camera.x, y + app.camera.y.
-//
-// PUBLIC FUNCTIONS :
-//        void update_camera( entity_t * );
 //
 // NOTES :
 //        Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -38,14 +35,18 @@
  * Applies an offset from the supplied entity, and stores
  * the coordinates in the App struct. Typically, in an overhead
  * style game, this supplied entity will be a reference to the
- * player. 
+ * player. If you want to remove the offset from an entity,
+ * just add the coordinates of the camera to your entity
+ * x + app.camera.x and y + app.camera.y. Note that if you have
+ * the option to modify the placement via a method in draw.c,
+ * do it there instead.
  *
  * @param entity_t* pointer to parent entity.
  *
  * @return void.
  */
 void
-update_camera( entity_t *focus_point ) {
+Stds_CameraUpdate( const struct entity_t *focus_point ) {
   if ( focus_point != NULL ) {
     app.camera.x = ( focus_point->x + focus_point->w / 2 ) - ( app.SCREEN_WIDTH >> 1 );
     app.camera.y = ( focus_point->y + focus_point->h / 2 ) - ( app.SCREEN_HEIGHT >> 1 );

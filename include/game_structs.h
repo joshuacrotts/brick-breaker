@@ -15,8 +15,8 @@ typedef enum BrickBreakerState {
 } BrickBreakerState;
 
 struct ScoreItem {
-  f32    x;
-  f32    y;
+  float    x;
+  float    y;
   char     text[16];
   int32_t  score;
   int32_t  life;
@@ -30,22 +30,22 @@ struct Level {
   size_t  ball_count;
   int32_t last_break_timer;
 
-  entity_t     ball_head, *ball_tail;
-  entity_t     brick_head, *brick_tail;
-  entity_t     powerup_head, *powerup_tail;
-  entity_t     entity_head, *entity_tail;
+  struct entity_t     ball_head, *ball_tail;
+  struct entity_t     brick_head, *brick_tail;
+  struct entity_t     powerup_head, *powerup_tail;
+  struct entity_t     entity_head, *entity_tail;
   score_item_t score_item_head, *score_item_tail;
 
-  background_t background;
+  struct background_t background;
 
   level_t *next;
 };
 
 struct Debris {
-  f32        x;
-  f32        y;
-  f32        dx;
-  f32        dy;
+  float        x;
+  float        y;
+  float        dx;
+  float        dy;
   uint32_t     flags;
   SDL_Texture *texture;
   SDL_Rect     rect;
@@ -58,7 +58,7 @@ struct Stage {
 
   BrickBreakerState state;
 
-  animation_t animation_head, *animation_tail;
+  struct animation_t animation_head, *animation_tail;
   level_t     level_head, *level_tail;
   debris_t    debris_head, *debris_tail;
 };

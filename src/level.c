@@ -7,7 +7,7 @@
 #define BRICK_WIDTH     92
 #define BRICK_HEIGHT    32
 
-static entity_t *spawn_powerup( entity_t * );
+static struct entity_t *spawn_powerup( struct entity_t * );
 
 static void update_balls( void );
 static void update_powerups( void );
@@ -19,9 +19,9 @@ static void draw_powerups( void );
 static void draw_bricks( void );
 static void draw_score_items( void );
 
-static void ball_hit_paddle( entity_t * );
-static void ball_hit_brick( entity_t * );
-static void powerup_hit_paddle( entity_t * );
+static void ball_hit_paddle( struct entity_t * );
+static void ball_hit_brick( struct entity_t * );
+static void powerup_hit_paddle( struct entity_t * );
 
 level_t *
 add_level( uint16_t level_id ) {
@@ -66,8 +66,8 @@ add_level( uint16_t level_id ) {
   for ( int y = 120; y < 120 + ( BRICK_HEIGHT * BRICK_ROW_COUNT ); y += 32 ) {
     fgets( buffer, MAXC, fptr );
     for ( int x = 20, bi = 0; x <= app.SCREEN_WIDTH - 80; x += 92, bi++ ) {
-      entity_t *b;
-      int       c = ( buffer[bi] - '\0' ) - CHAR_OFFSET;
+      struct entity_t *b;
+      int32_t          c = ( buffer[bi] - '\0' ) - CHAR_OFFSET;
 
       // If the char is invalid, then quit iteration.
       if ( c < 0 ) {
@@ -133,11 +133,11 @@ level_die() {
 
 void
 remove_balls( void ) {
-  entity_t *b = &currentLevel->ball_head;
+  struct entity_t *b = &currentLevel->ball_head;
 
   while ( b != NULL ) {
-    entity_t *tmp = b->next;
-    b             = NULL;
+    struct entity_t *tmp = b->next;
+    b                    = NULL;
     free( b );
     b = tmp;
   }
@@ -155,9 +155,8 @@ load_level_music( uint16_t level ) {
   strcpy( level_data, "res/sfx/music/level_" );
   char *file_name     = strcat( level_data, number_buffer );
   char *file_name_ext = strcat( level_data, file_extsn );
-  load_music( level_data );
-  print( "%s", level_data );
-  play_music( true );
+  Stds_LoadMusic( level_data );
+  Stds_PlayMusic( true );
 }
 
 /*
@@ -171,8 +170,8 @@ update_balls( void ) {
     activate_transition( true );
   }
 
-  entity_t *b;
-  entity_t *prevBall;
+  struct entity_t *b;
+  struct entity_t *prevBall;
 
   prevBall = &currentLevel->ball_head;
 
@@ -183,7 +182,7 @@ update_balls( void ) {
       ball_update( b );
     }
 
-    if ( b->flags & DEATH_MASK ) {
+    if ( b->flags & STDS_DEATH_MASK ) {
       if ( b == currentLevel->ball_tail ) {
         currentLevel->ball_tail = prevBall;
       }
@@ -202,8 +201,8 @@ update_balls( void ) {
  */
 static void
 update_powerups( void ) {
-  entity_t *p;
-  entity_t *prev;
+  struct entity_t *p;
+  struct entity_t *prev;
 
   prev = &currentLevel->powerup_head;
 
@@ -213,7 +212,7 @@ update_powerups( void ) {
       powerup_update( p );
     }
 
-    if ( p->flags & DEATH_MASK ) {
+    if ( p->flags & STDS_DEATH_MASK ) {
       if ( p == currentLevel->powerup_tail ) {
         currentLevel->powerup_tail = prev;
       }
@@ -231,15 +230,15 @@ update_powerups( void ) {
  */
 static void
 update_bricks( void ) {
-  entity_t *brick;
-  entity_t *prevBrick;
+  struct entity_t *brick;
+  struct entity_t *prevBrick;
 
   prevBrick = &currentLevel->brick_head;
 
   for ( brick = currentLevel->brick_head.next; brick != NULL; brick = brick->next ) {
     brick_update( brick );
 
-    if ( brick->flags & DEATH_MASK ) {
+    if ( brick->flags & STDS_DEATH_MASK ) {
       if ( brick == currentLevel->brick_tail ) {
         currentLevel->brick_tail = prevBrick;
       }
@@ -264,7 +263,7 @@ update_score_items( void ) {
   for ( s = currentLevel->score_item_head.next; s != NULL; s = s->next ) {
     score_item_update( s );
 
-    if ( s->flags & DEATH_MASK ) {
+    if ( s->flags & STDS_DEATH_MASK ) {
       if ( s == currentLevel->score_item_tail ) {
         currentLevel->score_item_tail = prev;
       }
@@ -282,7 +281,7 @@ update_score_items( void ) {
  */
 static void
 draw_powerups( void ) {
-  entity_t *p;
+  struct entity_t *p;
 
   for ( p = currentLevel->powerup_head.next; p != NULL; p = p->next ) {
     if ( p->id_flags & ID_DEFAULT_POWERUP_MASK ) {
@@ -308,7 +307,7 @@ draw_score_items( void ) {
  */
 static void
 draw_balls( void ) {
-  entity_t *b;
+  struct entity_t *b;
 
   for ( b = currentLevel->ball_head.next; b != NULL; b = b->next ) {
     if ( b->id_flags & ID_BALL_MASK ) {
@@ -322,7 +321,7 @@ draw_balls( void ) {
  */
 static void
 draw_bricks( void ) {
-  entity_t *b;
+  struct entity_t *b;
 
   for ( b = currentLevel->brick_head.next; b != NULL; b = b->next ) {
     brick_draw( b );
@@ -333,17 +332,18 @@ draw_bricks( void ) {
  *
  */
 static void
-ball_hit_brick( entity_t *ball ) {
-  entity_t *brick;
+ball_hit_brick( struct entity_t *ball ) {
+  struct entity_t *brick;
 
   for ( brick = currentLevel->brick_head.next; brick != NULL; brick = brick->next ) {
-    if ( check_intersection( ( int32_t ) ball->x, ( int32_t ) ball->y, ball->w, ball->h,
-                             ( int32_t ) brick->x, ( int32_t ) brick->y, brick->w, brick->h ) ) {
+    if ( Stds_CheckIntersection( ( int32_t ) ball->x, ( int32_t ) ball->y, ball->w, ball->h,
+                                 ( int32_t ) brick->x, ( int32_t ) brick->y, brick->w,
+                                 brick->h ) ) {
       brick->life--;
       if ( brick->life > 0 ) {
-        play_sound( SND_BRICK_SHATTER, CH_BRICK );
+        Stds_PlaySounds( SND_BRICK_SHATTER, CH_BRICK );
       } else {
-        entity_t *p;
+        struct entity_t *p;
         p = spawn_powerup( brick );
 
         if ( p != NULL ) {
@@ -354,7 +354,7 @@ ball_hit_brick( entity_t *ball ) {
         currentLevel->brick_count--;
         currentLevel->last_break_timer++;
 
-        play_sound( SND_BRICK_BREAK, CH_BRICK );
+        Stds_PlaySounds( SND_BRICK_BREAK, CH_BRICK );
         add_score_item( brick->x + brick->w / 4, brick->y + brick->h / 4, 0 );
 
         if ( currentLevel->brick_count == 0 ) {
@@ -374,18 +374,18 @@ ball_hit_brick( entity_t *ball ) {
  *
  */
 static void
-ball_hit_paddle( entity_t *b ) {
+ball_hit_paddle( struct entity_t *b ) {
 
-  if ( check_intersection( ( int32_t ) paddle->x, ( int32_t ) paddle->y, ( int32_t ) paddle->w,
-                           ( int32_t ) paddle->h, ( int32_t ) b->x, ( int32_t ) b->y,
-                           ( int32_t ) b->w, ( int32_t ) b->h ) ) {
+  if ( Stds_CheckIntersection( ( int32_t ) paddle->x, ( int32_t ) paddle->y, ( int32_t ) paddle->w,
+                               ( int32_t ) paddle->h, ( int32_t ) b->x, ( int32_t ) b->y,
+                               ( int32_t ) b->w, ( int32_t ) b->h ) ) {
     uint32_t SIZE   = 16;
     double   rel    = ( paddle->x + ( paddle->w / 2 ) ) - ( b->x + ( SIZE / 2 ) );
     double   norm   = rel / ( paddle->w / 2 );
     double   bounce = norm * ( 5 * PI / 12 );
 
-    b->dx = ( f32 ) ( BALL_SPEED * -sin( bounce ) );
-    b->dy = ( f32 ) ( -BALL_SPEED * cos( bounce ) );
+    b->dx = ( float ) ( BALL_SPEED * -sin( bounce ) );
+    b->dy = ( float ) ( -BALL_SPEED * cos( bounce ) );
     return;
   }
 }
@@ -394,10 +394,10 @@ ball_hit_paddle( entity_t *b ) {
  *
  */
 static void
-powerup_hit_paddle( entity_t *p ) {
-  if ( check_intersection( ( int32_t ) paddle->x, ( int32_t ) paddle->y, ( int32_t ) paddle->w,
-                           ( int32_t ) paddle->h, ( int32_t ) p->x, ( int32_t ) p->y,
-                           ( int32_t ) p->w, ( int32_t ) p->h ) &&
+powerup_hit_paddle( struct entity_t *p ) {
+  if ( Stds_CheckIntersection( ( int32_t ) paddle->x, ( int32_t ) paddle->y, ( int32_t ) paddle->w,
+                               ( int32_t ) paddle->h, ( int32_t ) p->x, ( int32_t ) p->y,
+                               ( int32_t ) p->w, ( int32_t ) p->h ) &&
        p->flags & POWERUP_INACTIVE ) {
 
     if ( p->identifier == LARGE_PADDLE ) {
@@ -415,11 +415,11 @@ powerup_hit_paddle( entity_t *p ) {
 /*
  * This needs to be severely updated.
  */
-static entity_t *
-spawn_powerup( entity_t *parent ) {
-  entity_t *p;
+static struct entity_t *
+spawn_powerup( struct entity_t *parent ) {
+  struct entity_t *p;
 
-  f32 prob = random_f32( 1.0f, 1000.0f );
+  float prob = Stds_RandomFloat( 1.0f, 1000.0f );
 
   if ( prob < 50.0f ) {
     p = add_powerup( parent->x, parent->y, 0, EXTRA_LIFE );

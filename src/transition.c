@@ -48,5 +48,5 @@ transition_draw( void ) {
   SDL_Color c;
   c.r = c.g = c.b = 0;
   c.a             = alpha;
-  draw_rect( &r, &c, true, false );
+  Stds_DrawRect( &r, &c, true, false );
 }

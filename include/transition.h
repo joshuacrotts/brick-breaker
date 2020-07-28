@@ -6,7 +6,7 @@
 #include "commons.h"
 #include "level.h"
 
-extern app_t app;
+extern struct app_t app;
 
 extern void activate_transition( bool );
 

@@ -7,54 +7,54 @@
 #include "commons.h"
 #include "score_item.h"
 
-extern app_t     app;
-extern entity_t *paddle;
+extern struct app_t     app;
+extern struct entity_t *paddle;
 extern stage_t   stage;
 extern level_t * currentLevel;
 
 /*
  *
  */
-extern entity_t *add_powerup( f32, f32, uint32_t, int8_t );
+extern struct entity_t *add_powerup( float, float, uint32_t, int8_t );
 
 /*
  *
  */
-extern void powerup_update( entity_t * );
+extern void powerup_update( struct entity_t * );
 
 /*
  *
  */
-extern void powerup_draw( entity_t * );
+extern void powerup_draw( struct entity_t * );
 
 /*
  *
  */
-extern void powerup_die( entity_t * );
+extern void powerup_die( struct entity_t * );
 
 /*
  *
  */
-extern void powerup_large_activate( entity_t * );
+extern void powerup_large_activate( struct entity_t * );
 
 /*
  *
  */
-extern void powerup_large_deactivate( entity_t * );
+extern void powerup_large_deactivate( struct entity_t * );
 
 /*
  *
  */
-extern void powerup_coin_activate( entity_t * );
+extern void powerup_coin_activate( struct entity_t * );
 
 /*
  *
  */
-extern void powerup_life_activate( entity_t * );
+extern void powerup_life_activate( struct entity_t * );
 
 /*
  *
  */
-extern void powerup_multi_activate( entity_t * );
+extern void powerup_multi_activate( struct entity_t * );
 
 #endif

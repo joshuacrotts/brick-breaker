@@ -3,8 +3,8 @@
 
 #include "stds.h"
 
-extern app_t app;
+extern struct app_t app;
 
-extern void update_camera( entity_t *parent );
+extern void Stds_CameraUpdate( const struct entity_t *parent );
 
 #endif // CAMERA_H

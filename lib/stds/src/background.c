@@ -4,17 +4,6 @@
 // DESCRIPTION :
 //        This file defines the background fuctionality, both regular and parallax.
 //
-// PUBLIC FUNCTIONS :
-//        void init_parallax_background( const char *bg_directory, size_t n,
-//                                    f32 default_scroll_speed, f32 modified_scroll_speeds[],
-//                                    bool is_infinite );
-//        void parallax_background_update( parallax_background_t *parallax );
-//        void parallax_background_draw( parallax_background_t *parallax );
-//        background_t *init_background( const char *bg_directory );
-//        void background_update( background_t *bg );
-//        void background_draw( background_t *bg );
-//        void background_die( background_t *bg );
-//
 // NOTES :
 //        Permission is hereby granted, free of charge, to any person obtaining a copy
 //        of this software and associated documentation files (the "Software"), to deal
@@ -53,8 +42,8 @@ static char input_buffer[MAX_BUFFER_SIZE];
  *
  * @param const char* string to directory of parallax background images.
  * @param size_t number of parallax frames.
- * @param f32 default scroll speed shared across all frames.
- * @param f32[] array of modified scroll speeds. These values alter
+ * @param float default scroll speed shared across all frames.
+ * @param float[] array of modified scroll speeds. These values alter
  *        the default scroll speed of each frame. These values
  *        f1 <= f2 <= ... < fn, as implied, should be listed in
  *        back-to-front speed.
@@ -63,17 +52,18 @@ static char input_buffer[MAX_BUFFER_SIZE];
  *        of an infinite background.
  */
 void
-init_parallax_background( const char *directory, size_t count, f32 normal_scroll_speed,
-                          f32 scroll_speeds[], bool infinite_scroll ) {
+Stds_AddParallaxBackground( const char *directory, const size_t count,
+                            const float normal_scroll_speed, const float scroll_speeds[],
+                            const bool infinite_scroll ) {
 
-  parallax_background_t *layer;
+  struct parallax_background_t *layer;
 
   const uint8_t NUM_DIGITS = 3;
   char          number_buffer[NUM_DIGITS];
-  char *        file_extsn = ".png";
+  const char *  file_extsn = ".png";
 
-  for ( int i = 0; i < count; i++ ) {
-    layer = malloc( sizeof( parallax_background_t ) );
+  for ( uint32_t i = 0; i < count; i++ ) {
+    layer = malloc( sizeof( struct parallax_background_t ) );
 
     if ( layer == NULL ) {
       SDL_LogInfo( SDL_LOG_CATEGORY_APPLICATION,
@@ -81,13 +71,13 @@ init_parallax_background( const char *directory, size_t count, f32 normal_scroll
       exit( EXIT_FAILURE );
     }
 
-    memset( layer, 0, sizeof( parallax_background_t ) );
+    memset( layer, 0, sizeof( struct parallax_background_t ) );
 
     sprintf( number_buffer, "%d", i );
     strcpy( input_buffer, directory );
     char *file_name              = strcat( input_buffer, number_buffer );
     char *file_name_ext          = strcat( input_buffer, file_extsn );
-    layer->background            = init_background( file_name_ext );
+    layer->background            = Stds_AddBackground( file_name_ext );
     layer->parallax_scroll_speed = scroll_speeds[i];
     layer->normal_scroll_speed   = normal_scroll_speed;
     layer->infinite_scroll       = infinite_scroll;
@@ -109,13 +99,13 @@ init_parallax_background( const char *directory, size_t count, f32 normal_scroll
  * @return void.
  */
 void
-parallax_background_update( parallax_background_t *p ) {
+Stds_ParallaxBackgroundUpdate( struct parallax_background_t *p ) {
   if ( !p->infinite_scroll ) {
     p->background->x =
         ( ( 0 - app.camera.x ) * ( p->normal_scroll_speed * p->parallax_scroll_speed ) );
 
     /* Repositions the background according to where it is relative to the camera. */
-    p->background->x = ( f32 ) fmod( p->background->x, p->background->w );
+    p->background->x = ( float ) fmod( p->background->x, p->background->w );
   } else {
     p->background->x -= ( p->normal_scroll_speed * p->parallax_scroll_speed );
     if ( p->background->x < -p->background->w ) {
@@ -134,13 +124,13 @@ parallax_background_update( parallax_background_t *p ) {
  * @return void.
  */
 void
-parallax_background_draw( parallax_background_t *p ) {
+Stds_ParallaxBackgroundDraw( const struct parallax_background_t *p ) {
   /* Two copies of the image are drawn to give the illusion of depth and parallax. */
-  blit_texture_scaled( p->background->background_texture, p->background->x, p->background->y,
-                       p->background->scale_x, p->background->scale_y, 0, SDL_FLIP_NONE, false );
-  blit_texture_scaled( p->background->background_texture, p->background->x + p->background->w,
-                       p->background->y, p->background->scale_x, p->background->scale_y, 0,
-                       SDL_FLIP_NONE, false );
+  Stds_DrawTexture( p->background->background_texture, p->background->x, p->background->y,
+                    p->background->w, p->background->h, 0, SDL_FLIP_NONE, NULL, false );
+  Stds_DrawTexture( p->background->background_texture, p->background->x + p->background->w,
+                    p->background->y, p->background->w, p->background->h, 0, SDL_FLIP_NONE, NULL,
+                    false );
 }
 
 /**
@@ -151,32 +141,23 @@ parallax_background_draw( parallax_background_t *p ) {
  *
  * @return void.
  */
-background_t *
-init_background( const char *file ) {
-  background_t *background;
-  background = malloc( sizeof( background_t ) );
+struct background_t *
+Stds_AddBackground( const char *file ) {
+  struct background_t *background;
+  background = malloc( sizeof( struct background_t ) );
 
   if ( background == NULL ) {
     SDL_LogInfo( SDL_LOG_CATEGORY_APPLICATION, "Could not allocate memory for background_t. %s.\n",
                  SDL_GetError() );
     exit( EXIT_FAILURE );
   }
+  memset( background, 0, sizeof( struct background_t ) );
 
-  memset( background, 0, sizeof( background_t ) );
+  background->x                  = 0;
+  background->y                  = 0;
+  background->background_texture = Stds_LoadTexture( file );
 
-  background->x = 0;
-  background->y = 0;
-
-  int32_t w;
-  int32_t h;
-
-  background->background_texture = load_texture( file );
-  SDL_QueryTexture( background->background_texture, NULL, NULL, &w, &h );
-
-  background->w       = w;
-  background->h       = h;
-  background->scale_x = 1.0;
-  background->scale_y = 1.0;
+  SDL_QueryTexture( background->background_texture, NULL, NULL, &background->w, &background->h );
 
   return background;
 }
@@ -191,7 +172,7 @@ init_background( const char *file ) {
  * @return void.
  */
 void
-background_update( background_t *background ) {}
+Stds_BackgroundUpdate( struct background_t *background ) {}
 
 /**
  * Draws the background at its appropriate location specified by the
@@ -202,9 +183,9 @@ background_update( background_t *background ) {}
  * @return void.
  */
 void
-background_draw( background_t *background ) {
-  blit_texture_scaled( background->background_texture, background->x, background->y,
-                       background->scale_x, background->scale_y, 0, SDL_FLIP_NONE, false );
+Stds_BackgroundDraw( const struct background_t *background ) {
+  Stds_DrawTexture( background->background_texture, background->x, background->y, background->w,
+                    background->h, 0, SDL_FLIP_NONE, NULL, false );
 }
 
 /**
@@ -215,7 +196,7 @@ background_draw( background_t *background ) {
  * @return void.
  */
 void
-background_die( background_t *background ) {
+Stds_BackgroundDie( struct background_t *background ) {
   SDL_DestroyTexture( background->background_texture );
   free( background );
 }

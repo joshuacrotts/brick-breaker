@@ -1,10 +1,10 @@
 #include "../include/particle.h"
 
-particle_t
-add_particle( f32 x, f32 y, f32 dx, f32 dy, f32 decX, f32 decY, uint16_t w, uint16_t h,
-              uint16_t angle, uint8_t r, uint8_t g, uint8_t b, uint8_t a, f32 delta_alpha,
+struct particle_t
+add_particle( float x, float y, float dx, float dy, float decX, float decY, uint16_t w, uint16_t h,
+              uint16_t angle, uint8_t r, uint8_t g, uint8_t b, uint8_t a, float delta_alpha,
               uint32_t id_flags ) {
-  particle_t en;
+  struct particle_t en;
 
   en.x             = x;
   en.y             = y;
@@ -27,22 +27,22 @@ add_particle( f32 x, f32 y, f32 dx, f32 dy, f32 decX, f32 decY, uint16_t w, uint
 
   en.particle_update = particle_update;
   en.particle_draw   = particle_draw;
-  
+
   return en;
 }
 
-particle_t *
-add_animated_particle( f32 x, f32 y, f32 dx, f32 dy, f32 decX, f32 decY, uint16_t angle,
-                       uint32_t id_flags, animation_t *animation ) {
-  particle_t *en;
-  en = malloc( sizeof( particle_t ) );
-  memset( en, 0, sizeof( particle_t ) );
+struct particle_t *
+add_animated_particle( float x, float y, float dx, float dy, float decX, float decY, uint16_t angle,
+                       uint32_t id_flags, struct animation_t *animation ) {
+  struct particle_t *en;
+  en = malloc( sizeof( struct particle_t ) );
+  memset( en, 0, sizeof( struct particle_t ) );
 
   en->x         = x;
   en->y         = y;
   en->animation = animation;
 
-  if ( animation->flags & STD_ANIMATION_MASK ) {
+  if ( animation->flags & STDS_ANIMATION_MASK ) {
     en->w = animation->sprite_sheet_width / animation->number_of_frames;
     en->h = animation->sprite_sheet_height / animation->number_of_frames;
   } else {
@@ -66,9 +66,9 @@ add_animated_particle( f32 x, f32 y, f32 dx, f32 dy, f32 decX, f32 decY, uint16_
 }
 
 void
-particle_update( particle_t *e ) {
+particle_update( struct particle_t *e ) {
   if ( --e->life <= 0 ) {
-    e->flags |= DEATH_MASK;
+    e->flags |= STDS_DEATH_MASK;
     return;
   }
 
@@ -82,7 +82,7 @@ particle_update( particle_t *e ) {
 
   if ( e->id_flags & ID_P_STAR_MASK ) {
     if ( e->y < -100.0f ) {
-      e->flags |= DEATH_MASK;
+      e->flags |= STDS_DEATH_MASK;
     }
   }
 
@@ -97,16 +97,16 @@ particle_update( particle_t *e ) {
 }
 
 void
-particle_draw( particle_t *e ) {
+particle_draw( struct particle_t *e ) {
   if ( e->animation == NULL ) {
     if ( e->id_flags & ID_P_SQUARE_MASK ) {
       SDL_FRect frect = {e->x, e->y, e->w, e->h};
-      draw_frect( &frect, &e->color, true, false );
+      Stds_DrawRectF( &frect, &e->color, true, false );
     } else if ( e->id_flags & ID_P_CIRCLE_MASK ) {
-      circle_t c = {e->x, e->y, e->w / 2};
-      fill_circle( &c, &e->color );
+      struct circle_t c = {e->x, e->y, e->w / 2};
+      Stds_DrawCircle( &c, &e->color, true );
     }
   } else {
-    animation_draw( e->animation );
+    Stds_AnimationDraw( e->animation );
   }
 }

@@ -5,12 +5,12 @@
 
 enum { PS_SUCCESS, PS_FULL, PS_INVALID_FP };
 
-extern particle_system_t *create_particle_system( int32_t max_particles );
+extern struct particle_system_t *Stds_CreateParticleSystem( const int32_t max_particles );
 
-extern int32_t insert_particle( particle_system_t *ps, particle_t *p );
+extern int32_t Stds_InsertParticle( struct particle_system_t *ps, const struct particle_t *p );
 
-extern void particle_system_update( particle_system_t *ps );
+extern void Stds_ParticleSystemUpdate( struct particle_system_t *ps );
 
-extern void particle_system_draw( particle_system_t *ps );
+extern void Stds_ParticleSystemDraw( const struct particle_system_t *ps );
 
 #endif // PARTICLE_SYSTEM_H

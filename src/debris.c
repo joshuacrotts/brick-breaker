@@ -1,7 +1,7 @@
 #include "../include/debris.h"
 
 void
-add_debris( entity_t *parentBrick, uint32_t flags ) {
+add_debris( struct entity_t *parentBrick, uint32_t flags ) {
   debris_t *d;
   int       x, y, w, h;
 
@@ -18,8 +18,8 @@ add_debris( entity_t *parentBrick, uint32_t flags ) {
 
       d->x       = parentBrick->x + parentBrick->w / 2;
       d->y       = parentBrick->y + parentBrick->h / 2;
-      d->dx      = random_f32( -5.0f, 5.0f );
-      d->dy      = random_f32( 1.0f, 2.0f );
+      d->dx      = Stds_RandomFloat( -5.0f, 5.0f );
+      d->dy      = Stds_RandomFloat( 1.0f, 2.0f );
       d->texture = parentBrick->texture[0];
 
       d->rect.x = x;
@@ -38,14 +38,15 @@ debris_update( debris_t *d ) {
   d->dy += 0.5f;
 
   if ( d->y > app.SCREEN_HEIGHT ) {
-    d->flags |= DEATH_MASK;
+    d->flags |= STDS_DEATH_MASK;
     return;
   }
 }
 
 void
 debris_draw( debris_t *d ) {
-  blit_rect( d->texture, &d->rect, d->x, d->y, false );
+  Stds_BlitTexture( d->texture, &d->rect, d->rect.x, d->rect.y, d->rect.w, d->rect.h, 0,
+                    SDL_FLIP_NONE, NULL, false );
 }
 
 void

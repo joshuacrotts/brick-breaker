@@ -14,8 +14,8 @@
 #include "transition.h"
 
 level_t *                 currentLevel;
-extern entity_t *         paddle;
-extern particle_system_t *ps;
+extern struct entity_t *         paddle;
+extern struct particle_system_t *ps;
 extern stage_t            stage;
 
 /*

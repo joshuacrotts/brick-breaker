@@ -9,7 +9,7 @@ extern stage_t stage;
 /*
  *
  */
-extern void add_debris( entity_t *, uint32_t );
+extern void add_debris( struct entity_t *, uint32_t );
 
 /*
  *

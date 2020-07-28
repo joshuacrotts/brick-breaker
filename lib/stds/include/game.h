@@ -3,17 +3,17 @@
 
 #include "stds.h"
 
-extern app_t app;
+extern struct app_t app;
 
-extern void prepare_scene( void );
+extern void Stds_PrepareScene( void );
 
-extern void process_input( void );
+extern void Stds_ProcessInput( void );
 
-extern void present_scene( void );
+extern void Stds_PresentScene( void );
 
-extern void loop( void );
+extern void Stds_GameLoop( void );
 
-extern void init_app_structures( void );
+extern void Stds_InitAppStructures( void );
 
 extern void init_window_fps( void  ); 
 

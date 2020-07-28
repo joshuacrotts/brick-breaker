@@ -1,14 +1,14 @@
 #include "../include/brick.h"
 
-static void  update_brick_status( entity_t * );
+static void  update_brick_status( struct entity_t * );
 static char *get_string_enum( enum Brick );
 
-entity_t *
-add_brick( f32 x, f32 y, uint32_t flags, int8_t identifier ) {
-  entity_t *b;
+struct entity_t *
+add_brick( float x, float y, uint32_t flags, int8_t identifier ) {
+  struct entity_t *b;
 
-  b = malloc( sizeof( entity_t ) );
-  memset( b, 0, sizeof( entity_t ) );
+  b = malloc( sizeof( struct entity_t ) );
+  memset( b, 0, sizeof( struct entity_t ) );
 
   b->x          = x;
   b->y          = y;
@@ -29,7 +29,7 @@ add_brick( f32 x, f32 y, uint32_t flags, int8_t identifier ) {
   strcat( buffer, str_identifier );
   strcat( buffer, "_animated.png" );
 
-  b->animation = add_spritesheet( buffer, 7, random_f32( 0.05f, 0.111f ), 0, 0 );
+  b->animation = Stds_AddSpritesheet( buffer, 7, Stds_RandomFloat( 0.05f, 0.111f ), 0, 0, 1, 7 );
   memset( buffer, 0, MAX_BUFFER_SIZE );
 
   // Now, load in the default image file.
@@ -39,14 +39,13 @@ add_brick( f32 x, f32 y, uint32_t flags, int8_t identifier ) {
   strcat( buffer, "/" );
   strcat( buffer, str_identifier );
   strcat( buffer, "_0.png" );
-  b->texture[0] = load_texture( buffer );
-
+  b->texture[0] = Stds_LoadTexture( buffer );
   memset( buffer, 0, MAX_BUFFER_SIZE );
   const int8_t MAX_DIGIT = 3;
   // Next, load in the three files for the damage image.
   for ( int i = 1; i <= MAX_DEBRIS_IMGS; i++ ) {
     char int_buffer[MAX_DIGIT];
-    sprintf(int_buffer, "%d", i);
+    sprintf( int_buffer, "%d", i );
     strcat( buffer, "res/img/brick/" );
     strcat( buffer, str_identifier );
     strcat( buffer, "/" );
@@ -54,7 +53,7 @@ add_brick( f32 x, f32 y, uint32_t flags, int8_t identifier ) {
     strcat( buffer, "_" );
     strcat( buffer, int_buffer );
     strcat( buffer, "_damaged.png" );
-    b->texture[i] = load_texture( buffer );
+    b->texture[i] = Stds_LoadTexture( buffer );
 
     memset( buffer, 0, MAX_BUFFER_SIZE );
   }
@@ -65,33 +64,33 @@ add_brick( f32 x, f32 y, uint32_t flags, int8_t identifier ) {
 }
 
 void
-brick_update( entity_t *b ) {
-  int32_t randInt = random_int( 1, 2000 );
-  if ( !b->animation->cycle_once && randInt == 1 && b->life == 4 ) {
-    b->animation->cycle_once = true;
-    b->animation->flags |= ANIMATION_ACTIVE_MASK;
+brick_update( struct entity_t *b ) {
+  int32_t randInt = Stds_RandomInt( 1, 2000 );
+  if ( !b->animation->is_cycle_once && randInt == 1 && b->life == 4 ) {
+    b->animation->is_cycle_once = true;
+    b->animation->flags |= STDS_ANIMATION_ACTIVE_MASK;
   }
 
-  if ( b->animation->cycle_once ) {
+  if ( b->animation->is_cycle_once ) {
     b->animation->pos_x = b->x;
     b->animation->pos_y = b->y;
-    animation_update( b->animation );
+    Stds_AnimationUpdate( b->animation );
   }
 
   update_brick_status( b );
 }
 
 void
-brick_draw( entity_t *b ) {
-  if ( b->animation->cycle_once && b->life == 4 ) {
-    animation_draw( b->animation );
+brick_draw( struct entity_t *b ) {
+  if ( b->animation->is_cycle_once && b->life == 4 ) {
+    Stds_AnimationDraw( b->animation );
   } else {
-    blit_texture( b->texture[0], b->x, b->y, false, false );
+    Stds_DrawTexture( b->texture[0], b->x, b->y, b->w, b->h, b->angle, SDL_FLIP_NONE, NULL, false );
   }
 }
 
 void
-brick_die( entity_t *b ) {
+brick_die( struct entity_t *b ) {
   free( b );
 }
 
@@ -99,7 +98,7 @@ brick_die( entity_t *b ) {
  *
  */
 static void
-update_brick_status( entity_t *b ) {
+update_brick_status( struct entity_t *b ) {
   switch ( b->life ) {
   case 4:
     return;
@@ -113,7 +112,7 @@ update_brick_status( entity_t *b ) {
     b->texture[0] = b->texture[3];
     break;
   case 0:
-    b->flags |= DEATH_MASK;
+    b->flags |= STDS_DEATH_MASK;
     break;
   }
 }

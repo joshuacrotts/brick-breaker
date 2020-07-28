@@ -3,7 +3,7 @@
 #define BRICK_SCORE 100
 
 void
-add_score_item( f32 x, f32 y, uint32_t score ) {
+add_score_item( float x, float y, uint32_t score ) {
   score_item_t *s;
   const int8_t  MAX_DIGITS = 5;
 
@@ -32,7 +32,7 @@ add_score_item( f32 x, f32 y, uint32_t score ) {
 void
 score_item_update( score_item_t *s ) {
   if ( --s->life <= 0 ) {
-    s->flags |= DEATH_MASK;
+    s->flags |= STDS_DEATH_MASK;
     currentLevel->last_break_timer = 0;
     return;
   }
@@ -41,5 +41,5 @@ score_item_update( score_item_t *s ) {
 void
 score_item_draw( score_item_t *s ) {
   SDL_Color white = {0xff, 0xff, 0xff, 0xff};
-  draw_text( s->x, s->y, &white, "res/fonts/nes.ttf", 18, s->text );
+  Stds_DrawText( s->x, s->y, "res/fonts/nes.ttf", 18,  &white, s->text );
 }

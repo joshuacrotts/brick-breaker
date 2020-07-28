@@ -6,39 +6,41 @@
 
 #include "../include/main.h"
 
-#define S_WIDTH 590
+#define S_WIDTH  590
 #define S_HEIGHT 960
-#define L_WIDTH 0
+#define L_WIDTH  0
 #define L_HEIGHT 0
 
-static void init_scene(void);
-static void draw(void);
-static void tick(void);
-static void check_pregame(void);
-static void check_paused(void);
-static void check_transition(void);
-static void cleanup_stage(void);
-static void start_game(void);
+static void init_scene( void );
+static void draw( void );
+static void update( void );
+static void check_pregame( void );
+static void check_paused( void );
+static void check_transition( void );
+static void cleanup_stage( void );
+static void start_game( void );
 
-static void update_entities(void);
-static void update_debris(void);
-static void update_trails(void);
+static void update_entities( void );
+static void update_debris( void );
+static void update_trails( void );
 
-static void draw_entities(void);
-static void draw_debris(void);
-static void draw_trails(void);
+static void draw_entities( void );
+static void draw_debris( void );
+static void draw_trails( void );
 
 // Barebones game. This is the minimum amount of code
 // necessary to run a window.
-int main(int argc, char *argv[])
-{
-  init_game("Brick Breaker in C", S_WIDTH, S_HEIGHT, L_WIDTH, L_HEIGHT);
-  init_app_structures();
+int
+main( int argc, char *argv[] ) {
+  Stds_InitGame( "Brick Breaker in C", S_WIDTH, S_HEIGHT, L_WIDTH, L_HEIGHT );
+  Stds_InitAppStructures();
+
   init_scene();
   init_menu();
-  loop();
 
-  atexit(cleanup_stage);
+  Stds_GameLoop();
+
+  atexit( cleanup_stage );
   return 0;
 }
 
@@ -51,60 +53,55 @@ int main(int argc, char *argv[])
  * Sprites and structs are also initalized here.
  */
 static void
-init_scene(void)
-{
-  app.delegate.tick = tick;
-  app.delegate.draw = draw;
-  app.game_state = PREGAME;
+init_scene( void ) {
+  app.delegate.update = update;
+  app.delegate.draw   = draw;
+  app.game_state      = PREGAME;
 
-  memset(&stage, 0, sizeof(stage_t));
-  stage.level_tail = &stage.level_head;
+  memset( &stage, 0, sizeof( stage_t ) );
+  stage.level_tail  = &stage.level_head;
   stage.debris_tail = &stage.debris_head;
-  stage.state = MENU;
-  stage.level_id = 1;
+  stage.state       = MENU;
+  stage.level_id    = 1;
 
-  level_t *level = add_level(stage.level_id);
+  level_t *level         = add_level( stage.level_id );
   stage.level_tail->next = level;
-  stage.level_tail = level;
-  currentLevel = stage.level_tail;
-  background = init_background("res/img/background/space-1.png");
+  stage.level_tail       = level;
+  currentLevel           = stage.level_tail;
+  background             = Stds_AddBackground( "res/img/background/space-1.png" );
 
   init_paddle();
   init_HUD();
 
-  ps = create_particle_system(51222);
+  ps = Stds_CreateParticleSystem( 1024 );
 }
 
 /*
  *
  */
 static void
-tick(void)
-{
+update( void ) {
   check_pregame();
   check_transition();
   check_paused();
   check_transition();
 
-  if (app.game_state == PAUSED)
-  {
+  if ( app.game_state == PAUSED ) {
     return;
   }
 
-  background_update(background);
+  Stds_BackgroundUpdate( background );
   update_HUD();
 
-  if (stage.state == GAME)
-  {
-    particle_system_update(ps);
+  if ( stage.state == GAME ) {
+    Stds_ParticleSystemUpdate( ps );
     update_entities();
     update_trails();
     update_debris();
     level_update();
   }
 
-  if (app.game_state != TRANSITION)
-  {
+  if ( app.game_state != TRANSITION ) {
     paddle_update();
   }
 }
@@ -113,27 +110,25 @@ tick(void)
  *
  */
 static void
-draw(void)
-{
-  background_draw(background);
-  if (stage.state == GAME)
-  {
-    particle_system_draw(ps);
+draw( void ) {
+  Stds_BackgroundDraw( background );
+  if ( stage.state == GAME ) {
     draw_entities();
     draw_trails();
     draw_debris();
     level_draw();
     paddle_draw();
+    Stds_ParticleSystemDraw( ps );
+
   }
 
-  if (app.game_state == TRANSITION)
-  {
+  if ( app.game_state == TRANSITION ) {
     transition_draw();
   }
+
   draw_HUD();
 
-  if (app.game_state == PAUSED)
-  {
+  if ( app.game_state == PAUSED ) {
     draw_paused();
   }
 }
@@ -142,28 +137,23 @@ draw(void)
  *
  */
 static void
-update_entities(void)
-{
-  entity_t *e;
-  entity_t *prev;
+update_entities( void ) {
+  struct entity_t *e;
+  struct entity_t *prev;
   prev = &currentLevel->entity_head;
 
-  for (e = currentLevel->entity_head.next; e != NULL; e = e->next)
-  {
-    if (e->tick)
-    {
-      e->tick(e);
+  for ( e = currentLevel->entity_head.next; e != NULL; e = e->next ) {
+    if ( e->update ) {
+      e->update( e );
     }
 
-    if (e->flags & DEATH_MASK)
-    {
-      if (e == currentLevel->entity_tail)
-      {
+    if ( e->flags & STDS_DEATH_MASK ) {
+      if ( e == currentLevel->entity_tail ) {
         currentLevel->entity_tail = prev;
       }
 
       prev->next = e->next;
-      free(e);
+      free( e );
       e = prev;
     }
     prev = e;
@@ -174,26 +164,22 @@ update_entities(void)
  *
  */
 static void
-update_debris(void)
-{
+update_debris( void ) {
   debris_t *d;
   debris_t *prev;
 
   prev = &stage.debris_head;
 
-  for (d = stage.debris_head.next; d != NULL; d = d->next)
-  {
-    debris_update(d);
+  for ( d = stage.debris_head.next; d != NULL; d = d->next ) {
+    debris_update( d );
 
-    if (d->flags & DEATH_MASK)
-    {
-      if (d == stage.debris_tail)
-      {
+    if ( d->flags & STDS_DEATH_MASK ) {
+      if ( d == stage.debris_tail ) {
         stage.debris_tail = prev;
       }
 
       prev->next = d->next;
-      debris_die(d);
+      debris_die( d );
       d = prev;
     }
     prev = d;
@@ -204,26 +190,22 @@ update_debris(void)
  *
  */
 static void
-update_trails(void)
-{
-  trail_t *t;
-  trail_t *prev;
+update_trails( void ) {
+  struct trail_t *t;
+  struct trail_t *prev;
 
   prev = &app.trail_head;
 
-  for (t = app.trail_head.next; t != NULL; t = t->next)
-  {
-    trail_update(t);
+  for ( t = app.trail_head.next; t != NULL; t = t->next ) {
+    Stds_TrailUpdate( t );
 
-    if (t->flags & DEATH_MASK)
-    {
-      if (t == app.trail_tail)
-      {
+    if ( t->flags & STDS_DEATH_MASK ) {
+      if ( t == app.trail_tail ) {
         app.trail_tail = prev;
       }
 
       prev->next = t->next;
-      free(t);
+      free( t );
       t = prev;
     }
     prev = t;
@@ -234,15 +216,12 @@ update_trails(void)
  *
  */
 static void
-draw_entities(void)
-{
-  entity_t *e;
+draw_entities( void ) {
+  struct entity_t *e;
 
-  for (e = currentLevel->entity_head.next; e != NULL; e = e->next)
-  {
-    if (e->draw)
-    {
-      e->draw(e);
+  for ( e = currentLevel->entity_head.next; e != NULL; e = e->next ) {
+    if ( e->draw ) {
+      e->draw( e );
     }
   }
 }
@@ -251,13 +230,11 @@ draw_entities(void)
  *
  */
 static void
-draw_debris(void)
-{
+draw_debris( void ) {
   debris_t *d;
 
-  for (d = stage.debris_head.next; d != NULL; d = d->next)
-  {
-    debris_draw(d);
+  for ( d = stage.debris_head.next; d != NULL; d = d->next ) {
+    debris_draw( d );
   }
 }
 
@@ -265,13 +242,11 @@ draw_debris(void)
  *
  */
 static void
-draw_trails(void)
-{
-  trail_t *t;
+draw_trails( void ) {
+  struct trail_t *t;
 
-  for (t = app.trail_head.next; t != NULL; t = t->next)
-  {
-    trail_draw(t);
+  for ( t = app.trail_head.next; t != NULL; t = t->next ) {
+    Stds_TrailDraw( t );
   }
 }
 
@@ -279,21 +254,16 @@ draw_trails(void)
  *
  */
 static void
-check_paused(void)
-{
-  if (app.keyboard[SDL_SCANCODE_P] && stage.state == GAME)
-  {
-    play_sound(SND_PAUSE, CH_ANY);
-    app.game_state = app.game_state == PAUSED ? RUNNING : PAUSED;
+check_paused( void ) {
+  if ( app.keyboard[SDL_SCANCODE_P] && stage.state == GAME ) {
+    Stds_PlaySounds( SND_PAUSE, CH_ANY );
+    app.game_state               = app.game_state == PAUSED ? RUNNING : PAUSED;
     app.keyboard[SDL_SCANCODE_P] = 0;
   }
 
-  if (app.game_state == PAUSED)
-  {
+  if ( app.game_state == PAUSED ) {
     Mix_PauseMusic();
-  }
-  else
-  {
+  } else {
     Mix_ResumeMusic();
   }
 }
@@ -302,10 +272,8 @@ check_paused(void)
  *
  */
 static void
-check_transition(void)
-{
-  if (app.game_state == TRANSITION)
-  {
+check_transition( void ) {
+  if ( app.game_state == TRANSITION ) {
     transition_update();
   }
 }
@@ -314,19 +282,17 @@ check_transition(void)
  *
  */
 static void
-check_pregame(void)
-{
+check_pregame( void ) {
   // Initially, we just have the player moving the paddle around,
   // and no ball or powerups.
-  if (app.keyboard[SDL_SCANCODE_SPACE] && app.game_state == PREGAME)
-  {
+  if ( app.keyboard[SDL_SCANCODE_SPACE] && app.game_state == PREGAME ) {
     app.keyboard[SDL_SCANCODE_SPACE] = 0;
-    entity_t *b =
-        add_ball(random_f32(app.SCREEN_WIDTH / 3, app.SCREEN_WIDTH / 2 + app.SCREEN_WIDTH / 4),
-                 app.SCREEN_HEIGHT / 2, 0);
+    struct entity_t *b               = add_ball(
+        Stds_RandomFloat( app.SCREEN_WIDTH / 3, app.SCREEN_WIDTH / 2 + app.SCREEN_WIDTH / 4 ),
+        app.SCREEN_HEIGHT / 2, 0 );
     currentLevel->ball_tail->next = b;
-    currentLevel->ball_tail = b;
-    app.game_state = RUNNING;
+    currentLevel->ball_tail       = b;
+    app.game_state                = RUNNING;
   }
 }
 
@@ -334,48 +300,42 @@ check_pregame(void)
  *
  */
 static void
-cleanup_stage(void)
-{
-  level_t *l;
-  animation_t *a;
-  entity_t *en;
-  entity_t *ball;
-  entity_t *brick;
+cleanup_stage( void ) {
+  level_t *           l;
+  struct animation_t *a;
+  struct entity_t *   en;
+  struct entity_t *   ball;
+  struct entity_t *   brick;
 
   // Iterate through the levels and free all allocated memory
   // to each level.
-  for (l = stage.level_head.next; l != NULL; l = l->next)
-  {
-    while (l->ball_head.next)
-    {
-      ball = l->ball_head.next;
+  for ( l = stage.level_head.next; l != NULL; l = l->next ) {
+    while ( l->ball_head.next ) {
+      ball              = l->ball_head.next;
       l->ball_head.next = ball->next;
-      free(ball);
+      free( ball );
     }
 
-    while (l->brick_head.next)
-    {
-      brick = l->brick_head.next;
+    while ( l->brick_head.next ) {
+      brick              = l->brick_head.next;
       l->brick_head.next = brick->next;
-      free(brick);
+      free( brick );
     }
 
-    while (l->entity_head.next)
-    {
-      en = l->entity_head.next;
+    while ( l->entity_head.next ) {
+      en                  = l->entity_head.next;
       l->entity_head.next = en->next;
-      free(en);
+      free( en );
     }
   }
 
-  while (stage.animation_head.next)
-  {
-    a = stage.animation_head.next;
+  while ( stage.animation_head.next ) {
+    a                         = stage.animation_head.next;
     stage.animation_head.next = a->next;
-    free(a);
+    free( a );
   }
 
-  free(currentLevel);
+  free( currentLevel );
   paddle_die();
-  background_die(background);
+  Stds_BackgroundDie( background );
 }

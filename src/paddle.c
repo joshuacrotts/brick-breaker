@@ -8,11 +8,11 @@ static void check_bounds( void );
 
 void
 init_paddle( void ) {
-  paddle = malloc( sizeof( entity_t ) );
-  memset( paddle, 0, sizeof( entity_t ) );
+  paddle = malloc( sizeof( struct entity_t ) );
+  memset( paddle, 0, sizeof( struct entity_t ) );
 
   paddle->life       = 3;
-  paddle->texture[0] = load_texture( "res/img/paddle.png" );
+  paddle->texture[0] = Stds_LoadTexture( "res/img/paddle.png" );
   SDL_QueryTexture( paddle->texture[0], NULL, NULL, &paddle->w, &paddle->h );
 
   paddle->x       = app.SCREEN_WIDTH / 2 - paddle->w / 2;
@@ -27,14 +27,17 @@ paddle_update( void ) {
   paddle->x += paddle->dx;
   paddle->y += paddle->dy;
 
+  paddle->w *= ( int32_t ) paddle->scale_x;
+  paddle->h *= ( int32_t ) paddle->scale_y;
+
   check_bounds();
   key_input_update();
 }
 
 void
 paddle_draw( void ) {
-  blit_texture_scaled( paddle->texture[0], paddle->x, paddle->y, paddle->scale_x, paddle->scale_y,
-                       paddle->angle, SDL_FLIP_NONE, false );
+  Stds_DrawTexture( paddle->texture[0], paddle->x, paddle->y, paddle->w, paddle->h, paddle->angle,
+                    SDL_FLIP_NONE, NULL, false );
 }
 
 void

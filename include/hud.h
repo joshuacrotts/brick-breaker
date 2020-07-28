@@ -7,10 +7,10 @@
 #include "commons.h"
 #include "main.h"
 
-extern particle_system_t *ps;
-extern app_t              app;
+extern struct particle_system_t *ps;
+extern struct app_t              app;
 extern stage_t            stage;
-extern entity_t *         paddle;
+extern struct entity_t *         paddle;
 
 /*
  *
