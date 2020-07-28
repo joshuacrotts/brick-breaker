@@ -173,7 +173,7 @@ Stds_TrailUpdate( struct trail_t *t ) {
 void
 Stds_TrailDraw( struct trail_t *t ) {
   /* If texture. */
-  if ( !( t->flags & STDS_TRAIL_TEXTURE_MASK ) ) {
+  if ( ( t->flags & STDS_TRAIL_TEXTURE_MASK ) ) {
     SDL_SetTextureBlendMode( t->texture, SDL_BLENDMODE_BLEND );
   }
 
@@ -189,7 +189,7 @@ Stds_TrailDraw( struct trail_t *t ) {
     Stds_DrawCircle( &circle, &t->color, true );
   }
 
-  if ( !( t->flags & STDS_TRAIL_TEXTURE_MASK ) ) {
+  if ( ( t->flags & STDS_TRAIL_TEXTURE_MASK ) ) {
     SDL_SetTextureBlendMode( t->texture, SDL_BLENDMODE_NONE );
   }
 }
