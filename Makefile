@@ -28,7 +28,7 @@ endif
 #COMPILER_FLAGS specifies the additional compilation options we're using
 # -w suppresszzes all warnings
 # -Wl,-subsystem,windows gets rid of the console window
-COMPILER_FLAGS = -Werror -Wfloat-conversion
+COMPILER_FLAGS = -Werror -g
 
 #LINKER_FLAGS specifies the libraries we're linking against
 LINKER_FLAGS = 0

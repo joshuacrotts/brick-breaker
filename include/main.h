@@ -17,11 +17,11 @@
 #include "particle.h"
 #include "powerup.h"
 
-particle_system_t *ps;
-app_t            app;
-stage_t          stage;
-entity_t *       paddle;
-background_t *   background;
+extern app_t 		app;
+extern particle_system_t *ps;
+extern stage_t          stage;
+extern entity_t *       paddle;
+extern background_t *   background;
 extern level_t * currentLevel;
 
 /*

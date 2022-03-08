@@ -28,6 +28,13 @@ static void draw_entities(void);
 static void draw_debris(void);
 static void draw_trails(void);
 
+particle_system_t *ps;
+stage_t          stage;
+entity_t *       paddle;
+background_t *   background;
+level_t * currentLevel;
+app_t app;
+
 // Barebones game. This is the minimum amount of code
 // necessary to run a window.
 int main(int argc, char *argv[])
@@ -378,4 +385,6 @@ cleanup_stage(void)
   free(currentLevel);
   paddle_die();
   background_die(background);
+  free(ps->particles);
+  free(ps);
 }
