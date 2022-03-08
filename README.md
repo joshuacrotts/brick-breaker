@@ -1,7 +1,7 @@
 <h1 align="center">Brick Breaker</h1>
 
 <p align="center">
-  <img width="250" height="407" src="sdl_brickbreaker.gif">
+  <img width="250" height="407" src="res/sdl_brickbreaker.gif">
 </p>
 
 [![CodeFactor](https://www.codefactor.io/repository/github/joshuacrotts/Brick-Breaker/badge)](https://www.codefactor.io/repository/github/joshuacrotts/Brick-Breaker) ![GitHub contributors](https://img.shields.io/github/contributors/JoshuaCrotts/Brick-Breaker) ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/JoshuaCrotts/Brick-Breaker) ![GitHub repo size](https://img.shields.io/github/repo-size/JoshuaCrotts/Brick-Breaker)  ![](https://tokei.rs/b1/github/JoshuaCrotts/Brick-Breaker?category=code) ![](https://tokei.rs/b1/github/JoshuaCrotts/Brick-Breaker?category=files) [![GitHub issues open](https://img.shields.io/github/issues/JoshuaCrotts/Brick-Breaker)]() 
@@ -47,3 +47,5 @@ See the Issues Tab.
 
 ## Version History
 The **master** branch encompasses all significant changes. The **development** branch is used for in-progress modifications.
+
+**Code Quality Note (03/07/2022):** I recognize that this repository has some very bad code, like shockingly bad. It produces large memory leaks and is generally just a poor representation of what C programming ought to be. So, while this may be a cool game, it is far from well-designed (despite what I thought two years ago when I wrote the game).
